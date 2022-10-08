@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;700&display=swap');
+
+
+@layer base {
+
+    * {
+        font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+        @apply bg-primary;
+    }
+
+    html {
+        @apply text-primary;
+    }
+
+    table {
+        @apply text-primary;
+    }
+
+    pre {
+    }
+
+    button {
+        font-family: 'Montserrat', sans-serif;
+    }
+}
+
+.submit-button {
+    @apply text-white font-semibold uppercase p-3 rounded-lg w-[220px] h-[50px] flex justify-center items-center
+    bg-gradient-to-b from-action to-actiongradient drop-shadow-[0_5px_5px_rgba(0,0,0,0.95)]
+    focus:bg-gradient-to-b focus:from-actiongradient focus:to-action focus:drop-shadow-[0_5px_5px_rgba(0,0,0,0.95)]
+    ;
+  }
+
+.submit-button-disabled {
+    @apply text-white font-semibold uppercase p-3 rounded-lg w-[220px] h-[50px] flex justify-center items-center
+    bg-gradient-to-b from-slate-400 to-slate-500 drop-shadow-[0_5px_5px_rgba(0,0,0,0.95)]
+    ;
+  }
+  
+
+.background-gradient-page {
+    background-image: radial-gradient(at 100% 100%, rgb(36, 23, 55) 0, transparent 30%), radial-gradient(at 0% 20%, rgb(16, 21, 52) 0, transparent 100%);
+    @apply bg-dark;
+}
+
+
+.background-gradient-modal {
+    background-image: radial-gradient(at 100% 100%, rgb(63, 29, 81) 0, transparent 30%), radial-gradient(at 100% 50%, rgb(15, 22, 59) 0, transparent 100%);
+    @apply bg-dark;
+}

@@ -1,0 +1,45 @@
+{
+    # email to generate a valid SSL certificate
+    email ohsito@gmail.com
+
+    # HTTP/3 support
+    servers {
+        protocol {
+            experimental_http3
+        }
+    }
+}
+
+# Host which Caddy will handle
+{$DOMAIN_NAME} {
+
+    # APP
+    @app expression `(
+            !path(
+                '/api*', '/media*', '/graphql*', '/bundles*', '/contexts*', '/_profiler*', '/_wdt*',
+                '*.json*', '*.html', '*.csv', '*.yml', '*.yaml', '*.xml'
+            )
+        )
+        || path('/favicon.ico', '/manifest.json', '/robots.txt', '/_next*', '/sitemap*')`
+
+    handle @app {
+        root * /srv/app
+        encode gzip zstd
+        file_server
+    }
+
+    # API
+    root * /srv/api/public
+    php_fastcgi /api* api:9000
+    encode gzip zstd
+    file_server
+
+}
+
+
+
+
+
+
+
+
