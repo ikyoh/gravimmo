@@ -84,12 +84,18 @@ docker-prod:
 .PHONY: docker-prod
 
 
+
 ## === SYMFONY ================================================
 symfony-dev : ## Symfony dev environment
 	@echo "\n==> Start Symfony dev environment ..."
 	rm -f api/.env.local.php
-	$(DOCKER_EXEC) ${APP_NAME}-api symfony serve -d
+	$(DOCKER_EXEC) ${APP_NAME}-api symfony server:start --no-tls -d
 .PHONY: symfony-dev
+
+symfony-bash : ## Symfony bash
+	@echo "\n==> Start Symfony bash ..."
+	$(DOCKER) exec -it ${APP_NAME}-api bash
+.PHONY: symfony-bash
 
 
 

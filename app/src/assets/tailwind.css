@@ -13,7 +13,7 @@
     }
 
     body {
-        @apply bg-primary;
+        @apply bg-dark;
     }
 
     html {
@@ -33,14 +33,14 @@
 }
 
 .submit-button {
-    @apply text-white font-semibold uppercase p-3 rounded-lg w-[220px] h-[50px] flex justify-center items-center
+    @apply text-white font-semibold uppercase p-3 rounded w-[220px] h-[50px] flex justify-center items-center
     bg-gradient-to-b from-action to-actiongradient drop-shadow-[0_5px_5px_rgba(0,0,0,0.95)]
     focus:bg-gradient-to-b focus:from-actiongradient focus:to-action focus:drop-shadow-[0_5px_5px_rgba(0,0,0,0.95)]
     ;
   }
 
 .submit-button-disabled {
-    @apply text-white font-semibold uppercase p-3 rounded-lg w-[220px] h-[50px] flex justify-center items-center
+    @apply text-white font-semibold uppercase p-3 rounded w-[220px] h-[50px] flex justify-center items-center
     bg-gradient-to-b from-slate-400 to-slate-500 drop-shadow-[0_5px_5px_rgba(0,0,0,0.95)]
     ;
   }
@@ -56,3 +56,9 @@
     background-image: radial-gradient(at 100% 100%, rgb(63, 29, 81) 0, transparent 30%), radial-gradient(at 100% 50%, rgb(15, 22, 59) 0, transparent 100%);
     @apply bg-dark;
 }
+
+.background-gradient-login {
+    background-image: radial-gradient(at 130% 130%, rgb(63, 29, 81) 0, transparent 50%), radial-gradient(at 0% 0%, rgb(15, 22, 59) 0, transparent 100%);
+    @apply bg-dark;
+}
+

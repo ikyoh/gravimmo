@@ -15,6 +15,12 @@ module.exports = {
       '4xl': '2.074rem',
       '5xl': '2.448rem',
     },
+    borderRadius: {
+      'none': '0',
+      'sm': '0.125rem',
+      'DEFAULT': '10px',
+      'full': '9999px',
+    },
     extend: {
       colors: {
         'primary': '#26263F',
@@ -26,6 +32,13 @@ module.exports = {
         'waiting': '#ffc107',
         'error': '#ef4444',
         'dark' : '#080A1D'
+      }, 
+      container: {
+        center: true,
+        padding: {
+          DEFAULT: '1rem',
+          sm: '2rem'
+        },
       },
     },
   },
