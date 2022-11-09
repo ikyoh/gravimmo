@@ -29,20 +29,19 @@ export const useTrustees = (search, sortValue, sortDirection) => {
     return useQuery(queryKey, fetchTrustees, {
         staleTime: 60_000,
         select: data => {
-            if (search === '') return _.orderBy(data['hydra:member'], sortValue ,sortDirection)
+            if (search === '') return _.orderBy(data['hydra:member'], sortValue, sortDirection)
             else return _.orderBy(data['hydra:member'].filter(f =>
                 f.title.toLowerCase().includes(search.toLowerCase()) ||
                 f.city.toLowerCase().includes(search.toLowerCase()) ||
                 f.postcode.toLowerCase().includes(search.toLowerCase())
-            ), sortValue ,sortDirection)
+            ), sortValue, sortDirection)
         }
     }
     )
 }
 
 export const useTrustee = (trusteeId) => {
-    if (!trusteeId) return {}
-    else return useQuery(['trustee', trusteeId], fetchTrustee,
+    return useQuery(['trustee', trusteeId], fetchTrustee,
         { cacheTime: 0 }
     )
 }
