@@ -9,7 +9,9 @@ import { FormInput } from "components/forms/input/FormInput";
 import FormInputMargin from "components/forms/input-margin/FormInputMargin";
 import FieldArray from "components/forms/field-array/FieldArray";
 
-export default function ServiceForm({ id = false, handleCloseModal }) {
+export default function ServiceForm({ id, handleCloseModal }) {
+
+    console.log('id', id)
 
     const { isLoading: isLoadingData, data, isError, error } = useService(id)
     const { mutate: postService, isLoading: isPosting, isSuccess } = usePostService()
@@ -17,12 +19,16 @@ export default function ServiceForm({ id = false, handleCloseModal }) {
 
     // Set form values
     useEffect(() => {
+        if (!id) {
+            reset({})
+        }
+    }, [])
+
+    useEffect(() => {
         if (id && data) {
             reset(data)
         }
     }, [isLoadingData, data])
-
-    console.log('data', data)
 
 
     const onSubmit = form => {
@@ -45,12 +51,14 @@ export default function ServiceForm({ id = false, handleCloseModal }) {
         defaultValues: id ? data : {}
     })
 
-    if (isLoadingData) {
-        return <h2>Loading...</h2>
-    }
+    if (id) {
+        if (isLoadingData) {
+            return <h2>Loading...</h2>
+        }
 
-    if (isError) {
-        return <h2 className='py-3'>Error : {error.message}</h2>
+        if (isError) {
+            return <h2 className='py-3'>Error : {error.message}</h2>
+        }
     }
 
     return (

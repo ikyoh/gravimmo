@@ -29,19 +29,18 @@ export const useServices = (search, sortValue, sortDirection) => {
     return useQuery(queryKey, fetchServices, {
         staleTime: 60_000,
         select: data => {
-            if (search === '') return  _.orderBy(data['hydra:member'], sortValue ,sortDirection)
-            else return  _.orderBy(data['hydra:member'].filter(f =>
+            if (search === '') return _.orderBy(data['hydra:member'], sortValue, sortDirection)
+            else return _.orderBy(data['hydra:member'].filter(f =>
                 f.title.toLowerCase().includes(search.toLowerCase()) ||
                 f.category.toLowerCase().includes(search.toLowerCase())
-            ), sortValue ,sortDirection)
+            ), sortValue, sortDirection)
         }
     }
     )
 }
 
 export const useService = (serviceId) => {
-    if (!serviceId) return {}
-    else return useQuery(['service', serviceId], fetchService,
+    return useQuery(['service', serviceId], fetchService,
         { cacheTime: 0 }
     )
 }
