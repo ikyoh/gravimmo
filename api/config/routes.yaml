@@ -1,6 +1,6 @@
-controllers:
-    resource: ../src/Controller/
-    type: attribute
+# controllers:
+#     resource: ../src/Controller/
+#     type: attribute
 
 # config/routes.yaml
 api_login_check:
