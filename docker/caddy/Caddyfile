@@ -3,11 +3,11 @@
     email ohsito@gmail.com
 
     # HTTP/3 support
-    servers {
-        protocol {
-            experimental_http3
-        }
-    }
+    # servers {
+    #     protocol {
+    #         experimental_http3
+    #     }
+    # }
 }
 
 # Host which Caddy will handle
@@ -24,14 +24,15 @@
 
     handle @app {
         root * /srv/app
-        try_files {path} /index.html
+        #try_files {path} /index.html
+        reverse_proxy app:3000
         encode gzip zstd
         file_server
     }
 
     # API
     root * /srv/api/public
-    php_fastcgi /api* api:9000
+    php_fastcgi unix//var/run/php/php-fpm.sock
     encode gzip zstd
     file_server
 

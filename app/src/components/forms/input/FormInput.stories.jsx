@@ -1,12 +1,12 @@
-import { FormInputText } from './FormInputText'
+import { FormInput } from './FormInput'
 
 export default {
-  title: 'FormInputText',
-  component: FormInputText,
+  title: 'FormInput',
+  component: FormInput,
 }
 
 
-const Template = args => <FormInputText {...args} />;
+const Template = args => <FormInput {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

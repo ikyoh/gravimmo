@@ -42,15 +42,13 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer selfupdate
 
+# Install symfony cli
 RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash
 RUN apt install symfony-cli
-
 
 # Copy existing application directory contents
 COPY . /srv/api
 
-
-# Expose port 9000 and start php server
-EXPOSE 9000
+# Start php server
 CMD ["php-fpm"]
 

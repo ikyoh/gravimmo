@@ -13,7 +13,8 @@
     }
 
     body {
-        @apply bg-dark;
+        @apply bg-white md:bg-light dark:bg-dark;
+
     }
 
     html {
@@ -22,9 +23,6 @@
 
     table {
         @apply text-primary;
-    }
-
-    pre {
     }
 
     button {
@@ -37,28 +35,54 @@
     bg-gradient-to-b from-action to-actiongradient drop-shadow-[0_5px_5px_rgba(0,0,0,0.95)]
     focus:bg-gradient-to-b focus:from-actiongradient focus:to-action focus:drop-shadow-[0_5px_5px_rgba(0,0,0,0.95)]
     ;
-  }
+}
 
 .submit-button-disabled {
     @apply text-white font-semibold uppercase p-3 rounded w-[220px] h-[50px] flex justify-center items-center
     bg-gradient-to-b from-slate-400 to-slate-500 drop-shadow-[0_5px_5px_rgba(0,0,0,0.95)]
     ;
-  }
-  
-
-.background-gradient-page {
-    background-image: radial-gradient(at 100% 100%, rgb(36, 23, 55) 0, transparent 30%), radial-gradient(at 0% 20%, rgb(16, 21, 52) 0, transparent 100%);
-    @apply bg-dark;
 }
 
 
-.background-gradient-modal {
-    background-image: radial-gradient(at 100% 100%, rgb(63, 29, 81) 0, transparent 30%), radial-gradient(at 100% 50%, rgb(15, 22, 59) 0, transparent 100%);
-    @apply bg-dark;
+/* MODAL */
+
+.slide-modal {
+    animation-duration: 0.1s;
+    animation-name: slidein;
+    animation-iteration-count: 1;
+    animation-direction: normal;
 }
 
-.background-gradient-login {
-    background-image: radial-gradient(at 130% 130%, rgb(63, 29, 81) 0, transparent 50%), radial-gradient(at 0% 0%, rgb(15, 22, 59) 0, transparent 100%);
-    @apply bg-dark;
+@keyframes slidein {
+    from {
+    margin-top: -100%;
+}
+    to {
+    margin-top: 0%;
+    }
 }
 
+.scrollbar {
+    @apply overflow-y-scroll;
+}
+
+/* total width */
+.scrollbar::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* background of the scrollbar except button or resizer */
+.scrollbar::-webkit-scrollbar-track {
+    @apply my-10;
+}
+
+/* scrollbar itself */
+.scrollbar::-webkit-scrollbar-thumb {
+    border: 1px solid #26263F;
+    @apply rounded absolute -right-6;
+}
+
+/* set button(top and bottom of the scrollbar) */
+.scrollbar::-webkit-scrollbar-button {
+    display:none;
+}

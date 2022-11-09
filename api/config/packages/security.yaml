@@ -34,10 +34,10 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
-        api:
-            pattern:   ^/api
-            stateless: true
-            jwt: ~
+        # api:
+        #     pattern:   ^/api
+        #     stateless: true
+        #     jwt: ~
 
 
     # Easy way to control access for large sections of your site
@@ -45,8 +45,8 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
-        - { path: ^/api/login, roles: PUBLIC_ACCESS }
-        - { path: ^/api,       roles: PUBLIC_ACCESS }
+        # - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        # - { path: ^/api/services, roles: PUBLIC_ACCESS }
 
 
 when@test:

@@ -3,7 +3,6 @@ FROM node:18-alpine
 ARG REACT_APP_API_URL
 ENV REACT_APP_API_URL=$REACT_APP_API_URL
 
-
 RUN apk add --no-cache libc6-compat
 
 WORKDIR /app

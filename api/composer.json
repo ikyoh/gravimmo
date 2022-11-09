@@ -22,7 +22,6 @@
         "symfony/expression-language": "6.1.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.1.*",
-        "symfony/mercure-bundle": "^0.3.5",
         "symfony/password-hasher": "6.1.*",
         "symfony/property-access": "6.1.*",
         "symfony/property-info": "6.1.*",
@@ -87,6 +86,8 @@
         }
     },
     "require-dev": {
-        "symfony/maker-bundle": "^1.47"
+        "symfony/maker-bundle": "^1.47",
+        "symfony/stopwatch": "6.1.*",
+        "symfony/web-profiler-bundle": "6.1.*"
     }
 }

@@ -1,7 +1,24 @@
-version: "3.8"
-
 services:
 
+  caddy:
+    image: caddy:2.6-alpine
+    container_name: ${APP_NAME}-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMAIN_NAME: ${DOMAIN_NAME}
+      APP_UPSTREAM: app:3000
+    volumes:
+      - ./api:/srv/api
+      - ./app/build:/srv/app
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - api
 
   app:
     container_name: ${APP_NAME}-app
@@ -14,10 +31,8 @@ services:
     restart: on-failure  
     environment:
       - CHOKIDAR_USEPOLLING=true  
-      - REACT_APP_ENV=dev
     ports:
     - "3000:3000"  
-
 
   api:
     container_name: ${APP_NAME}-api
@@ -38,7 +53,6 @@ services:
       - 9000:8000
     depends_on:
       - database
-
 
   database:
     container_name: ${APP_NAME}-database
@@ -65,7 +79,8 @@ services:
     depends_on:
       - database
 
-
 volumes:
   database:
+  caddy_data:
+  caddy_config:
 
