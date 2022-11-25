@@ -1,19 +1,33 @@
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 import { useForm } from "react-hook-form";
-import { usePostTrustee, usePutTrustee, useTrustee } from 'hooks/useTrustee'
-import { SelectInput } from "components/forms/select-input/SelectInput";
+import { usePostData, usePutData, useGetOneData } from 'hooks/useTrustee';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import Form from "components/forms/form/Form";
-import { FormInput } from "components/forms/input/FormInput";
-import FormInputMargin from "components/forms/input-margin/FormInputMargin";
-import FieldArray from "components/forms/field-array/FieldArray";
+import Form from "components/form/form/Form";
+import { FormInput } from "components/form/input/FormInput";
+import FieldArray from "components/form/field-array/FieldArray";
+import FormInputContact from 'components/form/input-contact/FormInputContact';
 
 export default function TrusteeForm({ id, handleCloseModal }) {
 
-    const { isLoading: isLoadingData, data, isError, error } = useTrustee(id)
-    const { mutate: postTrustee, isLoading: isPosting, isSuccess } = usePostTrustee()
-    const { mutate: putTrustee } = usePutTrustee()
+    const { isLoading: isLoadingData, data, isError, error } = useGetOneData(id)
+    const { mutate: postData, isLoading: isPosting, isSuccess } = usePostData()
+    const { mutate: putData } = usePutData()
+
+    const validationSchema = yup.object({
+        title: yup.string().required("Champ obligatoire"),
+        color: yup.string().required("Champ obligatoire"),
+        address: yup.string().required("Champ obligatoire"),
+        postcode: yup.string().required("Champ obligatoire"),
+        city: yup.string().required("Champ obligatoire"),
+        email: yup.string().required("Champ obligatoire"),
+        billingEmail: yup.string().required("Champ obligatoire"),
+    })
+
+    const { register, handleSubmit, setValue, reset, control, formState: { errors, isSubmitting } } = useForm({
+        resolver: yupResolver(validationSchema),
+        defaultValues: id ? data : {}
+    })
 
     // Set form values
     useEffect(() => {
@@ -29,27 +43,14 @@ export default function TrusteeForm({ id, handleCloseModal }) {
     }, [isLoadingData, data])
 
     const onSubmit = form => {
+        console.log('form', form)
         if (!id)
-            postTrustee(form)
+            postData(form)
         else {
-            putTrustee(form)
+            putData(form)
         }
         handleCloseModal()
     }
-
-    const validationSchema = yup.object({
-        title: yup.string().required("Champ obligatoire"),
-        address: yup.string().required("Champ obligatoire"),
-        postcode: yup.string().required("Champ obligatoire"),
-        city: yup.string().required("Champ obligatoire"),
-        email: yup.string().required("Champ obligatoire"),
-        billingEmail: yup.string().required("Champ obligatoire"),
-    })
-
-    const { register, handleSubmit, setValue, reset, control, formState: { errors, isSubmitting } } = useForm({
-        resolver: yupResolver(validationSchema),
-        defaultValues: id ? data : {}
-    })
 
     if (id) {
         if (isLoadingData) {
@@ -70,6 +71,22 @@ export default function TrusteeForm({ id, handleCloseModal }) {
                 type="text"
                 name="title"
                 label="Nom"
+                errors={errors}
+                register={register}
+                required={true}
+            />
+            <FormInput
+                type="color"
+                name="color"
+                label="Couleur"
+                errors={errors}
+                register={register}
+                required={true}
+            />
+            <FormInput
+                type="color"
+                name="color2"
+                label="Couleur secondaire"
                 errors={errors}
                 register={register}
                 required={true}

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useForm, SubmitHandler } from "react-hook-form";
-import { FormSubmitButton } from "components/forms/submit-button/FormSubmitButton"
-import { FormInput } from 'components/forms/input/FormInput';
+import { FormSubmitButton } from "components/form/submit-button/FormSubmitButton"
+import { FormInput } from 'components/form/input/FormInput';
 import axios from 'axios'
 import ReactLogo from 'assets/logo-gravimmo.svg'
 

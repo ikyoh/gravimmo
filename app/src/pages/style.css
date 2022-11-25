@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.title {
+    @apply mt-6 mb-6 font-bold text-xl uppercase underline decoration-blue-500 decoration-[6px] underline-offset-8;
+    @apply text-dark dark:text-white;
+}
+
+.subtitle {
+    @apply	text-blue-500 text-xl mb-2;
+}
+
+.card {
+    @apply p-3 rounded;
+    @apply text-dark dark:text-white;
+    @apply bg-dark/10 dark:bg-dark/60;
+}

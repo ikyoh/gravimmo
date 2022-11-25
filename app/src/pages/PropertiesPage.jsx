@@ -1,25 +1,40 @@
+import { useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Layout } from 'components/templates/layout/Layout'
 import Content from 'components/templates/content/Content'
 import Header from 'components/templates/header/Header'
 import { Button, ButtonSize } from 'components/button/Button'
-import ServiceForm from '../forms/services/ServiceForm'
+import TrusteeForm from '../forms/trustee/TrusteeForm'
 import Table from 'components/templates/table/Table'
 import Thead from 'components/templates/table/Thead'
 import Th from 'components/templates/table/Th'
 import Tbody from 'components/templates/table/Tbody'
 import Tr from 'components/templates/table/Tr'
 import Td from 'components/templates/table/Td'
-import { Dot, StatusColor } from 'components/dot/Dot'
-import { useServices } from 'hooks/useService'
-import { useFilters } from 'hooks/useFilters'
-import { BsPiggyBank } from 'react-icons/bs'
+import { useGetPaginatedDatas } from 'hooks/useProperty'
+import { useSearch } from 'hooks/useSearch'
+import { useSortBy } from 'hooks/useSortBy'
+import { GoPrimitiveDot } from 'react-icons/go'
+import { useState } from 'react'
+import Pagination from 'components/pagination/Pagination'
 
 export const PropertiesPage = ({ title }) => {
 
 	const PageContent = ({ handleOpenModal, handleCloseModal }) => {
 
-		const { searchvalue, searchbar } = useFilters()
-		const { data = [], isLoading, error } = useServices(searchvalue)
+		const navigate = useNavigate()
+		const { state: initialPageState } = useLocation()
+
+		const { searchValue, searchbar } = useSearch(initialPageState ? initialPageState.searchValue : "")
+		const [page, setPage] = useState(initialPageState ? initialPageState.page : 1)
+		const { sortValue, sortDirection, handleSort } = useSortBy(initialPageState ? { value: initialPageState.sortValue, direction: initialPageState.sortDirection } : "")
+		const { data = [], isLoading, error } = useGetPaginatedDatas(page, sortValue, sortDirection, searchValue)
+
+		useEffect(() => {
+			if (searchValue && !initialPageState) {
+				setPage(1)
+			}
+		}, [searchValue])
 
 		return (
 			<>
@@ -27,35 +42,68 @@ export const PropertiesPage = ({ title }) => {
 					{searchbar}
 					<Button
 						size={ButtonSize.Big}
-						onClick={() => handleOpenModal({ title: "Nouvelle commande", content: <ServiceForm handleCloseModal={handleCloseModal} /> })}
+						onClick={() => handleOpenModal({ title: "Nouveau syndic", content: <TrusteeForm handleCloseModal={handleCloseModal} /> })}
 					/>
 				</Header>
 				<Content>
 					<Table>
 						<Thead>
-							<Th label="#" />
-							<Th label="Nom" />
-							<Th label="Syndic" />
-							<Th label="Adresse" />
-							<Th label="Code postal" />
-							<Th label="Ville" />
+							<Th
+								label="#"
+								sortBy='id'
+								sortValue={sortValue}
+								sortDirection={sortDirection}
+								handleSort={handleSort}
+							/>
+							<Th label="Nom"
+								sortBy='title'
+								sortValue={sortValue}
+								sortDirection={sortDirection}
+								handleSort={handleSort}
+							/>
+							<Th label="Syndic"
+								sortBy='trustee.title'
+								sortValue={sortValue}
+								sortDirection={sortDirection}
+								handleSort={handleSort}
+							/>
+							<Th label="Secteur"
+								sortBy='zone'
+								sortValue={sortValue}
+								sortDirection={sortDirection}
+								handleSort={handleSort}
+							/>
+							<Th label="Code postal"
+								sortBy='postcode'
+								sortValue={sortValue}
+								sortDirection={sortDirection}
+								handleSort={handleSort}
+							/>
+							<Th label="Ville"
+								sortBy='city'
+								sortValue={sortValue}
+								sortDirection={sortDirection}
+								handleSort={handleSort}
+							/>
+
 						</Thead>
 						<Tbody>
-							{!isLoading && data.map(data =>
+							{!isLoading && data['hydra:member'].map(data =>
 								<Tr key={data.id}
-									onClick={() => handleOpenModal({ title: "édition du service", content: <ServiceForm id={data.id} handleCloseModal={handleCloseModal} /> })}
+									onClick={() => handleOpenModal({ title: "édition du syndic", content: <TrusteeForm id={data.id} handleCloseModal={handleCloseModal} /> })}
 								>
 									<Td text={data.id} />
-									<Td label="Nom" text="Copropriété" />
-									<Td label="Syndic" text="Syndic" />
-									<Td label="Adresse" text="Adresse" />
-									<Td label="Code postal" text="06000" />
-									<Td label="Ville" text="Nice" />
+									<Td label="Nom" text={data.title} />
+									<Td label="Syndic" text={data.trustee.title} />
+									<Td label="Secteur" text={data.zone} />
+									<Td label="Code postal" text={data.postcode} />
+									<Td label="Ville" text={data.city} />
 								</Tr>
 							)}
 						</Tbody>
 					</Table>
 				</Content>
+				<Pagination totalItems={data['hydra:totalItems']} page={page} setPage={setPage} />
 			</>
 		)
 	}

@@ -16,6 +16,7 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+        # used to reload user from session & other features (e.g. switch_user)
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -25,14 +26,8 @@ security:
         #     lazy: true
         #     provider: app_user_provider
         #     anonymous: true
-     
-        login:
-            pattern: ^/api/login
-            stateless: true
-            json_login:
-                check_path: /api/login
-                success_handler: lexik_jwt_authentication.handler.authentication_success
-                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        
+
 
         # api:
         #     pattern:   ^/api

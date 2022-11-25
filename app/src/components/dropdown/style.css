@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.dropdown {
+    @apply leading-tight absolute py-3 bg-slate-800 z-40 w-44 right-0 top-0 rounded divide-y divide-white/20;
+}
+
+.dropdown>div {
+    @apply p-2 hover:text-blue-500;
+}

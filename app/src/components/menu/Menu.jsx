@@ -9,6 +9,7 @@ import {
     MdLogout,
     MdOutlineHomeWork,
     MdGroups,
+    MdSupervisedUserCircle,
     MdOutlineDriveFileRenameOutline
 } from "react-icons/md";
 import { IoApps } from "react-icons/io5"
@@ -22,7 +23,7 @@ const Menu = () => {
     return (
         <div className='bg-light dark:bg-dark h-full'>
             {/* MOBILE MENU */}
-            <div className='lg:hidden flex flex-row h-[100px] items-start pt-2 justify-around bg-gradient-menu-mobile-light dark:bg-gradient-menu-mobile'>
+            <div className='lg:hidden flex flex-row h-[100px] items-start pt-2 justify-around'>
                 <Button
                     isBorder={location.pathname === "/home"}
                     size={ButtonSize.Medium}
@@ -59,29 +60,36 @@ const Menu = () => {
                 </div>
                 <div className='flex flex-col gap-3'>
                     <Button
-                        isBorder={location.pathname === "/dashboard"}
+                        isBorder={location.pathname.includes("/dashboard")}
                         link='/dashboard'
                         size={ButtonSize.Big}
                     >
                         <MdDashboard />
                     </Button>
                     <Button
-                        isBorder={location.pathname === "/orders"}
+                        isBorder={location.pathname.includes("/orders")}
                         link='/orders'
                         size={ButtonSize.Big}
                     >
                         <MdPendingActions />
                     </Button>
                     <Button
-                        isBorder={location.pathname === "/invoices"}
+                        isBorder={location.pathname.includes("/invoices")}
                         link='/invoices'
                         size={ButtonSize.Big}
                     >
                         <MdOutlineCalculate />
                     </Button>
                     <Button
-                        isBorder={location.pathname === "/trustees"}
+                        isBorder={location.pathname.includes("/trustees")}
                         link='/trustees'
+                        size={ButtonSize.Big}
+                    >
+                        <MdSupervisedUserCircle />
+                    </Button>
+                    <Button
+                        isBorder={location.pathname.includes("/contacts")}
+                        link='/contacts'
                         size={ButtonSize.Big}
                     >
                         <MdGroups />

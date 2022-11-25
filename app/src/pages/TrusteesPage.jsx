@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Layout } from 'components/templates/layout/Layout'
 import Content from 'components/templates/content/Content'
 import Header from 'components/templates/header/Header'
@@ -9,17 +11,32 @@ import Th from 'components/templates/table/Th'
 import Tbody from 'components/templates/table/Tbody'
 import Tr from 'components/templates/table/Tr'
 import Td from 'components/templates/table/Td'
-import { useTrustees } from 'hooks/useTrustee'
-import { useFilters } from 'hooks/useFilters'
+import { useGetPaginatedDatas } from 'hooks/useTrustee'
+import { useSearch } from 'hooks/useSearch'
 import { useSortBy } from 'hooks/useSortBy'
+import { GoPrimitiveDot } from 'react-icons/go'
+import { useState } from 'react'
+import Pagination from 'components/pagination/Pagination'
+import Dropdown from 'components/dropdown/Dropdown'
+
 
 export const TrusteesPage = ({ title }) => {
 
 	const PageContent = ({ handleOpenModal, handleCloseModal }) => {
 
-		const { searchValue, searchbar } = useFilters()
-		const { sortValue, sortDirection, setSortValue } = useSortBy()
-		const { data = [], isLoading, error } = useTrustees(searchValue, sortValue, sortDirection)
+		const navigate = useNavigate()
+		const { state: initialPageState } = useLocation()
+
+		const { searchValue, searchbar } = useSearch(initialPageState ? initialPageState.searchValue : "")
+		const [page, setPage] = useState(initialPageState ? initialPageState.page : 1)
+		const { sortValue, sortDirection, handleSort } = useSortBy(initialPageState ? { value: initialPageState.sortValue, direction: initialPageState.sortDirection } : "")
+		const { data = [], isLoading, error } = useGetPaginatedDatas(page, sortValue, sortDirection, searchValue)
+
+		useEffect(() => {
+			if (searchValue && !initialPageState) {
+				setPage(1)
+			}
+		}, [searchValue])
 
 		return (
 			<>
@@ -38,30 +55,65 @@ export const TrusteesPage = ({ title }) => {
 								sortBy='id'
 								sortValue={sortValue}
 								sortDirection={sortDirection}
-								setSortValue={setSortValue}
+								handleSort={handleSort}
 							/>
-							<Th label="Nom" sortBy='title' sortValue={sortValue} sortDirection={sortDirection} setSortValue={setSortValue} />
+							<Th label="Nom"
+								sortBy='title'
+								sortValue={sortValue}
+								sortDirection={sortDirection}
+								handleSort={handleSort}
+							/>
 							<Th label="Téléphone" />
 							<Th label="Email" />
-							<Th label="Code postal" sortBy='postcode' sortValue={sortValue} sortDirection={sortDirection} setSortValue={setSortValue} />
-							<Th label="Ville" sortBy='city' sortValue={sortValue} sortDirection={sortDirection} setSortValue={setSortValue} />
+							<Th label="Code postal"
+								sortBy='postcode'
+								sortValue={sortValue}
+								sortDirection={sortDirection}
+								handleSort={handleSort}
+							/>
+							<Th label="Ville"
+								sortBy='city'
+								sortValue={sortValue}
+								sortDirection={sortDirection}
+								handleSort={handleSort}
+							/>
+							<Th label="" style={{ width: 10 }} />
+
 						</Thead>
 						<Tbody>
-							{!isLoading && data.map(data =>
-								<Tr key={data.id}
-									onClick={() => handleOpenModal({ title: "édition du syndic", content: <TrusteeForm id={data.id} handleCloseModal={handleCloseModal} /> })}
-								>
+							{!isLoading && data['hydra:member'].map(data =>
+								<Tr key={data.id} onClick={() => navigate("/trustees/" + data.id, { state: { page: page, sortDirection: sortDirection, sortValue: sortValue, searchValue: searchValue } })}>
 									<Td text={data.id} />
-									<Td label="Nom" text={data.title} />
+									<Td label="Nom" text={data.title}>
+										<div className="flex flex-col mr-3">
+											<GoPrimitiveDot size={20} color={data.color} />
+											<GoPrimitiveDot size={20} color={data.color2} />
+										</div>
+									</Td>
 									<Td label="Téléphone" text={data.phone} />
 									<Td label="Email" text={data.email} />
 									<Td label="Code postal" text={data.postcode} />
 									<Td label="Ville" text={data.city} />
+									<Td label="" text={""} >
+										<div className='float-right'>
+											<Dropdown>
+												<div
+													onClick={() => handleOpenModal({ title: "édition du syndic", content: <TrusteeForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
+													Modifier le syndic
+												</div>
+												<div
+													onClick={() => handleOpenModal({ title: "édition du syndic", content: <TrusteeForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
+													Ajouter un contact
+												</div>
+											</Dropdown>
+										</div>
+									</Td>
 								</Tr>
 							)}
 						</Tbody>
 					</Table>
 				</Content>
+				<Pagination totalItems={data['hydra:totalItems']} page={page} setPage={setPage} />
 			</>
 		)
 	}

@@ -2,26 +2,48 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UserRepository;
-use ApiPlatform\Metadata\ApiResource;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use App\Filter\CustomSearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\GetCollection;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\EntityListeners(['App\EntityListener\UserListener'])]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['users:read']],
+    operations: [
+        new GetCollection(),
+        new Get(normalizationContext: ['groups' => ['user:read']]),
+        new Put(),
+        new Post()
+    ]
+)]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'title', 'lastname', 'email', 'phone', 'trustee.title'])]
+#[ApiFilter(CustomSearchFilter::class)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["users:read", "user:read", "trustee:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(["users:read", "user:read", "trustee:read"])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(["users:read", "user:read"])]
     private array $roles = [];
 
     /**
@@ -29,6 +51,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(["users:read", "user:read", "trustee:read"])]
+    private ?string $firstname = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(["users:read", "user:read", "trustee:read"])]
+    private ?string $lastname = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["users:read", "user:read", "trustee:read"])]
+    private ?string $title = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(["users:read", "user:read", "trustee:read"])]
+    private ?string $phone = null;
+
+    #[ORM\ManyToOne(inversedBy: 'contacts')]
+    #[Groups(["users:read", "user:read"])]
+    private ?Trustee $trustee = null;
+
+    #[ORM\OneToMany(mappedBy: 'contact', targetEntity: Property::class)]
+    private Collection $properties;
+
+    public function __construct()
+    {
+        $this->properties = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -98,5 +148,95 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(string $phone): self
+    {
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getTrustee(): ?Trustee
+    {
+        return $this->trustee;
+    }
+
+    public function setTrustee(?Trustee $trustee): self
+    {
+        $this->trustee = $trustee;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Property>
+     */
+    public function getProperties(): Collection
+    {
+        return $this->properties;
+    }
+
+    public function addProperty(Property $property): self
+    {
+        if (!$this->properties->contains($property)) {
+            $this->properties->add($property);
+            $property->setContact($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProperty(Property $property): self
+    {
+        if ($this->properties->removeElement($property)) {
+            // set the owning side to null (unless already changed)
+            if ($property->getContact() === $this) {
+                $property->setContact(null);
+            }
+        }
+
+        return $this;
     }
 }

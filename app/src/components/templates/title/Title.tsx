@@ -12,12 +12,12 @@ export const Title = ({
 
     const className = classNames("ext-dark dark:text-white text-2xl uppercase font-bold ",
         {
-            "animate-bounce": isLoading,
+            "animate-pulse": isLoading,
         })
 
     return (
         <div className={className}>
-            {title}
+            {isLoading ? "Chargement" : title}
         </div>
     )
 }

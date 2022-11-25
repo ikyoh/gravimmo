@@ -2,45 +2,95 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TrusteeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use App\Filter\CustomSearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\ApiProperty;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\GetCollection;
 
 #[ORM\Entity(repositoryClass: TrusteeRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['trustees:read']],
+    operations: [
+        new GetCollection(),
+        new Get(normalizationContext: ['groups' => ['trustee:read']]),
+        new Put(),
+        new Post()
+    ]
+)]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'title', 'postcode', 'city'])]
+#[ApiFilter(CustomSearchFilter::class)]
 class Trustee
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["trustees:read", "trustee:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["trustees:read", "trustee:read", "users:read", "properties:read"])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["trustees:read", "trustee:read"])]
     private ?string $address = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["trustees:read", "trustee:read"])]
     private ?string $postcode = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["trustees:read", "trustee:read"])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["trustees:read", "trustee:read"])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["trustees:read", "trustee:read"])]
     private ?string $billingEmail = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["trustees:read", "trustee:read"])]
     private ?string $phone = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["trustees:read", "trustee:read"])]
     private ?string $mobile = null;
 
-    #[ORM\Column()]
-    private array $contact = [];
+    #[ORM\Column(length: 7, nullable: true)]
+    #[Groups(["trustees:read", "trustee:read"])]
+    private ?string $color = '#C00000';
+
+    #[ORM\Column(length: 7, nullable: true)]
+    #[Groups(["trustees:read", "trustee:read"])]
+    private ?string $color2 = null;
+
+    #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: User::class, cascade: ['persist'])]
+    #[Groups(["trustee:read"])]
+    private Collection $contacts;
+
+    #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: Property::class)]
+    #[Groups(["trustee:read"])]
+    private Collection $properties;
+
+    public function __construct()
+    {
+        $this->contacts = new ArrayCollection();
+        $this->properties = new ArrayCollection();
+    }
+
 
     public function getId(): ?int
     {
@@ -143,14 +193,87 @@ class Trustee
         return $this;
     }
 
-    public function getContact(): array
+
+    public function getColor(): ?string
     {
-        return $this->contact;
+        return $this->color;
     }
 
-    public function setContact(array $contact): self
+    public function setColor(string $color): self
     {
-        $this->contact = $contact;
+        $this->color = $color;
+
+        return $this;
+    }
+
+    public function getColor2(): ?string
+    {
+        return $this->color2;
+    }
+
+    public function setColor2(?string $color2): self
+    {
+        $this->color2 = $color2;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getContacts(): Collection
+    {
+        return $this->contacts;
+    }
+
+    public function addContact(User $contact): self
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts->add($contact);
+            $contact->setTrustee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContact(User $contact): self
+    {
+        if ($this->contacts->removeElement($contact)) {
+            // set the owning side to null (unless already changed)
+            if ($contact->getTrustee() === $this) {
+                $contact->setTrustee(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Property>
+     */
+    public function getProperties(): Collection
+    {
+        return $this->properties;
+    }
+
+    public function addProperties(Property $properties): self
+    {
+        if (!$this->properties->contains($properties)) {
+            $this->properties->add($properties);
+            $properties->setTrustee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProperties(Property $properties): self
+    {
+        if ($this->properties->removeElement($properties)) {
+            // set the owning side to null (unless already changed)
+            if ($properties->getTrustee() === $this) {
+                $properties->setTrustee(null);
+            }
+        }
 
         return $this;
     }

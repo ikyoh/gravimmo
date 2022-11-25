@@ -5,7 +5,7 @@ const Tr = ({ onClick, children }) => {
 
     const ClassNames = classNames("flex flex-col md:table-row border-b border-slate-500/20 text-dark dark:text-white leading-8 md:leading-[3em]",
         {
-            "hover:bg-dark cursor-pointer": onClick,
+            "hover:bg-light dark:hover:bg-dark cursor-pointer": onClick,
         })
 
     return (

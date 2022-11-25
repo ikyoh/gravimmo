@@ -2,12 +2,18 @@
 
 namespace App\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ServiceRepository;
-use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use App\Filter\CustomSearchFilter;
 
-#[ApiResource(paginationEnabled: false)]
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
+#[ApiResource()]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'title', 'category'])]
+#[ApiFilter(CustomSearchFilter::class)]
+
 class Service
 {
     #[ORM\Id]

@@ -1,0 +1,106 @@
+services:
+
+  caddy:
+    image: caddy:2.5.2-alpine
+    container_name: ${APP_NAME}-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMAIN_NAME: ${DOMAIN_NAME}
+      APP_UPSTREAM: app:3000
+    volumes:
+      - php_socket:/var/run/php 
+      - ./api:/srv/api
+      - ./app/build:/srv/app
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - api
+    networks:
+      - gravimmo
+
+
+  app:
+    container_name: ${APP_NAME}-app
+    build:
+      context: ./app
+    stdin_open: true
+    volumes:
+      - ./app:/app
+      - /app/node_modules
+    restart: on-failure  
+    environment:
+      - CHOKIDAR_USEPOLLING=true  
+    ports:
+      - "3000:3000"  
+    networks:
+      - gravimmo
+
+  api:
+    container_name: ${APP_NAME}-api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    volumes:
+      - ./api:/srv/api
+      - ./docker/php/php.ini:/usr/local/etc/php/php.ini:ro
+      - ./docker/php/php.conf:/usr/local/etc/php/php.conf
+      - ./docker/php/zz-docker.conf:/usr/local/etc/php-fpm.d/zz-docker.conf
+      - php_socket:/var/run/php
+    environment:
+      - APP_ENV=dev
+      - APP_SECRET=${APP_SECRET}
+      - DATABASE_URL=mysql://${DB_USER}:${DB_PASS}@database:3306/${DB_NAME}?serverVersion=8&charset=utf8mb4
+      - CORS_ALLOW_ORIGIN=${CORS_ALLOW_ORIGIN}
+    depends_on:
+      - database
+    networks:
+      - gravimmo
+
+
+  database:
+    container_name: ${APP_NAME}-database
+    image: mysql:8
+    ports:
+      - "4306:3306"
+    volumes:
+      - ./docker/database:/var/lib/mysql
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
+    networks:
+      - gravimmo
+
+
+  phpmyadmin:
+    container_name: ${APP_NAME}-phpmyadmin
+    image: phpmyadmin/phpmyadmin:5.0.2
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: database
+    depends_on:
+      - database
+    networks:
+      - gravimmo
+
+
+networks:
+  gravimmo:
+    driver: bridge
+
+
+volumes:
+  php_socket:
+  caddy_data:
+  caddy_config:
+  database:
+
+

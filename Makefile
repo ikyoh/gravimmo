@@ -55,6 +55,11 @@ stop: ## Docker stop
 	$(DOCKER_COMPOSE) stop
 .PHONY: stop
 
+up: ## Docker up
+	@echo "\n==> Up docker container"
+	$(DOCKER_COMPOSE) up -d --build
+.PHONY: up
+
 down: ## Docker down
 	@echo "\n==> Remove docker container"
 	$(DOCKER_COMPOSE) down
