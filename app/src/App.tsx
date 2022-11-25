@@ -27,12 +27,12 @@ export default function App() {
             <Route path={'/'} element={<LoginPage />} />
             <Route path={'/contacts'} element={<ContactsPage title="Contacts" />} />
             <Route path={'/dashboard'} element={<DashboardPage title="Tableau de bord" />} />
-            <Route path='/properties/:id' element={<PropertyPage title="Copropriété" />} />
+            <Route path='/properties/:id' element={<PropertyPage />} />
             <Route path={'/properties'} element={<PropertiesPage title="Copropriétés" />} />
             <Route path={'/services'} element={<ServicesPage title="Prestations" />} />
             <Route path={'/orders'} element={<OrdersPage title="Commandes" />} />
             <Route path={'/invoices'} element={<InvoicesPage title="Factures" />} />
-            <Route path={'/trustees/:id'} element={<TrusteePage title="Syndic" />} />
+            <Route path={'/trustees/:id'} element={<TrusteePage />} />
             <Route path={'/trustees'} element={<TrusteesPage title="Syndics" />} />
             <Route path={'/trustees'} element={<TrusteesPage title="Syndics" />} />
           </Routes>

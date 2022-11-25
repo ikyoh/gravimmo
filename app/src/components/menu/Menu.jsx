@@ -96,7 +96,7 @@ const Menu = () => {
                     </Button>
                     <Button
                         size={ButtonSize.Big}
-                        isBorder={location.pathname === "/properties"}
+                        isBorder={location.pathname.includes("/properties")}
                         link='/properties'
                     >
                         <MdOutlineHomeWork />

@@ -1,105 +1,136 @@
-import { useEffect } from 'react'
+import { useNavigate, useLocation } from "react-router-dom";
+import { useParams } from 'react-router-dom'
 import { Layout } from 'components/templates/layout/Layout'
 import Content from 'components/templates/content/Content'
 import Header from 'components/templates/header/Header'
 import { Button, ButtonSize } from 'components/button/Button'
 import TrusteeForm from '../forms/trustee/TrusteeForm'
-import Table from 'components/templates/table/Table'
-import Thead from 'components/templates/table/Thead'
-import Th from 'components/templates/table/Th'
-import Tbody from 'components/templates/table/Tbody'
-import Tr from 'components/templates/table/Tr'
-import Td from 'components/templates/table/Td'
-import { useGetPaginatedDatas } from 'hooks/useProperty'
-import { useSearch } from 'hooks/useSearch'
-import { useSortBy } from 'hooks/useSortBy'
-import { GoPrimitiveDot } from 'react-icons/go'
-import { useState } from 'react'
-import Pagination from 'components/pagination/Pagination'
+import { useGetOneData } from 'hooks/useProperty'
+import { MdClose } from 'react-icons/md'
+import './style.css'
 
-export const PropertyPage = ({ title }) => {
+export const PropertyPage = () => {
 
 	const PageContent = ({ handleOpenModal, handleCloseModal }) => {
 
-		const { searchValue, searchbar } = useSearch()
-		const [page, setPage] = useState(1)
-		const { sortValue, sortDirection, handleSort } = useSortBy()
-		const { data = [], isLoading, error } = useGetPaginatedDatas(page, sortValue, sortDirection, searchValue)
+		const navigate = useNavigate();
+		const { state: previousPageState } = useLocation();
+		const { id } = useParams()
 
-		useEffect(() => {
-			if (searchValue) {
-				setPage(1)
-			}
-		}, [searchValue])
+		const { data = [], isLoading, error } = useGetOneData(id)
+
+		console.log('data', data)
 
 		return (
 			<>
-				<Header title={title} isLoading={isLoading} error={error}>
-					{searchbar}
+				<Header title={data.title} isLoading={isLoading} error={error}>
 					<Button
 						size={ButtonSize.Big}
-						onClick={() => handleOpenModal({ title: "Nouveau syndic", content: <TrusteeForm handleCloseModal={handleCloseModal} /> })}
-					/>
+						onClick={() => navigate("/properties", { state: previousPageState })}
+					>
+						<MdClose />
+					</Button>
 				</Header>
-				<Content>
-					<Table>
-						<Thead>
-							<Th
-								label="#"
-								sortBy='id'
-								sortValue={sortValue}
-								sortDirection={sortDirection}
-								handleSort={handleSort}
-							/>
-							<Th label="Nom"
-								sortBy='title'
-								sortValue={sortValue}
-								sortDirection={sortDirection}
-								handleSort={handleSort}
-							/>
-							<Th label="Syndic"
-								sortBy='trustee.title'
-								sortValue={sortValue}
-								sortDirection={sortDirection}
-								handleSort={handleSort}
-							/>
-							<Th label="Secteur"
-								sortBy='zone'
-								sortValue={sortValue}
-								sortDirection={sortDirection}
-								handleSort={handleSort}
-							/>
-							<Th label="Code postal"
-								sortBy='postcode'
-								sortValue={sortValue}
-								sortDirection={sortDirection}
-								handleSort={handleSort}
-							/>
-							<Th label="Ville"
-								sortBy='city'
-								sortValue={sortValue}
-								sortDirection={sortDirection}
-								handleSort={handleSort}
-							/>
 
-						</Thead>
-						<Tbody>
-							{!isLoading && data['hydra:member'].map(data =>
-								<Tr key={data.id}
-									onClick={() => handleOpenModal({ title: "édition du syndic", content: <TrusteeForm id={data.id} handleCloseModal={handleCloseModal} /> })}
-								>
-									<Td text={data.id} />
-									<Td label="Nom" text={data.title} />
-									<Td label="Syndic" text={data.trustee.title} />
-									<Td label="Secteur" text={data.zone} />
-									<Td label="Code postal" text={data.postcode} />
-									<Td label="Ville" text={data.city} />
-								</Tr>
-							)}
-						</Tbody>
-					</Table>
+				<Content>
+					<div className="pl-2">
+						{!isLoading &&
+							<>
+								<div className="title">
+									informations
+								</div>
+								<div className="flex gap-3">
+									<div className="card">
+										<div className="subtitle">
+											Adresse
+										</div>
+										<div>
+											{data.address}
+										</div>
+										<div>
+											{data.postcode} - {data.city}
+										</div>
+									</div>
+									<div className="card">
+										<div className="subtitle">
+											Secteur
+										</div>
+										{data.zone}
+									</div>
+									<div className="card">
+										<div className="subtitle">
+											Syndic
+										</div>
+										<div>
+											{data.trustee.title}
+										</div>
+										<div>
+											{data.trustee.postcode} - {data.trustee.city}
+										</div>
+									</div>
+
+									{data.contact &&
+										<div className="card">
+											<div className="subtitle">
+												Contact Syndic
+											</div>
+											<div>
+												{data.contact.lastname} {data.contact.firstname}
+											</div>
+											<div>
+												{data.contact.phone}
+											</div>
+											<div>
+												{data.contact.email}
+											</div>
+										</div>
+									}
+									<div className="card">
+										<div className="subtitle">
+											Contact Copro
+										</div>
+										<div>
+											{data.contactName}
+										</div>
+										<div>
+											{data.contactPhone}
+										</div>
+									</div>
+								</div>
+								<div className="title">
+									prestations
+								</div>
+								<div className="flex gap-3">
+									<div className="card">
+										<div>
+											<div className="subtitle">
+												Adresse
+											</div>
+											{data.address}
+										</div>
+										<div>
+											{data.postcode} - {data.city}
+										</div>
+									</div>
+									<div className="card">
+										<div className="subtitle">
+											Téléphone
+										</div>
+										{data.phone}
+									</div>
+									{data.mobile &&
+										<div className="card">
+											<div className="subtitle">
+												Mobile
+											</div>
+											{data.mobile}
+										</div>
+									}
+								</div>
+							</>
+						}
+					</div>
 				</Content>
-				<Pagination totalItems={data['hydra:totalItems']} page={page} setPage={setPage} />
 			</>
 		)
 	}

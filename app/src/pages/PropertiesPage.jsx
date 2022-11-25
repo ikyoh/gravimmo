@@ -89,9 +89,7 @@ export const PropertiesPage = ({ title }) => {
 						</Thead>
 						<Tbody>
 							{!isLoading && data['hydra:member'].map(data =>
-								<Tr key={data.id}
-									onClick={() => handleOpenModal({ title: "édition du syndic", content: <TrusteeForm id={data.id} handleCloseModal={handleCloseModal} /> })}
-								>
+								<Tr key={data.id} onClick={() => navigate("/properties/" + data.id, { state: { page: page, sortDirection: sortDirection, sortValue: sortValue, searchValue: searchValue } })}>
 									<Td text={data.id} />
 									<Td label="Nom" text={data.title} />
 									<Td label="Syndic" text={data.trustee.title} />

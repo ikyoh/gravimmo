@@ -35,11 +35,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["users:read", "user:read", "trustee:read"])]
+    #[Groups(["users:read", "user:read", "trustee:read", "property:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(["users:read", "user:read", "trustee:read"])]
+    #[Groups(["users:read", "user:read", "trustee:read", "property:read"])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -53,19 +53,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["users:read", "user:read", "trustee:read"])]
+    #[Groups(["users:read", "user:read", "trustee:read", "property:read"])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["users:read", "user:read", "trustee:read"])]
+    #[Groups(["users:read", "user:read", "trustee:read", "property:read"])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["users:read", "user:read", "trustee:read"])]
+    #[Groups(["users:read", "user:read", "trustee:read", "property:read"])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["users:read", "user:read", "trustee:read"])]
+    #[Groups(["users:read", "user:read", "trustee:read", "property:read"])]
     private ?string $phone = null;
 
     #[ORM\ManyToOne(inversedBy: 'contacts')]

@@ -45,7 +45,7 @@ module.exports = {
         'gradient-modal-footer': "radial-gradient(circle at 0% 0%, #0A0F27, transparent 100%),radial-gradient(circle at 0% 100%, #090D23, transparent 100%),radial-gradient(circle at 100% 100%, #2B1740, transparent 100%),radial-gradient(circle at 80% 20%,#0C102C, transparent 100%)",
         'gradient-login': "radial-gradient(at 130% 130%, rgb(63, 29, 81) 0, transparent 50%), radial-gradient(at 0% 0%, rgb(15, 22, 59) 0, transparent 100%)",
         'gradient-menu': "radial-gradient(at 200% 50%, rgb(15, 22, 59), transparent 70% )",
-        'gradient-menu-light': "radial-gradient(at 200% 50%, rgb(255, 255, 255), transparent 80% )",
+        'gradient-menu-light': "radial-gradient(at 200% 50%, rgb(255, 255, 255), transparent 90% )",
         'gradient-menu-mobile': "radial-gradient(at 50% 0%, rgb(15, 22, 59), transparent 70% )",
         'gradient-menu-mobile-light': "radial-gradient(at 50% 0%, rgb(255, 255, 255), transparent 100% )",
       },

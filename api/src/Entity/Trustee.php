@@ -38,7 +38,7 @@ class Trustee
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["trustees:read", "trustee:read", "users:read", "properties:read"])]
+    #[Groups(["trustees:read", "trustee:read", "users:read", "properties:read", "property:read"])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
@@ -46,11 +46,11 @@ class Trustee
     private ?string $address = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["trustees:read", "trustee:read"])]
+    #[Groups(["trustees:read", "trustee:read", "property:read"])]
     private ?string $postcode = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["trustees:read", "trustee:read"])]
+    #[Groups(["trustees:read", "trustee:read", "property:read"])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
