@@ -7,5 +7,5 @@
 }
 
 .dropdown>div {
-    @apply p-2 hover:text-blue-500;
+    @apply p-2 hover:text-blue-500 cursor-pointer;
 }

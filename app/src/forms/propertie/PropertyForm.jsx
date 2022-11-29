@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useForm } from "react-hook-form";
-import { usePostData, usePutData, useGetOneData } from 'hooks/useContact';
+import { usePostData, usePutData, useGetOneData } from 'hooks/useProperty';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import Form from "components/form/form/Form";
@@ -8,7 +8,7 @@ import { FormInput } from "components/form/input/FormInput";
 import FieldArray from "components/form/field-array/FieldArray";
 import FormInputContact from 'components/form/input-contact/FormInputContact';
 
-export default function ContactForm({ id, trustee, handleCloseModal }) {
+export default function PropertyForm({ id, handleCloseModal }) {
 
     const { isLoading: isLoadingData, data, isError, error } = useGetOneData(id)
     const { mutate: postData, isLoading: isPosting, isSuccess } = usePostData()
@@ -16,10 +16,9 @@ export default function ContactForm({ id, trustee, handleCloseModal }) {
 
     const validationSchema = yup.object({
         title: yup.string().required("Champ obligatoire"),
-        firstname: yup.string().required("Champ obligatoire"),
-        lastname: yup.string().required("Champ obligatoire"),
-        phone: yup.string().required("Champ obligatoire"),
-        email: yup.string().email('Email non valide').required('Champ obligatoire'),
+        address: yup.string().required("Champ obligatoire"),
+        postcode: yup.string().required("Champ obligatoire"),
+        city: yup.string().required("Champ obligatoire"),
     })
 
     const { register, handleSubmit, setValue, reset, control, formState: { errors, isSubmitting } } = useForm({
@@ -30,11 +29,9 @@ export default function ContactForm({ id, trustee, handleCloseModal }) {
     // Set form values
     useEffect(() => {
         if (!id) {
-            reset({trustee : trustee})
+            reset({})
         }
     }, [])
-
-    console.log('trustee', trustee)
 
     useEffect(() => {
         if (id && data) {
@@ -70,14 +67,6 @@ export default function ContactForm({ id, trustee, handleCloseModal }) {
             <FormInput
                 type="text"
                 name="title"
-                label="Fonction"
-                errors={errors}
-                register={register}
-                required={true}
-            />
-            <FormInput
-                type="text"
-                name="lastname"
                 label="Nom"
                 errors={errors}
                 register={register}
@@ -85,24 +74,56 @@ export default function ContactForm({ id, trustee, handleCloseModal }) {
             />
             <FormInput
                 type="text"
-                name="firstname"
-                label="Prénom"
+                name="address"
+                label="Adresse"
+                errors={errors}
+                register={register}
+                required={false}
+            />
+            <FormInput
+                type="text"
+                name="postcode"
+                label="Code postal"
                 errors={errors}
                 register={register}
                 required={true}
             />
             <FormInput
                 type="text"
-                name="email"
-                label="Email"
+                name="city"
+                label="Ville"
                 errors={errors}
                 register={register}
                 required={true}
             />
             <FormInput
                 type="text"
-                name="phone"
-                label="Numéro de téléphone"
+                name="zone"
+                label="Secteur"
+                errors={errors}
+                register={register}
+                required={true}
+            />
+            <FormInput
+                type="text"
+                name="contactName"
+                label="Nom du contact"
+                errors={errors}
+                register={register}
+                required={true}
+            />
+            <FormInput
+                type="text"
+                name="contactPhone"
+                label="Téléphone du contact"
+                errors={errors}
+                register={register}
+                required={true}
+            />
+            <FormInput
+                type="text"
+                name="tva"
+                label="Taux de TVA"
                 errors={errors}
                 register={register}
                 required={true}

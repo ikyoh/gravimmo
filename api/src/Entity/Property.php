@@ -15,10 +15,12 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['properties:read']],
+    denormalizationContext : ['groups' => ["property:write"]],
     operations: [
         new GetCollection(),
         new Get(normalizationContext: ['groups' => ['property:read']]),
@@ -28,6 +30,7 @@ use ApiPlatform\Metadata\GetCollection;
 )]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'title', 'postcode', 'city', 'zone', 'trustee.title'])]
 #[ApiFilter(CustomSearchFilter::class)]
+#[ApiFilter(SearchFilter::class, properties: ['trustee' => 'exact'])]
 class Property
 {
     #[ORM\Id]
@@ -37,39 +40,39 @@ class Property
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["properties:read", "property:read", "trustee:read"])]
+    #[Groups(["properties:read", "property:read", "trustee:read", "property:write"])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["properties:read", "property:read"])]
+    #[Groups(["properties:read", "property:read", "property:write"])]
     private ?string $address = null;
 
     #[ORM\Column(length: 5)]
-    #[Groups(["properties:read", "property:read", "trustee:read"])]
+    #[Groups(["properties:read", "property:read", "trustee:read", "property:write"])]
     private ?string $postcode = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["properties:read", "property:read", "trustee:read"])]
+    #[Groups(["properties:read", "property:read", "trustee:read", "property:write"])]
     private ?string $city = null;
 
     #[ORM\Column]
-    #[Groups(["property:read"])]
+    #[Groups(["property:read", "property:write"])]
     private ?float $tva = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["property:read"])]
+    #[Groups(["property:read", "property:write"])]
     private ?string $contactName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["property:read"])]
+    #[Groups(["property:read", "property:write"])]
     private ?string $contactPhone = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["properties:read", "property:read", "trustee:read"])]
+    #[Groups(["properties:read", "property:read", "trustee:read", "property:write"])]
     private ?string $zone = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(["property:read"])]
+    #[Groups(["property:read", "property:write"])]
     private array $params = [];
 
     #[ORM\ManyToOne(inversedBy: 'properties')]

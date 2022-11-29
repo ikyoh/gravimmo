@@ -11,6 +11,10 @@ const fetchAllDatas = () => {
     return request({ url: API, method: 'get' })
 }
 
+const fetchFilteredDatas = (sortValue, sortDirection, searchValue) => {
+    return request({ url: API + "?pagination=false" + "&order[" + sortValue + "]=" + sortDirection + "&" + searchValue, method: 'get' })
+}
+
 const fetchPaginatedDatas = (page, sortValue, sortDirection, searchValue) => {
     return request({ url: API + "?page=" + page + "&itemsPerPage=" + itemsPerPage + "&order[" + sortValue + "]=" + sortDirection + "&search[id,title,postcode,city,zone]=" + searchValue, method: 'get' })
 }
@@ -39,6 +43,16 @@ export const useGetAllDatas = (search = '', sortValue, sortDirection) => {
                 f.title.toLowerCase().includes(search.toLowerCase())
             ), sortValue, sortDirection)
         }
+    })
+}
+
+export const useGetFilteredDatas = (sortValue, sortDirection, searchValue) => {
+    return useQuery({
+        queryKey: [queryKey, sortValue, sortDirection, searchValue],
+        queryFn: () => fetchFilteredDatas(sortValue, sortDirection, searchValue),
+        keepPreviousData: true,
+        staleTime: 60_000,
+        //select: data => {return data['hydra:member']}
     })
 }
 

@@ -18,48 +18,15 @@ export const OrdersPage = ({ title }) => {
 
 	const PageContent = ({ handleOpenModal, handleCloseModal }) => {
 
-		const {searchvalue, searchbar} = useSearch()
-		const { data=[], isLoading, error } = useServices(searchvalue)
+
 
 		return (
 			<>
-				<Header title={title} isLoading={isLoading} error={error}>
-					{searchbar}
-					<Button
-						size={ButtonSize.Big}
-						onClick={() => handleOpenModal({ title: "Nouvelle commande", content: <ServiceForm handleCloseModal={handleCloseModal} /> })}
-					>
-					</Button>
+				<Header title={title}>
+
 				</Header>
 				<Content>
-					<Table>
-						<Thead>
-							<Th label="#" />
-							<Th label="Syndic" />
-							<Th label="Copropriété" />
-							<Th label="Date" />
-							<Th label="Date de pose" />
-							<Th label="Montant H.T." />
-							<Th label="" />
-						</Thead>
-						<Tbody>
-							{!isLoading && data.map(data =>
-								<Tr key={data.id}
-									onClick={() => handleOpenModal({ title: "édition du service", content: <ServiceForm id={data.id} handleCloseModal={handleCloseModal} /> })}
-								>
-									<Td text={data.id} />
-									<Td label="Syndic" text="Syndic" />
-									<Td label="Copropriété" text="Copropriété" />
-									<Td label="Date" text="04 11 2022" />
-									<Td label="Date de pose" text="04 11 2022" />
-									<Td label="Montant H.T." text="24.20" />
-									<Td label="">
-										<Dot color={StatusColor.Action} />
-									</Td>
-								</Tr>
-							)}
-						</Tbody>
-					</Table>
+
 				</Content>
 			</>
 		)

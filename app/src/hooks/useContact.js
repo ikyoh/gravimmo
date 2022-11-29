@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { request } from '../utils/axios.utils'
 import { API_USERS as API, itemsPerPage } from '../config/api.config'
 import _ from 'lodash'
+import { generatePassword } from 'utils/functions.utils'
 
 /* CONFIG */
 const queryKey = 'contacts'
@@ -9,6 +10,10 @@ const queryKey = 'contacts'
 /* API REQUESTS */
 const fetchAllDatas = () => {
     return request({ url: API, method: 'get' })
+}
+
+const fetchFilteredDatas = (sortValue, sortDirection, searchValue) => {
+    return request({ url: API + "?pagination=false" + "&order[" + sortValue + "]=" + sortDirection + "&" + searchValue, method: 'get' })
 }
 
 const fetchPaginatedDatas = (page, sortValue, sortDirection, searchValue) => {
@@ -21,13 +26,13 @@ const fetchOneData = ({ queryKey }) => {
 }
 
 const postData = form => {
-    return request({ url: API, method: 'post', data: form })
+    const datas = { ...form, plainPassword: generatePassword(8), roles : ["ROLE_USER"] }
+    return request({ url: API, method: 'post', data: datas })
 }
 
 const putData = form => {
     return request({ url: API + "/" + form.id, method: 'put', data: form })
 }
-
 
 /* HOOKS */
 export const useGetAllDatas = (search = '', sortValue, sortDirection) => {
@@ -42,6 +47,16 @@ export const useGetAllDatas = (search = '', sortValue, sortDirection) => {
     })
 }
 
+export const useGetFilteredDatas = (sortValue, sortDirection, searchValue) => {
+    return useQuery({
+        queryKey: [queryKey, sortValue, sortDirection, searchValue],
+        queryFn: () => fetchFilteredDatas(sortValue, sortDirection, searchValue),
+        keepPreviousData: true,
+        staleTime: 60_000,
+        //select: data => {return data['hydra:member']}
+    })
+}
+
 export const useGetPaginatedDatas = (page, sortValue, sortDirection, searchValue) => {
     return useQuery({
         queryKey: [queryKey, page, sortValue, sortDirection, searchValue],
@@ -50,7 +65,6 @@ export const useGetPaginatedDatas = (page, sortValue, sortDirection, searchValue
         staleTime: 60_000,
         //select: data => {return data['hydra:member']}
     })
-
 }
 
 export const useGetOneData = (id) => {

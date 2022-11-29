@@ -1,5 +1,6 @@
 # api/config/packages/api_platform.yaml
 api_platform:
     defaults:
+        pagination_client_enabled: true
         pagination_client_items_per_page: true
         pagination_items_per_page: 50

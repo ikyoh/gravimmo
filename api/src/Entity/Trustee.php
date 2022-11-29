@@ -77,12 +77,10 @@ class Trustee
     #[Groups(["trustees:read", "trustee:read"])]
     private ?string $color2 = null;
 
-    #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: User::class, cascade: ['persist'])]
-    #[Groups(["trustee:read"])]
+    #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: User::class)]
     private Collection $contacts;
 
     #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: Property::class)]
-    #[Groups(["trustee:read"])]
     private Collection $properties;
 
     public function __construct()
