@@ -55,11 +55,11 @@ export const Button = ({
                     </div>
                 </Link>
                 {label ?
-                <div className='dark:text-white text-dark text-xs mt-2 md:hidden'>
-                    {label}
-                </div>
-                : null
-            }
+                    <div className='dark:text-white text-dark text-xs mt-2 md:hidden'>
+                        {label}
+                    </div>
+                    : null
+                }
             </div >
         )
 

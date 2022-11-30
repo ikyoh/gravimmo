@@ -5,9 +5,10 @@ import Content from 'components/templates/content/Content'
 import Header from 'components/templates/header/Header'
 import { Button, ButtonSize } from 'components/button/Button'
 import { useGetOneData } from 'hooks/useProperty'
-import { MdClose } from 'react-icons/md'
+import { MdClose, MdArrowBack } from 'react-icons/md'
 import PropertyForm from "forms/propertie/PropertyForm"
 import Dropdown from 'components/dropdown/Dropdown'
+import _ from "lodash"
 import './style.css'
 
 export const PropertyPage = () => {
@@ -17,26 +18,32 @@ export const PropertyPage = () => {
 		const navigate = useNavigate();
 		const { state: previousPageState } = useLocation();
 		const { id } = useParams()
-
 		const { data = [], isLoading, error } = useGetOneData(id)
-
-		console.log('data', data)
 
 		return (
 			<>
 				<Header title={data.title} isLoading={isLoading} error={error}>
-					<Button
-						size={ButtonSize.Big}
-						onClick={() => navigate("/properties", { state: previousPageState })}
-					>
-						<MdClose />
-					</Button>
+					{_.isEmpty(previousPageState)
+						?
+						<Button
+							size={ButtonSize.Big}
+							onClick={() => navigate(-1)}
+						>
+							<MdArrowBack />
+						</Button>
+						:
+						<Button
+							size={ButtonSize.Big}
+							onClick={() => navigate("/properties", { state: previousPageState })}
+						>
+							<MdArrowBack />
+						</Button>
+					}
 				</Header>
 
 				<Content>
 					{!isLoading &&
 						<div className="pl-2">
-
 							<div className="title">
 								informations
 							</div>
@@ -144,7 +151,7 @@ export const PropertyPage = () => {
 							<div className="cards-container">
 								<div className="card">
 									<div className="subtitle">
-									Presta 1
+										Presta 1
 									</div>
 									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi inventore, explicabo dolore libero ratione animi harum fugiat culpa, porro numquam voluptas nostrum! Maiores quae laudantium voluptates quasi facilis quibusdam ratione?</p>
 									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi inventore, explicabo dolore libero ratione animi harum fugiat culpa, porro numquam voluptas nostrum! Maiores quae laudantium voluptates quasi facilis quibusdam ratione?</p>
@@ -152,7 +159,7 @@ export const PropertyPage = () => {
 								</div>
 								<div className="card">
 									<div className="subtitle">
-									Presta 2
+										Presta 2
 									</div>
 									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi inventore, explicabo dolore libero ratione animi harum fugiat culpa, porro numquam voluptas nostrum! Maiores quae laudantium voluptates quasi facilis quibusdam ratione?</p>
 									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi inventore, explicabo dolore libero ratione animi harum fugiat culpa, porro numquam voluptas nostrum! Maiores quae laudantium voluptates quasi facilis quibusdam ratione?</p>
@@ -160,7 +167,7 @@ export const PropertyPage = () => {
 								</div>
 								<div className="card">
 									<div className="subtitle">
-									Presta 3
+										Presta 3
 									</div>
 									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi inventore, explicabo dolore libero ratione animi harum fugiat culpa, porro numquam voluptas nostrum! Maiores quae laudantium voluptates quasi facilis quibusdam ratione?</p>
 									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi inventore, explicabo dolore libero ratione animi harum fugiat culpa, porro numquam voluptas nostrum! Maiores quae laudantium voluptates quasi facilis quibusdam ratione?</p>

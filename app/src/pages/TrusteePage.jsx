@@ -10,7 +10,7 @@ import PropertyForm from "forms/propertie/PropertyForm";
 import { useGetOneData } from 'hooks/useTrustee'
 import { useGetFilteredDatas as useGetFilteredDatasContact } from 'hooks/useContact'
 import { useGetFilteredDatas as useGetFilteredDatasProprerty } from 'hooks/useProperty'
-import { MdClose } from 'react-icons/md'
+import { MdClose, MdArrowBack } from 'react-icons/md'
 import Dropdown from 'components/dropdown/Dropdown'
 import { API_URL, API_TRUSTEES } from "config/api.config"
 import './style.css'
@@ -33,7 +33,7 @@ export const TrusteePage = () => {
 						size={ButtonSize.Big}
 						onClick={() => navigate("/trustees", { state: previousPageState })}
 					>
-						<MdClose />
+						<MdArrowBack />
 					</Button>
 				</Header>
 
@@ -149,6 +149,11 @@ export const TrusteePage = () => {
 										<div className="absolute top-3 right-3">
 											<Dropdown>
 												<div
+													onClick={() => navigate("/properties/" + data.id, { state: {} })}
+												>
+													Voir la fiche
+												</div>
+												<div
 													onClick={() => handleOpenModal({ title: "modifier la copropriété", content: <PropertyForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
 													Modifier la copropriété
 												</div>
@@ -160,9 +165,9 @@ export const TrusteePage = () => {
 									<Button size={ButtonSize.Big}
 										onClick={() => handleOpenModal({ title: "Nouvelle copropriété", content: <PropertyForm trusteeIRI={data["@id"]} handleCloseModal={handleCloseModal} /> })}
 									/>
-										<div>
-											ajouter <br /> une copropriété
-										</div>
+									<div>
+										ajouter <br /> une copropriété
+									</div>
 								</div>
 							</div>
 						</div>
