@@ -9,7 +9,7 @@ import FieldArray from "components/form/field-array/FieldArray";
 import FormInputContact from 'components/form/input-contact/FormInputContact';
 import FormCheckbox from 'components/form/checkbox/FormCheckbox';
 
-export default function PropertyForm({ id, handleCloseModal }) {
+export default function PropertyForm({ id, trusteeIRI, handleCloseModal }) {
 
     const { isLoading: isLoadingData, data, isError, error } = useGetOneData(id)
     const { mutate: postData, isLoading: isPosting, isSuccess } = usePostData()
@@ -22,6 +22,7 @@ export default function PropertyForm({ id, handleCloseModal }) {
         address: yup.string().required("Champ obligatoire"),
         postcode: yup.string().required("Champ obligatoire"),
         city: yup.string().required("Champ obligatoire"),
+        tva: yup.number().required("Champ obligatoire"),
     })
 
     const { register, handleSubmit, setValue, reset, control, formState: { errors, isSubmitting } } = useForm({
@@ -32,6 +33,12 @@ export default function PropertyForm({ id, handleCloseModal }) {
     // Set form values
     useEffect(() => {
         if (!id) {
+            reset({})
+        }
+        if (!id && trusteeIRI) {
+            reset({ trustee: trusteeIRI })
+        }
+        if (!id && !trusteeIRI) {
             reset({})
         }
     }, [])

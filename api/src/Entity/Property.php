@@ -74,7 +74,7 @@ class Property
 
     #[ORM\ManyToOne(inversedBy: 'properties')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["properties:read", "property:read"])]
+    #[Groups(["properties:read", "property:read", "property:write"])]
     private ?Trustee $trustee = null;
 
     #[ORM\ManyToOne(inversedBy: 'properties')]

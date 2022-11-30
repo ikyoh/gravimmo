@@ -157,10 +157,12 @@ export const TrusteePage = () => {
 									</div>
 								)}
 								<div className="card-button">
-									<Button size={ButtonSize.Big}></Button>
-									<div>
-										ajouter <br /> une copropriété
-									</div>
+									<Button size={ButtonSize.Big}
+										onClick={() => handleOpenModal({ title: "Nouvelle copropriété", content: <PropertyForm trusteeIRI={data["@id"]} handleCloseModal={handleCloseModal} /> })}
+									/>
+										<div>
+											ajouter <br /> une copropriété
+										</div>
 								</div>
 							</div>
 						</div>
