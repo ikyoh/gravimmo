@@ -101,10 +101,6 @@ export const TrusteesPage = ({ title }) => {
 													onClick={() => handleOpenModal({ title: "édition du syndic", content: <TrusteeForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
 													Modifier le syndic
 												</div>
-												<div
-													onClick={() => handleOpenModal({ title: "édition du syndic", content: <TrusteeForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
-													Ajouter un contact
-												</div>
 											</Dropdown>
 										</div>
 									</Td>

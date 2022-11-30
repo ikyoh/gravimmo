@@ -68,6 +68,9 @@ class AppFixtures extends Fixture
                         ->setContact($user)
                         ->setZone("Nice Est")
                         ->setTrustee($trustee)
+                        ->setAccessType("VIGIK")
+                        ->setAccessCode("1234A")
+                        ->setParams(["N° d'appartement", "N° d'étage"])
                         ->setContactName($faker->name)
                         ->setContactPhone($faker->phoneNumber);
                     $manager->persist($property);
@@ -82,6 +85,9 @@ class AppFixtures extends Fixture
                         ->setContact($user)
                         ->setZone("Nice Ouest")
                         ->setTrustee($trustee)
+                        ->setAccessType("VIGIK")
+                        ->setAccessCode("1234A")
+                        ->setParams(["N° d'appartement", "N° d'étage"])
                         ->setContactName($faker->name)
                         ->setContactPhone($faker->phoneNumber);
                     $manager->persist($property);
@@ -96,6 +102,9 @@ class AppFixtures extends Fixture
                         ->setContact($user)
                         ->setZone("Nice Nord")
                         ->setTrustee($trustee)
+                        ->setAccessType("VIGIK")
+                        ->setAccessCode("1234A")
+                        ->setParams(["N° d'appartement", "N° d'étage"])
                         ->setContactName($faker->name)
                         ->setContactPhone($faker->phoneNumber);
                     $manager->persist($property);
@@ -110,6 +119,9 @@ class AppFixtures extends Fixture
                         ->setContact($user)
                         ->setZone("Nice Centre")
                         ->setTrustee($trustee)
+                        ->setAccessType("VIGIK")
+                        ->setAccessCode("1234A")
+                        ->setParams(["N° d'appartement", "N° d'étage"])
                         ->setContactName($faker->name)
                         ->setContactPhone($faker->phoneNumber);
                     $manager->persist($property);
@@ -124,6 +136,9 @@ class AppFixtures extends Fixture
                         ->setContact($user)
                         ->setZone("Autre")
                         ->setTrustee($trustee)
+                        ->setAccessType("VIGIK")
+                        ->setAccessCode("1234A")
+                        ->setParams(["N° d'appartement", "N° d'étage"])
                         ->setContactName($faker->name)
                         ->setContactPhone($faker->phoneNumber);
                     $manager->persist($property);

@@ -7,12 +7,15 @@ import Form from "components/form/form/Form";
 import { FormInput } from "components/form/input/FormInput";
 import FieldArray from "components/form/field-array/FieldArray";
 import FormInputContact from 'components/form/input-contact/FormInputContact';
+import FormCheckbox from 'components/form/checkbox/FormCheckbox';
 
 export default function PropertyForm({ id, handleCloseModal }) {
 
     const { isLoading: isLoadingData, data, isError, error } = useGetOneData(id)
     const { mutate: postData, isLoading: isPosting, isSuccess } = usePostData()
     const { mutate: putData } = usePutData()
+
+    console.log('data', data)
 
     const validationSchema = yup.object({
         title: yup.string().required("Champ obligatoire"),
@@ -23,7 +26,7 @@ export default function PropertyForm({ id, handleCloseModal }) {
 
     const { register, handleSubmit, setValue, reset, control, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(validationSchema),
-        defaultValues: id ? data : {}
+        defaultValues: id ? data : { params: [] }
     })
 
     // Set form values
@@ -122,12 +125,126 @@ export default function PropertyForm({ id, handleCloseModal }) {
             />
             <FormInput
                 type="text"
+                name="accessType"
+                label="Type d'accès"
+                errors={errors}
+                register={register}
+                required={true}
+            />
+            <FormInput
+                type="text"
+                name="accessCode"
+                label="Code d'accès"
+                errors={errors}
+                register={register}
+                required={true}
+            />
+            <FormInput
+                type="text"
                 name="tva"
                 label="Taux de TVA"
                 errors={errors}
                 register={register}
                 required={true}
             />
+            <div className="grid grid-cols-2">
+                <FormCheckbox
+                    name="params"
+                    label="Entrée"
+                    value="Entrée"
+                    errors={errors}
+                    register={register}
+                    required={true}
+                />
+                <FormCheckbox
+                    name="params"
+                    label="N° de porte"
+                    value="N° de porte"
+                    errors={errors}
+                    register={register}
+                    required={true}
+                />
+                <FormCheckbox
+                    name="params"
+                    label="N° d'appartement"
+                    value="N° d'appartement"
+                    errors={errors}
+                    register={register}
+                    required={true}
+                />
+                <FormCheckbox
+                    name="params"
+                    label="N° d'étage"
+                    value="N° d'étage"
+                    errors={errors}
+                    register={register}
+                    required={true}
+                />
+                <FormCheckbox
+                    name="params"
+                    label="N° de boîte aux lettres"
+                    value="N° de boîte aux lettres"
+                    errors={errors}
+                    register={register}
+                    required={true}
+                />
+                <FormCheckbox
+                    name="params"
+                    label="N° de lot"
+                    value="N° de lot"
+                    errors={errors}
+                    register={register}
+                    required={true}
+                />
+                <FormCheckbox
+                    name="params"
+                    label="N° de villa"
+                    value="N° de villa"
+                    errors={errors}
+                    register={register}
+                    required={true}
+                />
+                <FormCheckbox
+                    name="params"
+                    label="Situation palière"
+                    value="Situation palière"
+                    errors={errors}
+                    register={register}
+                    required={true}
+                />
+                <FormCheckbox
+                    name="params"
+                    label="Tableau boîte aux lettres"
+                    value="Tableau boîte aux lettres"
+                    errors={errors}
+                    register={register}
+                    required={true}
+                />
+                <FormCheckbox
+                    name="params"
+                    label="Platine à défilement"
+                    value="Platine à défilement"
+                    errors={errors}
+                    register={register}
+                    required={true}
+                />
+                <FormCheckbox
+                    name="params"
+                    label="Platine parlophone électricien"
+                    value="Platine parlophone électricien"
+                    errors={errors}
+                    register={register}
+                    required={true}
+                />
+                <FormCheckbox
+                    name="params"
+                    label="Tableau PTT"
+                    value="Tableau PTT"
+                    errors={errors}
+                    register={register}
+                    required={true}
+                />
+            </div>
         </Form>
     );
 }

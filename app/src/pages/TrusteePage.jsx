@@ -1,4 +1,4 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"
 import { useParams } from 'react-router-dom'
 import { Layout } from 'components/templates/layout/Layout'
 import Content from 'components/templates/content/Content'

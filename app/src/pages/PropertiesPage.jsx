@@ -14,9 +14,10 @@ import Td from 'components/templates/table/Td'
 import { useGetPaginatedDatas } from 'hooks/useProperty'
 import { useSearch } from 'hooks/useSearch'
 import { useSortBy } from 'hooks/useSortBy'
-import { GoPrimitiveDot } from 'react-icons/go'
 import { useState } from 'react'
 import Pagination from 'components/pagination/Pagination'
+import PropertyForm from 'forms/propertie/PropertyForm'
+import Dropdown from 'components/dropdown/Dropdown'
 
 export const PropertiesPage = ({ title }) => {
 
@@ -85,6 +86,7 @@ export const PropertiesPage = ({ title }) => {
 								sortDirection={sortDirection}
 								handleSort={handleSort}
 							/>
+							<Th label="" style={{ width: 10 }} />
 
 						</Thead>
 						<Tbody>
@@ -96,6 +98,16 @@ export const PropertiesPage = ({ title }) => {
 									<Td label="Secteur" text={data.zone} />
 									<Td label="Code postal" text={data.postcode} />
 									<Td label="Ville" text={data.city} />
+									<Td label="" text={""} >
+										<div className='float-right'>
+											<Dropdown>
+												<div
+													onClick={() => handleOpenModal({ title: "édition de la copropriété", content: <PropertyForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
+													Modifier la copropriété
+												</div>
+											</Dropdown>
+										</div>
+									</Td>
 								</Tr>
 							)}
 						</Tbody>

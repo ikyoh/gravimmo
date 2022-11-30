@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\PropertyRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\ApiFilter;
@@ -71,10 +72,6 @@ class Property
     #[Groups(["properties:read", "property:read", "trustee:read", "property:write"])]
     private ?string $zone = null;
 
-    #[ORM\Column(nullable: true)]
-    #[Groups(["property:read", "property:write"])]
-    private array $params = [];
-
     #[ORM\ManyToOne(inversedBy: 'properties')]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(["properties:read", "property:read"])]
@@ -87,6 +84,19 @@ class Property
     #[ORM\OneToMany(mappedBy: 'property', targetEntity: PropertyService::class)]
     #[Groups(["property:read"])]
     private Collection $services;
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    #[Groups(["property:read", "property:write"])]
+    private $params = [];
+
+    #[ORM\Column(length: 255)]
+    #[Groups(["property:read", "property:write"])]
+    private ?string $accessType = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["property:read", "property:write"])]
+    private ?string $accessCode = null;
+
 
     public function __construct()
     {
@@ -194,17 +204,6 @@ class Property
         return $this;
     }
 
-    public function getParams(): array
-    {
-        return $this->params;
-    }
-
-    public function setParams(?array $params): self
-    {
-        $this->params = $params;
-
-        return $this;
-    }
 
     public function getTrustee(): ?Trustee
     {
@@ -259,4 +258,41 @@ class Property
 
         return $this;
     }
+
+    public function getParams(): array
+    {
+        return $this->params;
+    }
+
+    public function setParams(?array $params): self
+    {
+        $this->params = $params;
+
+        return $this;
+    }
+
+    public function getAccessType(): ?string
+    {
+        return $this->accessType;
+    }
+
+    public function setAccessType(string $accessType): self
+    {
+        $this->accessType = $accessType;
+
+        return $this;
+    }
+
+    public function getAccessCode(): ?string
+    {
+        return $this->accessCode;
+    }
+
+    public function setAccessCode(?string $accessCode): self
+    {
+        $this->accessCode = $accessCode;
+
+        return $this;
+    }
+
 }
