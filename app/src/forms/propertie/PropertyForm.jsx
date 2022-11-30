@@ -50,11 +50,12 @@ export default function PropertyForm({ id, trusteeIRI, handleCloseModal }) {
     }, [isLoadingData, data])
 
     const onSubmit = form => {
-        console.log('form', form)
         if (!id)
             postData(form)
         else {
-            putData(form)
+            const updateForm = {...form}
+            delete updateForm.trustee
+            putData(updateForm)
         }
         handleCloseModal()
     }
