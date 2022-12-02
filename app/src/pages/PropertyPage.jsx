@@ -6,7 +6,8 @@ import Header from 'components/templates/header/Header'
 import { Button, ButtonSize } from 'components/button/Button'
 import { useGetOneData } from 'hooks/useProperty'
 import { MdClose, MdArrowBack } from 'react-icons/md'
-import PropertyForm from "forms/propertie/PropertyForm"
+import PropertyForm from "forms/property/PropertyForm"
+import PropertyServiceForm from "forms/propertyService/PropertyServiceForm"
 import Dropdown from 'components/dropdown/Dropdown'
 import _ from "lodash"
 import './style.css'
@@ -175,7 +176,9 @@ export const PropertyPage = () => {
 								</div>
 							</div>
 							<div className="card-button">
-								<Button size={ButtonSize.Big}></Button>
+								<Button size={ButtonSize.Big}
+									onClick={() => handleOpenModal({ title: "Ajouter une prestation", content: <PropertyServiceForm id={data.id} handleCloseModal={handleCloseModal} /> })}
+								/>
 								<div>
 									ajouter <br /> une prestation
 								</div>

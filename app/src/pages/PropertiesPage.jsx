@@ -16,7 +16,7 @@ import { useSearch } from 'hooks/useSearch'
 import { useSortBy } from 'hooks/useSortBy'
 import { useState } from 'react'
 import Pagination from 'components/pagination/Pagination'
-import PropertyForm from 'forms/propertie/PropertyForm'
+import PropertyForm from 'forms/property/PropertyForm'
 import Dropdown from 'components/dropdown/Dropdown'
 
 export const PropertiesPage = ({ title }) => {

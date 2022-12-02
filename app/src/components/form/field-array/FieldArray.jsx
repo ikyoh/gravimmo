@@ -23,13 +23,11 @@ const FieldArray = ({ name, label, required, placeholder, control }) => {
 
     const handleAddItem = () => {
         if (inputValue !== '') {
-            append({ "data": inputValue })
+            append(inputValue)
             setInputValue(initialValue)
         }
         else setError("Champ requis")
     }
-
-
     return (
         <div className="w-full mb-2">
             <Label name={name} label={label} required={required} />

@@ -6,7 +6,7 @@ import Header from 'components/templates/header/Header'
 import { Button, ButtonSize } from 'components/button/Button'
 import TrusteeForm from '../forms/trustee/TrusteeForm'
 import ContactForm from "forms/contact/ContactForm"
-import PropertyForm from "forms/propertie/PropertyForm";
+import PropertyForm from "forms/property/PropertyForm";
 import { useGetOneData } from 'hooks/useTrustee'
 import { useGetFilteredDatas as useGetFilteredDatasContact } from 'hooks/useContact'
 import { useGetFilteredDatas as useGetFilteredDatasProprerty } from 'hooks/useProperty'
