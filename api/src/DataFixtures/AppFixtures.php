@@ -56,8 +56,6 @@ class AppFixtures extends Fixture
                     ->setTrustee($trustee)
                     ->setPassword($hasher);
                 $manager->persist($user);
-
-
                 for ($k = 0; $k < 4; $k++) {
                     $property = new Property();
                     $property->setTitle($faker->company)
