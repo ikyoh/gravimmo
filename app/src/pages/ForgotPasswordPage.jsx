@@ -2,18 +2,20 @@ import { useForm, SubmitHandler } from "react-hook-form"
 import { FormSubmitButton } from "components/form/submit-button/FormSubmitButton"
 import { FormInput } from 'components/form/input/FormInput'
 import axios from 'axios'
-import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
 import ReactLogo from 'assets/logo-gravimmo.svg'
 import { Link } from 'react-router-dom'
 
 export const ForgotPasswordPage = () => {
 
+	const validationSchema = yup.object({
+		email: yup.string().email('Email non valide').required('Champ obligatoire')
+	});
+
 	const { register, handleSubmit, watch, formState: { errors } } = useForm(
 		{
-			resolver: yupResolver(validationSchema),
-			defaultValues: {
-				email: ''
-			}
+			resolver: yupResolver(validationSchema)
 		}
 	)
 
@@ -49,11 +51,9 @@ export const ForgotPasswordPage = () => {
 						type="text"
 						name="email"
 						label="Adresse email"
+						placeholder='Adresse email'
 						errors={errors}
 						register={register}
-						validationSchema={{
-							required: "Champ obligatoire"
-						}}
 						required
 					/>
 					<div className='mt-6'>
