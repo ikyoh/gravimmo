@@ -1,13 +1,13 @@
 <?php
 
 // src/Entity/PasswordToken.php
+declare(strict_types=1);
+
 namespace App\Entity;
-use App\EntityListener\PasswordTokenListener;
 use CoopTilleuls\ForgotPasswordBundle\Entity\AbstractPasswordToken;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
-#[ORM\EntityListeners([PasswordTokenListener::class])]
 class PasswordToken extends AbstractPasswordToken
 {
     #[ORM\Id]

@@ -4,7 +4,6 @@ import { FormSubmitButton } from "components/form/submit-button/FormSubmitButton
 import { FormInput } from 'components/form/input/FormInput';
 import axios from 'axios'
 import ReactLogo from 'assets/logo-gravimmo.svg'
-
 import { Link } from 'react-router-dom';
 
 type Inputs = {
@@ -47,7 +46,7 @@ export const LoginPage = (props: Props) => {
 
 
 	return (
-		<div className="flex md:items-center md:justify-center md:h-screen">
+		<div className="flex flex-col md:items-center md:justify-center md:h-screen">
 			<div className='bg-gradient-login w-full md:w-[400px] p-8 md:rounded relative h-screen md:h-auto'>
 				<div className='h-[160px] flex items-center justify-center'>
 					<img src={ReactLogo} alt="Logo" style={{ width: 120 }} />
@@ -77,11 +76,13 @@ export const LoginPage = (props: Props) => {
 						required
 					/>
 					<div className='mt-6'>
-
 						<Link to="/dashboard">
 							<FormSubmitButton label='connexion' />
 						</Link>
 					</div>
+					<Link to="/forgot-password" className='text-action mt-3 uppercase text-sm'>
+						j'ai oublié mon mot de passe
+					</Link>
 				</form>
 			</div >
 		</div >

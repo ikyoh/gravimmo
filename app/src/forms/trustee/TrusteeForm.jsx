@@ -5,8 +5,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import Form from "components/form/form/Form";
 import { FormInput } from "components/form/input/FormInput";
-import FieldArray from "components/form/field-array/FieldArray";
-import FormInputContact from 'components/form/input-contact/FormInputContact';
+
 
 export default function TrusteeForm({ id, handleCloseModal }) {
 

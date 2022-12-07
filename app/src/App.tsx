@@ -14,6 +14,8 @@ import {TrusteesPage} from './pages/TrusteesPage';
 import {InvoicesPage} from './pages/InvoicesPage';
 import {DashboardPage} from './pages/DashboardPage';
 import {ContactsPage} from './pages/ContactsPage';
+import { ResetPasswordPage } from 'pages/ResetPasswordPage';
+import { ForgotPasswordPage } from 'pages/ForgotPasswordPage';
 
 
 const queryClient = new QueryClient()
@@ -34,7 +36,8 @@ export default function App() {
             <Route path={'/invoices'} element={<InvoicesPage title="Factures" />} />
             <Route path={'/trustees/:id'} element={<TrusteePage />} />
             <Route path={'/trustees'} element={<TrusteesPage title="Syndics" />} />
-            <Route path={'/trustees'} element={<TrusteesPage title="Syndics" />} />
+            <Route path={'/reset-password/:token'} element={<ResetPasswordPage />} />
+            <Route path={'/forgot-password'} element={<ForgotPasswordPage />} />
           </Routes>
         </Router>
         <ReactQueryDevtools initialIsOpen={false} position='bottom-right' />
