@@ -8,9 +8,24 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ServiceRepository;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use App\Filter\CustomSearchFilter;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\GetCollection;
+
 
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
-#[ApiResource()]
+#[ApiResource(
+    normalizationContext: ['groups' => ['services:read']],
+    denormalizationContext : ['groups' => ["service:write"]],
+    operations: [
+        new GetCollection(),
+        new Get(normalizationContext: ['groups' => ['service:read']]),
+        new Put(),
+        new Post()
+    ]
+)]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'title', 'category'])]
 #[ApiFilter(CustomSearchFilter::class)]
 
@@ -19,36 +34,47 @@ class Service
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["services:read", "service:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["services:read", "service:read", "service:write", "propertyservice:read"])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["services:read", "service:read", "service:write", "propertyservice:read"])]
     private ?string $category = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(["services:read", "service:read", "service:write"])]
     private array $material = [];
 
     #[ORM\Column(nullable: true)]
+    #[Groups(["services:read", "service:read", "service:write"])]
     private array $size = [];
 
     #[ORM\Column(nullable: true)]
+    #[Groups(["services:read", "service:read", "service:write"])]
     private array $color = [];
 
     #[ORM\Column(nullable: true)]
+    #[Groups(["services:read", "service:read", "service:write"])]
     private array $font = [];
 
     #[ORM\Column(nullable: true)]
+    #[Groups(["services:read", "service:read", "service:write"])]
     private array $margin = [];
 
     #[ORM\Column(nullable: true)]
+    #[Groups(["services:read", "service:read", "service:write"])]
     private array $finishing = [];
 
     #[ORM\Column(length: 255)]
+    #[Groups(["services:read", "service:read", "service:write"])]
     private ?string $configuration = null;
 
     #[ORM\Column]
+    #[Groups(["services:read", "service:read", "service:write"])]
     private ?float $price = null;
 
 

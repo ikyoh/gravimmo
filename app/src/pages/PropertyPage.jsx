@@ -5,9 +5,10 @@ import Content from 'components/templates/content/Content'
 import Header from 'components/templates/header/Header'
 import { Button, ButtonSize } from 'components/button/Button'
 import { useGetOneData } from 'hooks/useProperty'
-import { MdClose, MdArrowBack } from 'react-icons/md'
+import { MdArrowBack } from 'react-icons/md'
 import PropertyForm from "forms/property/PropertyForm"
 import PropertyServiceForm from "forms/propertyService/PropertyServiceForm"
+import { CardService } from "components/card/service/CardService"
 import Dropdown from 'components/dropdown/Dropdown'
 import _ from "lodash"
 import './style.css'
@@ -105,7 +106,7 @@ export const PropertyPage = () => {
 										)}
 									</div>
 								</div>
-								<div className="absolute top-3 right-3">
+								<div className="absolute top-2 right-1">
 									<Dropdown>
 										<div
 											onClick={() => handleOpenModal({ title: "modifier la copropriété", content: <PropertyForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
@@ -150,34 +151,13 @@ export const PropertyPage = () => {
 								prestations
 							</div>
 							<div className="cards-container">
-								<div className="card">
-									<div className="subtitle">
-										Presta 1
-									</div>
-									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi inventore, explicabo dolore libero ratione animi harum fugiat culpa, porro numquam voluptas nostrum! Maiores quae laudantium voluptates quasi facilis quibusdam ratione?</p>
-									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi inventore, explicabo dolore libero ratione animi harum fugiat culpa, porro numquam voluptas nostrum! Maiores quae laudantium voluptates quasi facilis quibusdam ratione?</p>
-									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi inventore, explicabo dolore libero ratione animi harum fugiat culpa, porro numquam voluptas nostrum! Maiores quae laudantium voluptates quasi facilis quibusdam ratione?</p>
-								</div>
-								<div className="card">
-									<div className="subtitle">
-										Presta 2
-									</div>
-									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi inventore, explicabo dolore libero ratione animi harum fugiat culpa, porro numquam voluptas nostrum! Maiores quae laudantium voluptates quasi facilis quibusdam ratione?</p>
-									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi inventore, explicabo dolore libero ratione animi harum fugiat culpa, porro numquam voluptas nostrum! Maiores quae laudantium voluptates quasi facilis quibusdam ratione?</p>
-									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi inventore, explicabo dolore libero ratione animi harum fugiat culpa, porro numquam voluptas nostrum! Maiores quae laudantium voluptates quasi facilis quibusdam ratione?</p>
-								</div>
-								<div className="card">
-									<div className="subtitle">
-										Presta 3
-									</div>
-									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi inventore, explicabo dolore libero ratione animi harum fugiat culpa, porro numquam voluptas nostrum! Maiores quae laudantium voluptates quasi facilis quibusdam ratione?</p>
-									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi inventore, explicabo dolore libero ratione animi harum fugiat culpa, porro numquam voluptas nostrum! Maiores quae laudantium voluptates quasi facilis quibusdam ratione?</p>
-									<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi inventore, explicabo dolore libero ratione animi harum fugiat culpa, porro numquam voluptas nostrum! Maiores quae laudantium voluptates quasi facilis quibusdam ratione?</p>
-								</div>
+								{data.services.map((iri) =>
+									<CardService key={iri} id={iri} />
+								)}
 							</div>
 							<div className="card-button">
 								<Button size={ButtonSize.Big}
-									onClick={() => handleOpenModal({ title: "Ajouter une prestation", content: <PropertyServiceForm id={data.id} handleCloseModal={handleCloseModal} /> })}
+									onClick={() => handleOpenModal({ title: "Ajouter une prestation", content: <PropertyServiceForm propertyIRI={data['@id']} handleCloseModal={handleCloseModal} /> })}
 								/>
 								<div>
 									ajouter <br /> une prestation

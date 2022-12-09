@@ -4,12 +4,12 @@
 
 
 .title {
-    @apply mt-6 mb-6 font-bold text-xl uppercase underline decoration-blue-500 decoration-[6px] underline-offset-8;
+    @apply mt-6 mb-6 font-bold text-xl uppercase underline decoration-accent decoration-[6px] underline-offset-8;
     @apply text-dark dark:text-white;
 }
 
 .subtitle {
-    @apply	text-blue-500 text-xl mb-2;
+    @apply	text-accent text-xl mb-2;
 }
 
 .cards-container {

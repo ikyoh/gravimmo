@@ -21,7 +21,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['properties:read']],
-    denormalizationContext : ['groups' => ["property:write"]],
+    denormalizationContext: ['groups' => ["property:write"]],
     operations: [
         new GetCollection(),
         new Get(normalizationContext: ['groups' => ['property:read']]),
@@ -81,8 +81,8 @@ class Property
     #[Groups(["property:read"])]
     private ?User $contact = null;
 
-    #[ORM\OneToMany(mappedBy: 'property', targetEntity: PropertyService::class)]
-    #[Groups(["property:read"])]
+    #[ORM\OneToMany(mappedBy: 'property', targetEntity: PropertyService::class, orphanRemoval: true)]
+    #[Groups(["property:read", "property:write"])]
     private Collection $services;
 
     #[ORM\Column(type: 'json', nullable: true)]
@@ -294,5 +294,4 @@ class Property
 
         return $this;
     }
-
 }

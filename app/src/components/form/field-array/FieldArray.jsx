@@ -10,6 +10,7 @@ const FieldArray = ({ name, label, required, placeholder, control }) => {
         control,
         name: name
     });
+    console.log('fields', fields)
 
     const initialValue = ''
     const [inputValue, setInputValue] = useState(initialValue)
@@ -23,7 +24,7 @@ const FieldArray = ({ name, label, required, placeholder, control }) => {
 
     const handleAddItem = () => {
         if (inputValue !== '') {
-            append(inputValue)
+            append({ data: inputValue })
             setInputValue(initialValue)
         }
         else setError("Champ requis")
@@ -35,7 +36,7 @@ const FieldArray = ({ name, label, required, placeholder, control }) => {
                 <input
                     name="data"
                     placeholder={placeholder}
-                    className="appearance-none bg-light dark:bg-dark text-dark dark:text-white h-[50px] rounded px-2 grow leading-tight focus:outline focus:outline-blue-500"
+                    className="appearance-none bg-light dark:bg-dark text-dark dark:text-white h-[50px] rounded px-2 grow leading-tight focus:outline focus:outline-accent"
                     onChange={handleChange}
                     value={inputValue}
                 />
@@ -43,6 +44,7 @@ const FieldArray = ({ name, label, required, placeholder, control }) => {
             </div>
             {error && <span className="text-error text-sm">{error}</span>}
             <div className='flex flex-row flex-wrap gap-3 mt-3'>
+
                 {fields.map((field, index) =>
                     <div key={field.id} className='flex items-center rounded bg-dark h-[50px] pl-3 text-white'>
                         {field.data}

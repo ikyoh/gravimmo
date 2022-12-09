@@ -37,7 +37,7 @@ const FormInputMargin = ({ name, label, setValue, required, type, placeholder, c
 		else setError("Champs requis")
 	}
 
-	const className = "appearance-none bg-light dark:bg-dark text-dark dark:text-white h-[50px] rounded px-2 grow leading-tight focus:outline focus:outline-blue-500 w-1/6"
+	const className = "appearance-none bg-light dark:bg-dark text-dark dark:text-white h-[50px] rounded px-2 grow leading-tight focus:outline focus:outline-accent w-1/6"
 
 	return (
 		<div className="w-full mb-2">

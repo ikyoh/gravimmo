@@ -19,3 +19,22 @@ export const request = async ({ ...options }) => {
 
   return client(options).then(onSuccess).catch(onError)
 }
+
+const clientIRI = axios.create()
+
+export const requestIRI = async ({ ...options }) => {
+  // client.defaults.headers.common.Authorization = `Bearer token`
+
+  const onSuccess = response => {
+    //console.log('Axios utils response', response)
+    return response.data
+  }
+  const onError = error => {
+    //console.log('Axios utils error', error)
+    return Promise.reject(error);
+  }
+
+  //await new Promise(resolve => setTimeout(resolve, 1000))
+
+  return clientIRI(options).then(onSuccess).catch(onError)
+}

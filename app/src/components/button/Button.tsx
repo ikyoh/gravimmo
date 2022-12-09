@@ -30,15 +30,15 @@ export const Button = ({
     ...otherProps
 }: ButtonProps) => {
 
-    const buttonClassName = classNames("flex items-center justify-center p-0.5 rounded-full focus:ring-2 focus:ring-blue-500 ring-offset-2 ring-offset-dark dark:focus:ring-blue-500 group",
+    const buttonClassName = classNames("flex items-center justify-center p-0.5 rounded-full focus:ring-2 focus:ring-accent ring-offset-2 ring-offset-dark dark:focus:ring-accent group",
         {
-            "bg-gradient-to-br from-purple-500 to-blue-500": isBorder,
+            "bg-gradient-to-br from-purple-500 to-accent": isBorder,
             "h-8 w-8": size === ButtonSize.Small,
             "h-14 w-14": size === ButtonSize.Big,
             "h-10 w-10": size === ButtonSize.Medium,
         })
 
-    const iconClassName = classNames("w-full h-full flex items-center justify-center transition-all ease-in duration-75 dark:text-white text-dark group-hover:bg-gradient-to-br group-hover:from-purple-500 group-hover:to-blue-500 rounded-full dark:bg-dark bg-light",
+    const iconClassName = classNames("w-full h-full flex items-center justify-center transition-all ease-in duration-75 dark:text-white text-dark group-hover:bg-gradient-to-br group-hover:from-purple-500 group-hover:to-accent rounded-full dark:bg-dark bg-light",
         {
             "text-2xl": size === ButtonSize.Small,
             "text-3xl": size === ButtonSize.Medium,

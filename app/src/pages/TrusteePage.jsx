@@ -82,7 +82,7 @@ export const TrusteePage = () => {
 									</div>
 									{data.billingEmail}
 								</div>
-								<div className="absolute top-3 right-3">
+								<div className="absolute top-2 right-1">
 									<Dropdown>
 										<div
 											onClick={() => handleOpenModal({ title: "modifier le syndic", content: <TrusteeForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
@@ -109,7 +109,7 @@ export const TrusteePage = () => {
 										<div className="mt-3 text-sm">
 											{data.title}
 										</div>
-										<div className="absolute top-3 right-3">
+										<div className="absolute top-2 right-1">
 											<Dropdown>
 												<div
 													onClick={() => handleOpenModal({ title: "modifier le contact", content: <ContactForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
@@ -146,7 +146,7 @@ export const TrusteePage = () => {
 										<div className="mt-3 text-sm">
 											{data.zone}
 										</div>
-										<div className="absolute top-3 right-3">
+										<div className="absolute top-2 right-1">
 											<Dropdown>
 												<div
 													onClick={() => navigate("/properties/" + data.id, { state: {} })}

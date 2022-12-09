@@ -1,4 +1,5 @@
-import { useParams } from 'react-router-dom'
+import react, { useState, useEffect } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
@@ -6,11 +7,23 @@ import { FormSubmitButton } from "components/form/submit-button/FormSubmitButton
 import { FormInput } from 'components/form/input/FormInput';
 import axios from 'axios'
 import ReactLogo from 'assets/logo-gravimmo.svg'
-import { Link } from 'react-router-dom';
+
 
 export const ResetPasswordPage = () => {
 
 	const { token } = useParams()
+	const navigate = useNavigate();
+	const [submitting, setSubmitting] = useState(false)
+	const [userToken, setUserToken] = useState(false)
+
+	useEffect(() => {
+		const fetchToken = async () => {
+			const tokenContent = await axios.get('https://localhost/api/forgot_password/' + token)
+			setUserToken(tokenContent.data);
+		}
+		fetchToken()
+	}, [])
+
 
 	const validationSchema = yup.object({
 		password: yup.string().required('Mot de passe obligatoire')
@@ -22,25 +35,25 @@ export const ResetPasswordPage = () => {
 			.oneOf([yup.ref('password'), null], 'Le mots de passe ne correspondent pas')
 	});
 
-	const { register, handleSubmit, watch, formState: { errors } } = useForm(
+	const { register, handleSubmit, formState: { errors } } = useForm(
 		{
 			resolver: yupResolver(validationSchema)
 		}
 	)
 
 	const onSubmit = data => {
-		console.log(data);
+		setSubmitting(true)
 		submitPassword(data)
-		//  accountLogin(data)
 	}
 
 	const submitPassword = async (data) => {
+	
 		try {
 			const response = await axios.post('https://localhost/api/forgot_password/' + token, data)
-			console.log('response', response)
-			return response.data
+			if (response.status === 204) {
+				navigate("/", { state: { login: userToken.user.email, password: data.password } });
+			}
 		} catch (error) {
-			console.log(error)
 			throw error
 		}
 	}
@@ -55,7 +68,6 @@ export const ResetPasswordPage = () => {
 					<p>réinitialiser</p>
 					<p>mon mot de passe</p>
 				</div>
-
 				<form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 items-center">
 					<FormInput
 						type="password"
@@ -76,10 +88,10 @@ export const ResetPasswordPage = () => {
 						required
 					/>
 					<div className='text-sm text-medium'>
-						Afin de garantir la sécurité de vos données le mot de passe doit contenir 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial ! @ # % & *
+						Pour la sécurité de vos données le mot de passe doit contenir 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial ! @ # % & *
 					</div>
 					<div className='mt-6'>
-						<FormSubmitButton label='valider' />
+						<FormSubmitButton label='valider' isLoading={submitting || !userToken} isDisabled={submitting || !userToken} />
 					</div>
 				</form>
 			</div >

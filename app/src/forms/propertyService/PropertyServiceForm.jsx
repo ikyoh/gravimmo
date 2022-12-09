@@ -1,44 +1,49 @@
-import { useEffect } from 'react';
-import { useForm } from "react-hook-form";
-import { usePostData, usePutData, useGetOneData } from 'hooks/useProperty';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from "yup";
-import Form from "components/form/form/Form";
-import { FormInput } from "components/form/input/FormInput";
-import FieldArray from "components/form/field-array/FieldArray";
-import FormInputContact from 'components/form/input-contact/FormInputContact';
-import FormCheckbox from 'components/form/checkbox/FormCheckbox';
+import { useEffect } from 'react'
+import { useForm } from "react-hook-form"
+import { usePostData, usePutData, useGetOneData } from 'hooks/usePropertyService'
+import { useGetAllDatas as useGetAllDatasServices, useGetOneData as useGetOneDataService } from 'hooks/useService'
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from "yup"
+import Form from "components/form/form/Form"
+import FormCheckbox from 'components/form/checkbox/FormCheckbox'
+import { FormSelect } from 'components/form/select/FormSelect'
+import { API_URL, API_SERVICES } from 'config/api.config'
 
-export default function PropertyServiceForm({ id, trusteeIRI, handleCloseModal }) {
-
-    const { isLoading: isLoadingData, data, isError, error } = useGetOneData(id)
-    const { mutate: postData, isLoading: isPosting, isSuccess } = usePostData()
-    const { mutate: putData } = usePutData()
-
-    console.log('data', data)
+export default function PropertyServiceForm({ id, propertyIRI, handleCloseModal }) {
 
     const validationSchema = yup.object({
-        title: yup.string().required("Champ obligatoire"),
-        address: yup.string().required("Champ obligatoire"),
-        postcode: yup.string().required("Champ obligatoire"),
-        city: yup.string().required("Champ obligatoire"),
-        tva: yup.number().required("Champ obligatoire"),
+        service: yup.string().required("Champ obligatoire"),
+        // address: yup.string().required("Champ obligatoire"),
+        // postcode: yup.string().required("Champ obligatoire"),
+        // city: yup.string().required("Champ obligatoire"),
+        // tva: yup.number().required("Champ obligatoire"),
     })
 
-    const { register, handleSubmit, setValue, reset, control, formState: { errors, isSubmitting } } = useForm({
+    const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(validationSchema),
-        defaultValues: id ? data : { params: [] }
+        defaultValues: id ? data : {
+            property: propertyIRI,
+            margin: { top: '', bottom: '', left: '', right: '' }
+        }
     })
+
+    const watchService = watch("service", false)
+
+    const { isLoading: isLoadingData, data, isError, error } = useGetOneData(id)
+    const { data: dataServices = [], isLoading: isLoadingServices, error: errorServices } = useGetAllDatasServices()
+    const { isLoading: isLoadingService, data: dataService, isError: isErrorService, error: errorService } = useGetOneDataService(watchService)
+    const { mutate: postData, isLoading: isPosting, isSuccess } = usePostData()
+
 
     // Set form values
     useEffect(() => {
         if (!id) {
             reset({})
         }
-        if (!id && trusteeIRI) {
-            reset({ trustee: trusteeIRI })
+        if (!id && propertyIRI) {
+            reset({ property: propertyIRI })
         }
-        if (!id && !trusteeIRI) {
+        if (!id && !propertyIRI) {
             reset({})
         }
     }, [])
@@ -50,210 +55,127 @@ export default function PropertyServiceForm({ id, trusteeIRI, handleCloseModal }
     }, [isLoadingData, data])
 
     const onSubmit = form => {
-        console.log('form', form)
-        // if (!id)
-        //     postData(form)
-        // else {
-        //     const updateForm = {...form}
-        //     delete updateForm.trustee
-        //     putData(updateForm)
-        // }
-        // handleCloseModal()
+        const formDatas = { ...form }
+        if (form.margin) formDatas.margin = JSON.parse(form.margin)
+        formDatas.service = API_URL + API_SERVICES + '/' + form.service
+        if (!id)
+            postData(formDatas)
+        else {
+            putData(formDatas)
+        }
+        handleCloseModal()
     }
 
     if (id) {
         if (isLoadingData) {
             return <h2>Loading...</h2>
         }
-
         if (isError) {
             return <h2 className='py-3'>Error : {error.message}</h2>
         }
     }
 
     return (
-
         <Form onSubmit={handleSubmit(onSubmit)}
             isLoading={isSubmitting}
             isDisabled={isSubmitting}>
-            <FormInput
+            <FormSelect
                 type="text"
-                name="title"
-                label="Nom"
+                name="service"
+                label="Prestation"
                 errors={errors}
                 register={register}
                 required={true}
-            />
-            <FormInput
-                type="text"
-                name="address"
-                label="Adresse"
-                errors={errors}
-                register={register}
-                required={false}
-            />
-            <FormInput
-                type="text"
-                name="postcode"
-                label="Code postal"
-                errors={errors}
-                register={register}
-                required={true}
-            />
-            <FormInput
-                type="text"
-                name="city"
-                label="Ville"
-                errors={errors}
-                register={register}
-                required={true}
-            />
-            <FormInput
-                type="text"
-                name="zone"
-                label="Secteur"
-                errors={errors}
-                register={register}
-                required={true}
-            />
-            <FormInput
-                type="text"
-                name="contactName"
-                label="Nom du contact"
-                errors={errors}
-                register={register}
-                required={true}
-            />
-            <FormInput
-                type="text"
-                name="contactPhone"
-                label="Téléphone du contact"
-                errors={errors}
-                register={register}
-                required={true}
-            />
-            <FormInput
-                type="text"
-                name="accessType"
-                label="Type d'accès"
-                errors={errors}
-                register={register}
-                required={true}
-            />
-            <FormInput
-                type="text"
-                name="accessCode"
-                label="Code d'accès"
-                errors={errors}
-                register={register}
-                required={true}
-            />
-            <FormInput
-                type="text"
-                name="tva"
-                label="Taux de TVA"
-                errors={errors}
-                register={register}
-                required={true}
-            />
-            <div className="grid grid-cols-2">
-                <FormCheckbox
-                    name="params"
-                    label="Entrée"
-                    value="Entrée"
+            >
+                {isLoadingServices &&
+                    <option value="">Chargement des prestations</option>
+                }
+                {!isLoadingServices && dataServices.length != 0 &&
+                    < option value="">Choisir une prestation</option>
+                }
+                {!isLoadingServices && dataServices.length === 0 &&
+                    < option value="">Aucune prestation trouvée</option>
+                }
+                {!isLoadingServices && dataServices.map(data =>
+                    <option key={data.id} value={data.id}>{data.title} - {data.price} € H.T.</option>
+                )}
+            </FormSelect>
+            {dataService && dataService.material.length != 0 &&
+                <FormSelect
+                    type="text"
+                    name="material"
+                    label="Matière"
                     errors={errors}
                     register={register}
                     required={true}
-                />
-                <FormCheckbox
-                    name="params"
-                    label="N° de porte"
-                    value="N° de porte"
+                >
+                    {dataService.material.map(data =>
+                        <option key={data.data} value={data.data}>{data.data}</option>
+                    )}
+                </FormSelect>
+            }
+            {dataService && dataService.size.length != 0 &&
+                <FormSelect
+                    type="text"
+                    name="size"
+                    label="Dimensions"
                     errors={errors}
                     register={register}
                     required={true}
-                />
-                <FormCheckbox
-                    name="params"
-                    label="N° d'appartement"
-                    value="N° d'appartement"
+                >
+                    {dataService.size.map(data =>
+                        <option key={data.data} value={data.data}>{data.data}</option>
+                    )}
+                </FormSelect>
+            }
+            {dataService && dataService.color.length != 0 &&
+                <FormSelect
+                    type="text"
+                    name="color"
+                    label="Couleurs"
                     errors={errors}
                     register={register}
                     required={true}
-                />
-                <FormCheckbox
-                    name="params"
-                    label="N° d'étage"
-                    value="N° d'étage"
+                >
+                    {dataService.color.map(data =>
+                        <option key={data.data} value={data.data}>{data.data}</option>
+                    )}
+                </FormSelect>
+            }
+            {dataService && dataService.font.length != 0 &&
+                <FormSelect
+                    type="text"
+                    name="font"
+                    label="Police"
                     errors={errors}
                     register={register}
                     required={true}
-                />
-                <FormCheckbox
-                    name="params"
-                    label="N° de boîte aux lettres"
-                    value="N° de boîte aux lettres"
+                >
+                    {dataService.font.map(data =>
+                        <option key={data.data} value={data.data}>{data.data}</option>
+                    )}
+                </FormSelect>
+            }
+            {dataService && dataService.margin.length != 0 &&
+                <FormSelect
+                    type="text"
+                    name="margin"
+                    label="Marges"
                     errors={errors}
                     register={register}
                     required={true}
-                />
-                <FormCheckbox
-                    name="params"
-                    label="N° de lot"
-                    value="N° de lot"
-                    errors={errors}
-                    register={register}
-                    required={true}
-                />
-                <FormCheckbox
-                    name="params"
-                    label="N° de villa"
-                    value="N° de villa"
-                    errors={errors}
-                    register={register}
-                    required={true}
-                />
-                <FormCheckbox
-                    name="params"
-                    label="Situation palière"
-                    value="Situation palière"
-                    errors={errors}
-                    register={register}
-                    required={true}
-                />
-                <FormCheckbox
-                    name="params"
-                    label="Tableau boîte aux lettres"
-                    value="Tableau boîte aux lettres"
-                    errors={errors}
-                    register={register}
-                    required={true}
-                />
-                <FormCheckbox
-                    name="params"
-                    label="Platine à défilement"
-                    value="Platine à défilement"
-                    errors={errors}
-                    register={register}
-                    required={true}
-                />
-                <FormCheckbox
-                    name="params"
-                    label="Platine parlophone électricien"
-                    value="Platine parlophone électricien"
-                    errors={errors}
-                    register={register}
-                    required={true}
-                />
-                <FormCheckbox
-                    name="params"
-                    label="Tableau PTT"
-                    value="Tableau PTT"
-                    errors={errors}
-                    register={register}
-                    required={true}
-                />
-            </div>
-        </Form>
-    );
+                    onChange={(e) => console.log('e.value', e.target.value)}
+                >
+                    {dataService.margin.map(data =>
+                        <option key={JSON.stringify(data.data)} value={JSON.stringify(data.data)}>
+                            Haut : {data.data.top} -
+                            Bas : {data.data.bottom} -
+                            Gauche : {data.data.left} -
+                            Droite : {data.data.right}
+                        </option>
+                    )}
+                </FormSelect>
+            }
+        </Form >
+    )
 }

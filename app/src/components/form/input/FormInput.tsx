@@ -22,7 +22,7 @@ export const FormInput = ({ name, label, register, errors, required, type, place
       type={type}
       placeholder={placeholder}
       {...register(name, validationSchema)}
-      className="appearance-none bg-light dark:bg-dark text-dark dark:text-white h-[50px] rounded px-2 mt-2 w-full leading-tight focus:outline focus:outline-blue-500"
+      className="appearance-none bg-light dark:bg-dark text-dark dark:text-white h-[50px] rounded px-2 mt-2 w-full leading-tight focus:outline focus:outline-accent"
     />
     <Error errors={errors[name]} />
   </div>

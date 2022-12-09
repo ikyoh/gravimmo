@@ -26,14 +26,14 @@ export const SelectInput = ({ name, label, register, errors, required, type, pla
 					type={type}
 					placeholder={placeholder}
 					{...register(name, validationSchema)}
-					className="appearance-none bg-light dark:bg-dark text-dark dark:text-white h-[50px] rounded px-2 mt-2 w-full leading-tight focus:outline focus:outline-blue-500"
+					className="appearance-none bg-light dark:bg-dark text-dark dark:text-white h-[50px] rounded px-2 mt-2 w-full leading-tight focus:outline focus:outline-accent"
 				/>
 
 				{!isLoading && data.length >= 1 ?
 					<select
 						name="cat"
 						id="cat"
-						className="appearance-none bg-light dark:bg-dark text-dark dark:text-white h-[50px] rounded px-2 mt-2 w-full leading-tight focus:outline focus:outline-blue-500 arrow"
+						className="appearance-none bg-light dark:bg-dark text-dark dark:text-white h-[50px] rounded px-2 mt-2 w-full leading-tight focus:outline focus:outline-accent arrow"
 						onChange={(e) => setValue(name, e.target.value)}
 					>
 						<option value=''>Catégories</option>

@@ -28,7 +28,7 @@ module.exports = {
         'light' : '#F0F0F0',
         'primary': '#26263F',
         'action': '#406BF5',
-        'accent': '#CA3FBD',
+        'accent': 'rgb(59 130 246)',
         'info': '#94C121',
         'mention': '#5ac8fa',
         'success': '#28a745',

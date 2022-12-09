@@ -13,7 +13,7 @@ const FormCheckbox = ({ name, register, value, label }) => {
                 className="appearance-none h-[30px] w-[30px] cursor-pointer flex items-center justify-center text-white text-4xl checked:before:content-['+'] rotate-45"
             />  
             </div>
-            <div className="text-dark dark:text-blue-500">
+            <div className="text-dark dark:text-accent">
                 {label}
             </div>
         </div>

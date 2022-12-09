@@ -22,7 +22,7 @@ export const DashboardPage = ({ title }) => {
 					<div className='px-4 py-6'>
 						<div className="grid md:grid-cols-1 xl:grid-cols-3 gap-8">
 							<div className={card}>
-								<AiOutlineSlack size={70} className="bg-blue-500 rounded-full p-3 text-dark" />
+								<AiOutlineSlack size={70} className="bg-accent rounded-full p-3 text-dark" />
 								<div>
 									<div className={cardtitle}>
 										123
