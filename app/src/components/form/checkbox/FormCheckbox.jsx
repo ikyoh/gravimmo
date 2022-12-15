@@ -1,6 +1,3 @@
-import React from 'react'
-import { BiCheck } from 'react-icons/bi'
-
 const FormCheckbox = ({ name, register, value, label }) => {
     return (
         <div className='flex gap-3 items-center py-2'>

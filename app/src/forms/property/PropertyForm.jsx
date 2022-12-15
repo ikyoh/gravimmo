@@ -53,7 +53,7 @@ export default function PropertyForm({ id, trusteeIRI, handleCloseModal }) {
         if (!id)
             postData(form)
         else {
-            const updateForm = {...form}
+            const updateForm = { ...form }
             delete updateForm.trustee
             putData(updateForm)
         }

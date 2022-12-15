@@ -8,53 +8,62 @@ import Form from "components/form/form/Form"
 import FormCheckbox from 'components/form/checkbox/FormCheckbox'
 import { FormSelect } from 'components/form/select/FormSelect'
 import { API_URL, API_SERVICES } from 'config/api.config'
+import FormLabel from 'components/form/label/FormLabel'
+
 
 export default function PropertyServiceForm({ id, propertyIRI, handleCloseModal }) {
 
+    const { isLoading: isLoadingData, data = false, isError, error, isFetched, is } = useGetOneData(id)
+
     const validationSchema = yup.object({
-        service: yup.string().required("Champ obligatoire"),
-        // address: yup.string().required("Champ obligatoire"),
-        // postcode: yup.string().required("Champ obligatoire"),
-        // city: yup.string().required("Champ obligatoire"),
-        // tva: yup.number().required("Champ obligatoire"),
+        service: yup.string().required("Champ obligatoire")
     })
 
-    const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting } } = useForm({
+    const { register, handleSubmit, watch, reset, getValues, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(validationSchema),
-        defaultValues: id ? data : {
-            property: propertyIRI,
-            margin: { top: '', bottom: '', left: '', right: '' }
-        }
+        defaultValues: id
+            ? {
+                ...data,
+                service: data.service.id,
+                margin: JSON.stringify(data.margin)
+            }
+            : {
+                service: "",
+                property: propertyIRI,
+                finishing: []
+            }
     })
 
     const watchService = watch("service", false)
 
-    const { isLoading: isLoadingData, data, isError, error } = useGetOneData(id)
     const { data: dataServices = [], isLoading: isLoadingServices, error: errorServices } = useGetAllDatasServices()
     const { isLoading: isLoadingService, data: dataService, isError: isErrorService, error: errorService } = useGetOneDataService(watchService)
     const { mutate: postData, isLoading: isPosting, isSuccess } = usePostData()
-
+    const { mutate: putData } = usePutData()
 
     // Set form values
     useEffect(() => {
-        if (!id) {
-            reset({})
-        }
-        if (!id && propertyIRI) {
-            reset({ property: propertyIRI })
-        }
-        if (!id && !propertyIRI) {
-            reset({})
-        }
+        // if (!id) {
+        //     reset({})
+        // }
+        // if (!id && propertyIRI) {
+        //     reset({ property: propertyIRI })
+        // }
+        // if (!id && !propertyIRI) {
+        //     reset({})
+        // }
+        // if (id && !propertyIRI) {
+        //     reset({})
+        // }
     }, [])
 
     useEffect(() => {
-        if (id && data) {
-            reset(data)
-        }
-    }, [isLoadingData, data])
+        if (!id)
+            reset({ property: propertyIRI, service: watchService })
+    }, [watchService])
 
     const onSubmit = form => {
+        console.log('form', form)
         const formDatas = { ...form }
         if (form.margin) formDatas.margin = JSON.parse(form.margin)
         formDatas.service = API_URL + API_SERVICES + '/' + form.service
@@ -175,6 +184,24 @@ export default function PropertyServiceForm({ id, propertyIRI, handleCloseModal 
                         </option>
                     )}
                 </FormSelect>
+            }
+
+            {dataService && dataService.finishing.length != 0 &&
+                <>
+                    <FormLabel name="finishing" label="Façonnages" />
+                    <div className='grid grid-cols-2'>
+                        {dataService.finishing.map(data =>
+                            <FormCheckbox
+                                key={data.data}
+                                name="finishing"
+                                label={data.data}
+                                value={data.data}
+                                errors={errors}
+                                register={register}
+                            />
+                        )}
+                    </div>
+                </>
             }
         </Form >
     )

@@ -1,8 +1,9 @@
 import React from 'react'
-import { useGetOneData, useDeleteData} from 'hooks/usePropertyService'
+import { useGetOneData, useDeleteData } from 'hooks/usePropertyService'
 import Dropdown from 'components/dropdown/Dropdown'
+import PropertyServiceForm from 'forms/propertyService/PropertyServiceForm'
 
-export const CardService = ({ id }) => {
+export const CardService = ({ handleOpenModal, handleCloseModal, id }) => {
 
     const { data = {}, isLoading, error } = useGetOneData(id)
     const { mutate: deleteData } = useDeleteData()
@@ -15,8 +16,7 @@ export const CardService = ({ id }) => {
                 <>
                     <div className="absolute top-2 right-1">
                         <Dropdown>
-                            <div
-                                onClick={() => handleOpenModal({ title: "modifier la copropriété", content: <PropertyForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
+                            <div onClick={() => handleOpenModal({ title: "Modifier une prestation", content: <PropertyServiceForm id={id} handleCloseModal={handleCloseModal} /> })}>
                                 Modifier la prestation
                             </div>
                             <div
@@ -68,6 +68,12 @@ export const CardService = ({ id }) => {
                                     <span className='text-accent mr-3'>Matière :</span>
                                     {data.material}
                                 </p>
+                            }
+                            {data.finishing.length > 0 &&
+                                <div>
+                                    <span className='text-accent mr-3'>Façonnages :</span>
+                                    {data.finishing.map(finishing => <p key={finishing}>{finishing}</p>)}
+                                </div>
                             }
                         </div>
                     </div>

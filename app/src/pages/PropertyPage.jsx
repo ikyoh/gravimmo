@@ -152,7 +152,7 @@ export const PropertyPage = () => {
 							</div>
 							<div className="cards-container">
 								{data.services.map((iri) =>
-									<CardService key={iri} id={iri} />
+									<CardService handleOpenModal={handleOpenModal} handleCloseModal={handleCloseModal} key={iri} id={iri} />
 								)}
 							</div>
 							<div className="card-button">

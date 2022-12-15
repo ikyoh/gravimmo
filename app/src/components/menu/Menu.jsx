@@ -56,7 +56,7 @@ const Menu = () => {
             {/* COMPUTER MENU */}
             <div className='hidden lg:flex lg:flex-col items-center justify-between bg-gradient-menu-light dark:bg-gradient-menu h-full py-8'>
                 <div className=''>
-                    <img src={ReactLogo} alt="Logo" style={{ width: 80 }} />
+                    <img src={ReactLogo} alt="Logo" style={{ width: 70 }} />
                 </div>
                 <div className='flex flex-col gap-3'>
                     <Button

@@ -34,7 +34,7 @@ class Service
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["services:read", "service:read"])]
+    #[Groups(["services:read", "service:read", "propertyservice:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]

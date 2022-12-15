@@ -1,6 +1,6 @@
 import React from 'react'
 
-const FormLabel = ({name, label, required}) => {
+const FormLabel = ({name, label, required=false}) => {
     return (
         <label htmlFor={name}
             className="text-dark dark:text-accent">
