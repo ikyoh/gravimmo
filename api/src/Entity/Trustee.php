@@ -83,10 +83,14 @@ class Trustee
     #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: Property::class)]
     private Collection $properties;
 
+    #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: Order::class)]
+    private Collection $orders;
+
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
         $this->properties = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
 
@@ -270,6 +274,36 @@ class Trustee
             // set the owning side to null (unless already changed)
             if ($properties->getTrustee() === $this) {
                 $properties->setTrustee(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setTrustee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getTrustee() === $this) {
+                $order->setTrustee(null);
             }
         }
 

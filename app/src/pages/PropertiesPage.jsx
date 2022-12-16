@@ -4,7 +4,6 @@ import { Layout } from 'components/templates/layout/Layout'
 import Content from 'components/templates/content/Content'
 import Header from 'components/templates/header/Header'
 import { Button, ButtonSize } from 'components/button/Button'
-import TrusteeForm from '../forms/trustee/TrusteeForm'
 import Table from 'components/templates/table/Table'
 import Thead from 'components/templates/table/Thead'
 import Th from 'components/templates/table/Th'
@@ -43,7 +42,7 @@ export const PropertiesPage = ({ title }) => {
 					{searchbar}
 					<Button
 						size={ButtonSize.Big}
-						onClick={() => handleOpenModal({ title: "Nouveau syndic", content: <TrusteeForm handleCloseModal={handleCloseModal} /> })}
+						onClick={() => handleOpenModal({ title: "Nouvelle copropriété", content: <PropertyForm	 handleCloseModal={handleCloseModal} /> })}
 					/>
 				</Header>
 				<Content>

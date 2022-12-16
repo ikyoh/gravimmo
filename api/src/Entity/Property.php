@@ -97,10 +97,14 @@ class Property
     #[Groups(["property:read", "property:write"])]
     private ?string $accessCode = null;
 
+    #[ORM\OneToMany(mappedBy: 'property', targetEntity: Order::class)]
+    private Collection $orders;
+
 
     public function __construct()
     {
         $this->services = new ArrayCollection();
+        $this->orders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -291,6 +295,36 @@ class Property
     public function setAccessCode(?string $accessCode): self
     {
         $this->accessCode = $accessCode;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setProperty($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getProperty() === $this) {
+                $order->setProperty(null);
+            }
+        }
 
         return $this;
     }
