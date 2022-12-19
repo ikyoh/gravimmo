@@ -39,11 +39,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["users:read", "user:read", "trustee:read", "property:read"])]
+    #[Groups(["users:read", "user:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(["users:read", "user:read", "trustee:read", "property:read"])]
+    #[Groups(["users:read", "user:read"])]
     private ?string $email = null;
 
     #[ORM\Column]
@@ -60,32 +60,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["users:read", "user:read", "trustee:read", "property:read"])]
+    #[Groups(["users:read", "user:read"])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["users:read", "user:read", "trustee:read", "property:read"])]
+    #[Groups(["users:read", "user:read"])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["users:read", "user:read", "trustee:read", "property:read"])]
+    #[Groups(["users:read", "user:read"])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["users:read", "user:read", "trustee:read", "property:read"])]
+    #[Groups(["users:read", "user:read"])]
     private ?string $phone = null;
 
     #[ORM\ManyToOne(inversedBy: 'contacts')]
     #[Groups(["users:read", "user:read"])]
     private ?Trustee $trustee = null;
 
-    #[ORM\OneToMany(mappedBy: 'contact', targetEntity: Property::class)]
+    #[ORM\ManyToMany(targetEntity: Property::class, mappedBy: 'contacts')]
     private Collection $properties;
 
     public function __construct()
     {
         $this->properties = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -250,7 +251,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->properties->contains($property)) {
             $this->properties->add($property);
-            $property->setContact($this);
+            $property->addContact($this);
         }
 
         return $this;
@@ -259,12 +260,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeProperty(Property $property): self
     {
         if ($this->properties->removeElement($property)) {
-            // set the owning side to null (unless already changed)
-            if ($property->getContact() === $this) {
-                $property->setContact(null);
-            }
+            $property->removeContact($this);
         }
 
         return $this;
     }
+
 }

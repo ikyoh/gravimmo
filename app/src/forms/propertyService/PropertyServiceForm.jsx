@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from "react-hook-form"
 import { usePostData, usePutData, useGetOneData } from 'hooks/usePropertyService'
 import { useGetAllDatas as useGetAllDatasServices, useGetOneData as useGetOneDataService } from 'hooks/useService'
@@ -11,71 +11,64 @@ import { API_URL, API_SERVICES } from 'config/api.config'
 import FormLabel from 'components/form/label/FormLabel'
 
 
-export default function PropertyServiceForm({ id, propertyIRI, handleCloseModal }) {
+export default function PropertyServiceForm({ iri, propertyIRI, handleCloseModal }) {
 
-    const { isLoading: isLoadingData, data = false, isError, error, isFetched, is } = useGetOneData(id)
+    const [firstLoad, setFirstLoad] = useState(true)
+
+    const { isLoading: isLoadingData, data, isError, error, isFetched } = useGetOneData(iri)
 
     const validationSchema = yup.object({
         service: yup.string().required("Champ obligatoire")
     })
 
-    const { register, handleSubmit, watch, reset, getValues, formState: { errors, isSubmitting } } = useForm({
+    const defaultValues = {
+        service: "",
+        property: propertyIRI,
+        finishing: []
+    }
+
+    const { register, handleSubmit, watch, reset, setValue, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(validationSchema),
-        defaultValues: id
-            ? {
-                ...data,
-                service: data.service.id,
-                margin: JSON.stringify(data.margin)
-            }
-            : {
-                service: "",
-                property: propertyIRI,
-                finishing: []
-            }
+        defaultValues: defaultValues
     })
 
-    const watchService = watch("service", false)
+    const watchService = watch("service", data ? data.service["@id"] : false)
 
-    const { data: dataServices = [], isLoading: isLoadingServices, error: errorServices } = useGetAllDatasServices()
+    console.log('watchService', watchService)
+
+    const { data: dataServices, isLoading: isLoadingServices, error: errorServices } = useGetAllDatasServices()
     const { isLoading: isLoadingService, data: dataService, isError: isErrorService, error: errorService } = useGetOneDataService(watchService)
     const { mutate: postData, isLoading: isPosting, isSuccess } = usePostData()
     const { mutate: putData } = usePutData()
 
-    // Set form values
     useEffect(() => {
-        // if (!id) {
-        //     reset({})
-        // }
-        // if (!id && propertyIRI) {
-        //     reset({ property: propertyIRI })
-        // }
-        // if (!id && !propertyIRI) {
-        //     reset({})
-        // }
-        // if (id && !propertyIRI) {
-        //     reset({})
-        // }
-    }, [])
+        if (!firstLoad)
+            reset({ ...defaultValues, service: watchService })
+    }, [watchService])
+
+    // CASE UPDATE
+    useEffect(() => {
+        if (iri && data) {
+            reset({ ...data, service: watchService })
+        }
+    }, [isLoadingData, data])
 
     useEffect(() => {
-        if (!id)
-            reset({ property: propertyIRI, service: watchService })
-    }, [watchService])
+        setFirstLoad(false)
+    }, [])
+    
 
     const onSubmit = form => {
         console.log('form', form)
-        const formDatas = { ...form }
-        if (form.margin) formDatas.margin = JSON.parse(form.margin)
-        formDatas.service = API_URL + API_SERVICES + '/' + form.service
-        if (!id)
-            postData(formDatas)
+        if (!iri)
+            postData(form)
         else {
-            putData(formDatas)
+            putData(form)
         }
         handleCloseModal()
     }
 
-    if (id) {
+    if (iri) {
         if (isLoadingData) {
             return <h2>Loading...</h2>
         }
@@ -100,13 +93,13 @@ export default function PropertyServiceForm({ id, propertyIRI, handleCloseModal 
                     <option value="">Chargement des prestations</option>
                 }
                 {!isLoadingServices && dataServices.length != 0 &&
-                    < option value="">Choisir une prestation</option>
+                    <option value="">Choisir une prestation</option>
                 }
                 {!isLoadingServices && dataServices.length === 0 &&
-                    < option value="">Aucune prestation trouvée</option>
+                    <option value="">Aucune prestation trouvée</option>
                 }
                 {!isLoadingServices && dataServices.map(data =>
-                    <option key={data.id} value={data.id}>{data.title} - {data.price} € H.T.</option>
+                    <option key={data["@id"]} value={data["@id"]}>{data.title} - {data.price} € H.T.</option>
                 )}
             </FormSelect>
             {dataService && dataService.material.length != 0 &&
@@ -119,7 +112,7 @@ export default function PropertyServiceForm({ id, propertyIRI, handleCloseModal 
                     required={true}
                 >
                     {dataService.material.map(data =>
-                        <option key={data.data} value={data.data}>{data.data}</option>
+                        <option key={data} value={data}>{data}</option>
                     )}
                 </FormSelect>
             }
@@ -133,7 +126,7 @@ export default function PropertyServiceForm({ id, propertyIRI, handleCloseModal 
                     required={true}
                 >
                     {dataService.size.map(data =>
-                        <option key={data.data} value={data.data}>{data.data}</option>
+                        <option key={data} value={data}>{data}</option>
                     )}
                 </FormSelect>
             }
@@ -147,7 +140,7 @@ export default function PropertyServiceForm({ id, propertyIRI, handleCloseModal 
                     required={true}
                 >
                     {dataService.color.map(data =>
-                        <option key={data.data} value={data.data}>{data.data}</option>
+                        <option key={data} value={data}>{data}</option>
                     )}
                 </FormSelect>
             }
@@ -161,7 +154,7 @@ export default function PropertyServiceForm({ id, propertyIRI, handleCloseModal 
                     required={true}
                 >
                     {dataService.font.map(data =>
-                        <option key={data.data} value={data.data}>{data.data}</option>
+                        <option key={data} value={data}>{data}</option>
                     )}
                 </FormSelect>
             }
@@ -173,14 +166,13 @@ export default function PropertyServiceForm({ id, propertyIRI, handleCloseModal 
                     errors={errors}
                     register={register}
                     required={true}
-                    onChange={(e) => console.log('e.value', e.target.value)}
                 >
                     {dataService.margin.map(data =>
-                        <option key={JSON.stringify(data.data)} value={JSON.stringify(data.data)}>
-                            Haut : {data.data.top} -
-                            Bas : {data.data.bottom} -
-                            Gauche : {data.data.left} -
-                            Droite : {data.data.right}
+                        <option key={JSON.stringify(data)} value={JSON.stringify(data)}>
+                            Haut : {data.top} -
+                            Bas : {data.bottom} -
+                            Gauche : {data.left} -
+                            Droite : {data.right}
                         </option>
                     )}
                 </FormSelect>
@@ -192,10 +184,10 @@ export default function PropertyServiceForm({ id, propertyIRI, handleCloseModal 
                     <div className='grid grid-cols-2'>
                         {dataService.finishing.map(data =>
                             <FormCheckbox
-                                key={data.data}
+                                key={data}
                                 name="finishing"
-                                label={data.data}
-                                value={data.data}
+                                label={data}
+                                value={data}
                                 errors={errors}
                                 register={register}
                             />

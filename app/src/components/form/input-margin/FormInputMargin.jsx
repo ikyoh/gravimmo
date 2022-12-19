@@ -31,7 +31,7 @@ const FormInputMargin = ({ name, label, setValue, required, type, placeholder, c
 
 	const handleAddItem = () => {
 		if (Object.values(inputValues).every(value => value !== '')) {
-			append({ 'data': inputValues })
+			append(inputValues)
 			setInputValues(initialState)
 		}
 		else setError("Champs requis")
@@ -89,7 +89,7 @@ const FormInputMargin = ({ name, label, setValue, required, type, placeholder, c
 			<div className='flex flex-row flex-wrap gap-3 mt-3'>
 				{fields.map((field, index) =>
 					<div key={field.id} className='flex items-center rounded bg-dark h-[50px] pl-3 text-white'>
-						Haut : {field.data.top} - Bas : {field.data.bottom} - Gauche : {field.data.left} - Droite : {field.data.right}
+						Haut : {field.top} - Bas : {field.bottom} - Gauche : {field.left} - Droite : {field.right}
 						<IoIosClose size={32} className="text-slate-600 cursor-pointer" onClick={() => remove(index)} />
 					</div>
 				)}

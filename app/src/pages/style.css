@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .title {
     @apply mt-6 mb-6 font-bold text-xl uppercase underline decoration-accent decoration-[6px] underline-offset-8;
     @apply text-dark dark:text-white;
@@ -15,7 +14,6 @@
 .cards-container {
     @apply grid grid-cols-1 xl:grid-cols-5 gap-3;
 }
-
 
 .card {
     @apply p-3 rounded relative;

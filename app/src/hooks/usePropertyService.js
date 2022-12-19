@@ -71,10 +71,10 @@ export const useGetPaginatedDatas = (page, sortValue, sortDirection, searchValue
 
 }
 
-export const useGetOneData = (id) => {
-    return useQuery([queryKey, id], fetchOneData, {
+export const useGetOneData = (iri) => {
+    return useQuery([queryKey, iri], fetchOneData, {
         cacheTime: 60_000,
-        enabled: id ? true : false
+        enabled: iri ? true : false
     })
 }
 

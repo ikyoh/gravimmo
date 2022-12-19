@@ -74,7 +74,7 @@ export const ServicesPage = ({ title }) => {
 						<Tbody>
 							{!isLoading && data['hydra:member'].map(data =>
 								<Tr key={data.id}
-									onClick={() => handleOpenModal({ title: "édition de la prestation", content: <ServiceForm id={data.id} handleCloseModal={handleCloseModal} /> })}
+									onClick={() => handleOpenModal({ title: "édition de la prestation", content: <ServiceForm iri={data["@id"]} handleCloseModal={handleCloseModal} /> })}
 								>
 									<Td text={data.id} />
 									<Td label="Intitulé" text={data.title} />

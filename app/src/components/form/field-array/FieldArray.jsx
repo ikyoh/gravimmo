@@ -10,10 +10,8 @@ const FieldArray = ({ name, label, required, placeholder, control }) => {
         control,
         name: name
     });
-    console.log('fields', fields)
 
-    const initialValue = ''
-    const [inputValue, setInputValue] = useState(initialValue)
+    const [inputValue, setInputValue] = useState('')
     const [error, setError] = useState();
 
     const handleChange = ({ currentTarget }) => {
@@ -24,11 +22,19 @@ const FieldArray = ({ name, label, required, placeholder, control }) => {
 
     const handleAddItem = () => {
         if (inputValue !== '') {
-            append({ data: inputValue })
-            setInputValue(initialValue)
+            append(inputValue)
+            setInputValue('')
         }
         else setError("Champ requis")
     }
+
+
+    const formatFieldValue = (field) => {
+        const formattedField = {...field}
+        delete formattedField.id
+        return Object.values(formattedField).join('') // object values to array
+    }
+
     return (
         <div className="w-full mb-2">
             <Label name={name} label={label} required={required} />
@@ -44,10 +50,9 @@ const FieldArray = ({ name, label, required, placeholder, control }) => {
             </div>
             {error && <span className="text-error text-sm">{error}</span>}
             <div className='flex flex-row flex-wrap gap-3 mt-3'>
-
                 {fields.map((field, index) =>
                     <div key={field.id} className='flex items-center rounded bg-dark h-[50px] pl-3 text-white'>
-                        {field.data}
+                        {formatFieldValue(field)}
                         <IoIosClose size={32} className="text-slate-600 cursor-pointer" onClick={() => remove(index)} />
                     </div>
                 )}

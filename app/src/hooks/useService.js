@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { request } from '../utils/axios.utils'
+import { request, requestIRI } from '../utils/axios.utils'
 import { API_SERVICES as API , itemsPerPage } from '../config/api.config'
 import _ from 'lodash'
 
@@ -16,8 +16,8 @@ const fetchPaginatedDatas = (page, sortValue, sortDirection, searchValue) => {
 }
 
 const fetchOneData = ({ queryKey }) => {
-    const id = queryKey[1]
-    return request({ url: API + "/" + id, method: 'get' })
+    const iri = queryKey[1]
+    return requestIRI({ url: iri, method: 'get' })
 }
 
 const postData = form => {

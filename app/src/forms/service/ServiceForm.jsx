@@ -10,9 +10,9 @@ import FormInputMargin from "components/form/input-margin/FormInputMargin";
 import FieldArray from "components/form/field-array/FieldArray";
 
 
-export default function ServiceForm({ id, handleCloseModal }) {
+export default function ServiceForm({ iri, handleCloseModal }) {
 
-    const { isLoading: isLoadingData, data, isError, error } = useGetOneData(id)
+    const { isLoading: isLoadingData, data, isError, error } = useGetOneData(iri)
     const { mutate: postData, isLoading: isPosting, isSuccess } = usePostData()
     const { mutate: putData } = usePutData()
 
@@ -22,27 +22,31 @@ export default function ServiceForm({ id, handleCloseModal }) {
         price: yup.number().required().typeError("Champ obligatoire"),
     })
 
+
+    const defaultValues = {
+        material:[],
+        size:[],
+        color:[],
+        font:[],
+        margin:[],
+        finishing:[],
+    }
+
     const { register, handleSubmit, setValue, reset, control, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(validationSchema),
-        defaultValues: id ? data : {}
+        defaultValues: defaultValues
     })
 
-    // Set form values
-    useEffect(() => {
-        if (!id) {
-            reset({})
-        }
-    }, [])
 
+    // CASE UPDATE SERVICE
     useEffect(() => {
-        if (id && data) {
+        if (iri && data) {
             reset(data)
         }
     }, [isLoadingData, data])
 
     const onSubmit = form => {
-        console.log('form', form)
-        if (!id)
+        if (!iri)
             postData(form)
         else {
             putData(form)
@@ -50,11 +54,10 @@ export default function ServiceForm({ id, handleCloseModal }) {
         handleCloseModal()
     }
 
-    if (id) {
+    if (iri) {
         if (isLoadingData) {
             return <h2>Loading...</h2>
         }
-
         if (isError) {
             return <h2 className='py-3'>Error : {error.message}</h2>
         }

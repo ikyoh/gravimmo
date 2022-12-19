@@ -1,51 +1,49 @@
-import { useEffect } from 'react';
-import { useForm } from "react-hook-form";
-import { usePostData, usePutData, useGetOneData } from 'hooks/useProperty';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from "yup";
-import Form from "components/form/form/Form";
-import { FormInput } from "components/form/input/FormInput";
-import FieldArray from "components/form/field-array/FieldArray";
-import FormInputContact from 'components/form/input-contact/FormInputContact';
-import FormCheckbox from 'components/form/checkbox/FormCheckbox';
+import { useEffect } from 'react'
+import { useForm } from "react-hook-form"
+import { yupResolver } from '@hookform/resolvers/yup'
+import * as yup from "yup"
+import { usePostData, usePutData, useGetOneData } from 'hooks/useProperty'
+import { useGetAllDatas } from 'hooks/useTrustee'
+import Form from "components/form/form/Form"
+import { FormInput } from "components/form/input/FormInput"
+import FormCheckbox from 'components/form/checkbox/FormCheckbox'
+import { FormSelect } from 'components/form/select/FormSelect'
 
 export default function PropertyForm({ id, trusteeIRI, handleCloseModal }) {
 
     const { isLoading: isLoadingData, data, isError, error } = useGetOneData(id)
+    const { isLoading: isLoadingTrustees, data: dataTrustees, isError: isErrorTrustees, error: errorTrustees } = useGetAllDatas("","title","ASC")
     const { mutate: postData, isLoading: isPosting, isSuccess } = usePostData()
     const { mutate: putData } = usePutData()
 
-    console.log('data', data)
-
     const validationSchema = yup.object({
+        trustee: yup.string().required("Champ obligatoire"),
         title: yup.string().required("Champ obligatoire"),
         address: yup.string().required("Champ obligatoire"),
         postcode: yup.string().required("Champ obligatoire"),
         city: yup.string().required("Champ obligatoire"),
-        tva: yup.number().required("Champ obligatoire"),
+        tva: yup.number().typeError("Champ obligatoire"),
+
     })
 
-    const { register, handleSubmit, setValue, reset, control, formState: { errors, isSubmitting } } = useForm({
+    const defaultValues = { params: [] }
+
+    const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(validationSchema),
-        defaultValues: id ? data : { params: [] }
+        defaultValues: defaultValues
     })
 
-    // Set form values
+    // CASE NEW PROPERTY FROM TRUSTEE
     useEffect(() => {
-        if (!id) {
-            reset({})
+        if (trusteeIRI && !id) {
+            reset({ ...defaultValues, trustee: trusteeIRI })
         }
-        if (!id && trusteeIRI) {
-            reset({ trustee: trusteeIRI })
-        }
-        if (!id && !trusteeIRI) {
-            reset({})
-        }
-    }, [])
+    }, [isLoadingTrustees, dataTrustees])
 
+    // CASE UPDATE PROPERTY
     useEffect(() => {
         if (id && data) {
-            reset(data)
+            reset({ ...data, trustee: data.trustee["@id"] })
         }
     }, [isLoadingData, data])
 
@@ -53,9 +51,7 @@ export default function PropertyForm({ id, trusteeIRI, handleCloseModal }) {
         if (!id)
             postData(form)
         else {
-            const updateForm = { ...form }
-            delete updateForm.trustee
-            putData(updateForm)
+            putData(form)
         }
         handleCloseModal()
     }
@@ -64,17 +60,39 @@ export default function PropertyForm({ id, trusteeIRI, handleCloseModal }) {
         if (isLoadingData) {
             return <h2>Loading...</h2>
         }
-
         if (isError) {
             return <h2 className='py-3'>Error : {error.message}</h2>
         }
     }
 
     return (
-
         <Form onSubmit={handleSubmit(onSubmit)}
             isLoading={isSubmitting}
-            isDisabled={isSubmitting}>
+            isDisabled={isSubmitting}
+        >
+            {!trusteeIRI &&
+                <FormSelect
+                    type="text"
+                    name="trustee"
+                    label="Syndic"
+                    errors={errors}
+                    register={register}
+                    required={true}
+                >
+                    {isLoadingTrustees &&
+                        <option value="">Chargement des syndics</option>
+                    }
+                    {!isLoadingTrustees && dataTrustees.length != 0 &&
+                        < option value="">Choisir un syndic</option>
+                    }
+                    {!isLoadingTrustees && dataTrustees.length === 0 &&
+                        < option value="">Aucun syndic trouvé</option>
+                    }
+                    {!isLoadingTrustees && dataTrustees.map(data =>
+                        <option key={data["@id"]} value={data["@id"]}>{data.title}</option>
+                    )}
+                </FormSelect>
+            }
             <FormInput
                 type="text"
                 name="title"
@@ -254,5 +272,5 @@ export default function PropertyForm({ id, trusteeIRI, handleCloseModal }) {
                 />
             </div>
         </Form>
-    );
+    )
 }

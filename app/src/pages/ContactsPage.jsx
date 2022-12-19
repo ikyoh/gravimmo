@@ -78,7 +78,7 @@ export const ContactsPage = ({ title }) => {
 						<Tbody>
 							{!isLoading && data['hydra:member'].map(data =>
 								<Tr key={data.id}
-									onClick={() => handleOpenModal({ title: "édition du contact", content: <ContactForm id={data.id} handleCloseModal={handleCloseModal} /> })}
+									onClick={() => handleOpenModal({ title: "édition du contact", content: <ContactForm iri={data["@id"]} handleCloseModal={handleCloseModal} /> })}
 								>
 									<Td text={data.id} />
 									<Td label="Nom" text={data.lastname + ' ' + data.firstname} />

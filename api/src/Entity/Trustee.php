@@ -78,6 +78,7 @@ class Trustee
     private ?string $color2 = null;
 
     #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: User::class)]
+    #[Groups(["trustee:read"])]
     private Collection $contacts;
 
     #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: Property::class)]

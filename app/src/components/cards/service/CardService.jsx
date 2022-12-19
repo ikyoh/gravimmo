@@ -3,10 +3,14 @@ import { useGetOneData, useDeleteData } from 'hooks/usePropertyService'
 import Dropdown from 'components/dropdown/Dropdown'
 import PropertyServiceForm from 'forms/propertyService/PropertyServiceForm'
 
-export const CardService = ({ handleOpenModal, handleCloseModal, id }) => {
+export const CardService = ({ handleOpenModal, handleCloseModal, iri }) => {
 
-    const { data = {}, isLoading, error } = useGetOneData(id)
+    const { data = {}, isLoading, error } = useGetOneData(iri)
     const { mutate: deleteData } = useDeleteData()
+
+    const parse = (object) => {
+        return JSON.parse(object)
+    }
 
     return (
         <div className="card">
@@ -16,7 +20,7 @@ export const CardService = ({ handleOpenModal, handleCloseModal, id }) => {
                 <>
                     <div className="absolute top-2 right-1">
                         <Dropdown>
-                            <div onClick={() => handleOpenModal({ title: "Modifier une prestation", content: <PropertyServiceForm id={id} handleCloseModal={handleCloseModal} /> })}>
+                            <div onClick={() => handleOpenModal({ title: "Modifier une prestation", content: <PropertyServiceForm iri={data["@id"]} handleCloseModal={handleCloseModal} /> })}>
                                 Modifier la prestation
                             </div>
                             <div
@@ -60,7 +64,7 @@ export const CardService = ({ handleOpenModal, handleCloseModal, id }) => {
                             {data.margin &&
                                 <p>
                                     <span className='text-accent mr-3'>Marges :</span>
-                                    H : {data.margin.top} - B : {data.margin.bottom} - G : {data.margin.left} - D : {data.margin.right}
+                                    H : {parse(data.margin).top} - B : {parse(data.margin).bottom} - G : {parse(data.margin).left} - D : {parse(data.margin).right}
                                 </p>
                             }
                             {data.material &&

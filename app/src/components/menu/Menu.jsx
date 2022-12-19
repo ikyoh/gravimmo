@@ -54,15 +54,16 @@ const Menu = () => {
                 </Button>
             </div>
             {/* COMPUTER MENU */}
-            <div className='hidden lg:flex lg:flex-col items-center justify-between bg-gradient-menu-light dark:bg-gradient-menu h-full py-8'>
+            <div className='hidden lg:flex lg:flex-col items-center justify-between bg-gradient-menu-light dark:bg-gradient-menu h-full py-12'>
                 <div className=''>
-                    <img src={ReactLogo} alt="Logo" style={{ width: 70 }} />
+                    <img src={ReactLogo} alt="Logo" style={{ width: 60 }} />
                 </div>
                 <div className='flex flex-col gap-3'>
                     <Button
                         isBorder={location.pathname.includes("/dashboard")}
                         link='/dashboard'
                         size={ButtonSize.Big}
+                        info="Tableau de bord"
                     >
                         <MdDashboard />
                     </Button>
@@ -70,6 +71,7 @@ const Menu = () => {
                         isBorder={location.pathname.includes("/orders")}
                         link='/orders'
                         size={ButtonSize.Big}
+                        info="Commandes"
                     >
                         <MdPendingActions />
                     </Button>
@@ -77,6 +79,7 @@ const Menu = () => {
                         isBorder={location.pathname.includes("/invoices")}
                         link='/invoices'
                         size={ButtonSize.Big}
+                        info="Factures"
                     >
                         <MdOutlineCalculate />
                     </Button>
@@ -84,6 +87,7 @@ const Menu = () => {
                         isBorder={location.pathname.includes("/trustees")}
                         link='/trustees'
                         size={ButtonSize.Big}
+                        info="Syndics"
                     >
                         <MdSupervisedUserCircle />
                     </Button>
@@ -91,6 +95,7 @@ const Menu = () => {
                         isBorder={location.pathname.includes("/contacts")}
                         link='/contacts'
                         size={ButtonSize.Big}
+                        info="Contacts"
                     >
                         <MdGroups />
                     </Button>
@@ -98,6 +103,7 @@ const Menu = () => {
                         size={ButtonSize.Big}
                         isBorder={location.pathname.includes("/properties")}
                         link='/properties'
+                        info="Copropriétés"
                     >
                         <MdOutlineHomeWork />
                     </Button>
@@ -105,6 +111,7 @@ const Menu = () => {
                         size={ButtonSize.Big}
                         isBorder={location.pathname === "/services"}
                         link='/services'
+                        info="Prestations"
                     >
                         <MdOutlineDriveFileRenameOutline />
                     </Button>

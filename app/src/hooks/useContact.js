@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { request } from '../utils/axios.utils'
+import { request, requestIRI } from '../utils/axios.utils'
 import { API_USERS as API, itemsPerPage } from '../config/api.config'
 import _ from 'lodash'
 import { generatePassword } from 'utils/functions.utils'
@@ -21,8 +21,8 @@ const fetchPaginatedDatas = (page, sortValue, sortDirection, searchValue) => {
 }
 
 const fetchOneData = ({ queryKey }) => {
-    const id = queryKey[1]
-    return request({ url: API + "/" + id, method: 'get' })
+    const iri = queryKey[1]
+    return requestIRI({ url: iri, method: 'get' })
 }
 
 const postData = form => {
@@ -67,10 +67,10 @@ export const useGetPaginatedDatas = (page, sortValue, sortDirection, searchValue
     })
 }
 
-export const useGetOneData = (id) => {
-    return useQuery([queryKey, id], fetchOneData, {
+export const useGetOneData = (iri) => {
+    return useQuery([queryKey, iri], fetchOneData, {
         cacheTime: 60_000,
-        enabled: id ? true : false
+        enabled: iri ? true : false
     })
 }
 
@@ -81,7 +81,7 @@ export const usePostData = () => {
             console.log('error', error)
         },
         onSettled: () => {
-            queryClient.invalidateQueries([queryKey])
+            queryClient.invalidateQueries()
         }
     })
 }
@@ -94,7 +94,7 @@ export const usePutData = () => {
             queryClient.setQueryData([queryKey], context.previousDatas)
         },
         onSettled: () => {
-            queryClient.invalidateQueries([queryKey])
+            queryClient.invalidateQueries()
         }
     })
 }

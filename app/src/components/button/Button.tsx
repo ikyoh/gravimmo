@@ -17,6 +17,7 @@ export type ButtonProps = PropsWithChildren<{
     size?: ButtonSize;
     link?: string;
     label?: string;
+    info?: string;
     onClick?: () => void;
 }>
 
@@ -27,6 +28,7 @@ export const Button = ({
     onClick,
     link,
     label,
+    info,
     ...otherProps
 }: ButtonProps) => {
 
@@ -48,7 +50,7 @@ export const Button = ({
 
     if (link)
         return (
-            <div className='flex flex-col md:flex-row items-center justify-center'>
+            <div className='group flex flex-col md:flex-row items-center justify-center relative'>
                 <Link to={link} className={buttonClassName} {...otherProps}>
                     <div className={iconClassName}>
                         {children}
@@ -59,6 +61,11 @@ export const Button = ({
                         {label}
                     </div>
                     : null
+                }
+                {info &&
+                    <div className='absolute z-10 left-[64px] text-white p-3 bg-dark rounded hidden group-hover:block'>
+                        {info}
+                    </div>
                 }
             </div >
         )

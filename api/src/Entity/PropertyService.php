@@ -54,9 +54,9 @@ class PropertyService
     #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write"])]
     private ?string $font = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write"])]
-    private array $margin = [];
+    private ?string $margin = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write"])]
@@ -132,12 +132,12 @@ class PropertyService
         return $this;
     }
 
-    public function getMargin(): array
+    public function getMargin(): ?string
     {
         return $this->margin;
     }
 
-    public function setMargin(?array $margin): self
+    public function setMargin(?string $margin): self
     {
         $this->margin = $margin;
 

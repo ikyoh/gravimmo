@@ -77,10 +77,6 @@ class Property
     #[Groups(["properties:read", "property:read", "property:write"])]
     private ?Trustee $trustee = null;
 
-    #[ORM\ManyToOne(inversedBy: 'properties')]
-    #[Groups(["property:read"])]
-    private ?User $contact = null;
-
     #[ORM\OneToMany(mappedBy: 'property', targetEntity: PropertyService::class, orphanRemoval: true)]
     #[Groups(["property:read", "property:write"])]
     private Collection $services;
@@ -100,11 +96,16 @@ class Property
     #[ORM\OneToMany(mappedBy: 'property', targetEntity: Order::class)]
     private Collection $orders;
 
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'properties')]
+    #[Groups(["property:read", "property:write"])]
+    private Collection $contacts;
+
 
     public function __construct()
     {
         $this->services = new ArrayCollection();
         $this->orders = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -221,17 +222,7 @@ class Property
         return $this;
     }
 
-    public function getContact(): ?User
-    {
-        return $this->contact;
-    }
 
-    public function setContact(?User $contact): self
-    {
-        $this->contact = $contact;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, PropertyService>
@@ -325,6 +316,30 @@ class Property
                 $order->setProperty(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getContacts(): Collection
+    {
+        return $this->contacts;
+    }
+
+    public function addContact(User $contact): self
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts->add($contact);
+        }
+
+        return $this;
+    }
+
+    public function removeContact(User $contact): self
+    {
+        $this->contacts->removeElement($contact);
 
         return $this;
     }

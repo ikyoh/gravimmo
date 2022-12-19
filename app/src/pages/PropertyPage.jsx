@@ -8,7 +8,8 @@ import { useGetOneData } from 'hooks/useProperty'
 import { MdArrowBack } from 'react-icons/md'
 import PropertyForm from "forms/property/PropertyForm"
 import PropertyServiceForm from "forms/propertyService/PropertyServiceForm"
-import { CardService } from "components/card/service/CardService"
+import { CardService } from "components/cards/service/CardService"
+import { CardContact } from "components/cards/contact/CardContact"
 import Dropdown from 'components/dropdown/Dropdown'
 import _ from "lodash"
 import './style.css'
@@ -118,7 +119,7 @@ export const PropertyPage = () => {
 							<div className="title">
 								Syndic
 							</div>
-							<div className="flex gap-3">
+							<div className="cards-container">
 								<div className="card">
 									<div className="subtitle">
 										Syndic
@@ -130,29 +131,24 @@ export const PropertyPage = () => {
 										{data.trustee.postcode} - {data.trustee.city}
 									</div>
 								</div>
-								{data.contact &&
-									<div className="card">
-										<div className="subtitle">
-											Contact Syndic
-										</div>
-										<div>
-											{data.contact.lastname} {data.contact.firstname}
-										</div>
-										<div>
-											{data.contact.phone}
-										</div>
-										<div>
-											{data.contact.email}
-										</div>
+								{data.contacts.map((iri) =>
+									<CardContact key={iri} iri={iri} />
+								)}
+								<div className="card-button">
+									<Button size={ButtonSize.Big}
+										onClick={() => handleOpenModal({ title: "Ajouter un contact", content: <PropertyContactForm propertyIRI={data['@id']} handleCloseModal={handleCloseModal} /> })}
+									/>
+									<div>
+										ajouter <br /> un contact
 									</div>
-								}
+								</div>
 							</div>
 							<div className="title">
 								prestations
 							</div>
 							<div className="cards-container">
 								{data.services.map((iri) =>
-									<CardService handleOpenModal={handleOpenModal} handleCloseModal={handleCloseModal} key={iri} id={iri} />
+									<CardService handleOpenModal={handleOpenModal} handleCloseModal={handleCloseModal} key={iri} iri={iri} />
 								)}
 							</div>
 							<div className="card-button">

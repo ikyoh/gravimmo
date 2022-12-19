@@ -8,11 +8,11 @@ import TrusteeForm from '../forms/trustee/TrusteeForm'
 import ContactForm from "forms/contact/ContactForm"
 import PropertyForm from "forms/property/PropertyForm";
 import { useGetOneData } from 'hooks/useTrustee'
-import { useGetFilteredDatas as useGetFilteredDatasContact } from 'hooks/useContact'
 import { useGetFilteredDatas as useGetFilteredDatasProprerty } from 'hooks/useProperty'
 import { MdClose, MdArrowBack } from 'react-icons/md'
 import Dropdown from 'components/dropdown/Dropdown'
 import { API_URL, API_TRUSTEES } from "config/api.config"
+import { CardContact } from "components/cards/contact/CardContact"
 import './style.css'
 
 export const TrusteePage = () => {
@@ -23,9 +23,9 @@ export const TrusteePage = () => {
 		const { state: previousPageState } = useLocation();
 		const { id } = useParams()
 		const { data = [], isLoading, error } = useGetOneData(id)
-		const { data: dataContact = [], isLoading: isLoadingContact, error: errorContact } = useGetFilteredDatasContact('lastname', 'ASC', "trustee=" + API_URL + API_TRUSTEES + "/" + id)
 		const { data: dataProperty = [], isLoading: isLoadingProperty, error: errorProperty } = useGetFilteredDatasProprerty('title', 'ASC', "trustee=" + API_URL + API_TRUSTEES + "/" + id)
 
+		console.log('data["@id"]', data["@id"])
 		return (
 			<>
 				<Header title={data.title} isLoading={isLoading} error={error}>
@@ -95,33 +95,12 @@ export const TrusteePage = () => {
 								contacts
 							</div>
 							<div className="cards-container">
-								{!isLoadingContact && dataContact['hydra:member'].map(data =>
-									<div className="card" key={data["@id"]}>
-										<div className="subtitle">
-											{data.firstname} {data.lastname}
-										</div>
-										<div>
-											{data.email}
-										</div>
-										<div>
-											{data.phone}
-										</div>
-										<div className="mt-3 text-sm">
-											{data.title}
-										</div>
-										<div className="absolute top-2 right-1">
-											<Dropdown>
-												<div
-													onClick={() => handleOpenModal({ title: "modifier le contact", content: <ContactForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
-													Modifier le contact
-												</div>
-											</Dropdown>
-										</div>
-									</div>
+								{data.contacts.map((iri) =>
+									<CardContact handleOpenModal={handleOpenModal} handleCloseModal={handleCloseModal} key={iri} iri={iri} />
 								)}
 								<div className="card-button">
 									<Button size={ButtonSize.Big}
-										onClick={() => handleOpenModal({ title: "nouveau contact", content: <ContactForm trustee={data['@id']} handleCloseModal={handleCloseModal} /> })}
+										onClick={() => handleOpenModal({ title: "nouveau contact", content: <ContactForm trusteeIRI={data["@id"]} handleCloseModal={handleCloseModal} /> })}
 									/>
 									<div>
 										ajouter <br /> un contact
@@ -154,7 +133,7 @@ export const TrusteePage = () => {
 													Voir la fiche
 												</div>
 												<div
-													onClick={() => handleOpenModal({ title: "modifier la copropriété", content: <PropertyForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
+													onClick={() => handleOpenModal({ title: "modifier la copropriété", content: <PropertyForm id={data.id} trusteeIRI={data["@id"]} handleCloseModal={handleCloseModal} /> })}>
 													Modifier la copropriété
 												</div>
 											</Dropdown>
