@@ -77,17 +77,16 @@ prune :
 	
 docker-dev: ## Docker docker-compose.dev.yml
 	@echo "\n==> Docker compose development environment ..."
-	$(DOCKER_COMPOSE) -f docker-compose.dev.yml up -d --build
+	$(DOCKER_COMPOSE) up -d --build
 .PHONY: docker-dev
 
 docker-prod:
 	@echo "\n==> Docker compose production environment ..."
-	$(DOCKER_COMPOSE) up -d --build
+	$(DOCKER_COMPOSE) -f docker-compose.yml -f docker-compose.production.yml up -d --build
 	$(DOCKER) exec -it ${APP_NAME}-app npm run build --force
 	$(DOCKER) exec -it ${APP_NAME}-api composer dump-env prod
 	$(DOCKER_COMPOSE_STOP) app
 .PHONY: docker-prod
-
 
 
 ## === SYMFONY ================================================
@@ -103,12 +102,12 @@ symfony-bash : ## Symfony bash
 .PHONY: symfony-bash
 
 
-
 ## === CADDY ================================================
 caddy-reload: ## Reload Caddy Server
 	@echo "\n==> Reloadind Caddy Server ..."
 	$(DOCKER) exec -w /etc/caddy ${APP_NAME}-caddy caddy reload
 .PHONY: caddy-reload
+
 
 
 ## === FIRST INSTALL ================================================
@@ -118,14 +117,12 @@ install:
 
 
 ## === DEVELOPMENT ================================================
-dev: ## Development environment
-	$(MAKE) docker-dev
-	$(MAKE) symfony-dev
+dev: docker-dev symfony-dev
 	@echo "\n==> Running development environment ..."
 .PHONY: dev
 
 
 ## === PRODUCTION ================================================
 prod: docker-prod caddy-reload
-	@echo "\n==> Run production environment ..."
+	@echo "\n==> Running production environment ..."
 .PHONY: prod

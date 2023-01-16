@@ -10,7 +10,7 @@ export const Title = ({
     isLoading = false
 }: TitleProps) => {
 
-    const className = classNames("ext-dark dark:text-white text-2xl uppercase font-bold ",
+    const className = classNames("text-dark dark:text-white text-2xl uppercase font-bold ",
         {
             "animate-pulse": isLoading,
         })

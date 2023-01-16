@@ -2,12 +2,12 @@
     # email to generate a valid SSL certificate
     email ohsito@gmail.com
 
-    HTTP/3 support
-    servers {
-        protocol {
-            experimental_http3
-        }
-    }
+    # HTTP/3 support
+    # servers {
+    #     protocol {
+    #         experimental_http3
+    #     }
+    # }
 }
 
 # Host which Caddy will handle
@@ -27,12 +27,11 @@ log
     handle @app {
         root * /srv/app
         try_files {path} /index.html
-        #reverse_proxy app:3000
         encode gzip zstd
         file_server
     }
 
-    vulcain
+    #vulcain
 
     # API
     root * /srv/api/public

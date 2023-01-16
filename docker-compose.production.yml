@@ -1,0 +1,11 @@
+services:
+    
+  app:
+    environment:
+    - REACT_APP_ENV=prod
+
+  api:
+    environment:
+    - DATABASE_URL=mysql://${DB_USER}:${DB_PASS}@database:3306/${DB_NAME}?serverVersion=8&charset=utf8mb4
+    - CORS_ALLOW_ORIGIN=https://${DOMAIN_NAME}
+

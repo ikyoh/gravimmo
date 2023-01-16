@@ -135,9 +135,6 @@ export const PropertyPage = () => {
 									<CardContact key={iri} iri={iri} />
 								)}
 								<div className="card-button">
-									<Button size={ButtonSize.Big}
-										onClick={() => handleOpenModal({ title: "Ajouter un contact", content: <PropertyContactForm propertyIRI={data['@id']} handleCloseModal={handleCloseModal} /> })}
-									/>
 									<div>
 										ajouter <br /> un contact
 									</div>

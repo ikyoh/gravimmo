@@ -82,14 +82,12 @@ export const TrusteePage = () => {
 									</div>
 									{data.billingEmail}
 								</div>
-								<div className="absolute top-2 right-1">
-									<Dropdown>
-										<div
-											onClick={() => handleOpenModal({ title: "modifier le syndic", content: <TrusteeForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
-											Modifier le syndic
-										</div>
-									</Dropdown>
-								</div>
+								<Dropdown>
+									<div
+										onClick={() => handleOpenModal({ title: "modifier le syndic", content: <TrusteeForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
+										Modifier le syndic
+									</div>
+								</Dropdown>
 							</div>
 							<div className="title">
 								contacts
@@ -125,19 +123,17 @@ export const TrusteePage = () => {
 										<div className="mt-3 text-sm">
 											{data.zone}
 										</div>
-										<div className="absolute top-2 right-1">
-											<Dropdown>
-												<div
-													onClick={() => navigate("/properties/" + data.id, { state: {} })}
-												>
-													Voir la fiche
-												</div>
-												<div
-													onClick={() => handleOpenModal({ title: "modifier la copropriété", content: <PropertyForm id={data.id} trusteeIRI={data["@id"]} handleCloseModal={handleCloseModal} /> })}>
-													Modifier la copropriété
-												</div>
-											</Dropdown>
-										</div>
+										<Dropdown>
+											<div
+												onClick={() => navigate("/properties/" + data.id, { state: {} })}
+											>
+												Voir la fiche
+											</div>
+											<div
+												onClick={() => handleOpenModal({ title: "modifier la copropriété", content: <PropertyForm id={data.id} trusteeIRI={data["@id"]} handleCloseModal={handleCloseModal} /> })}>
+												Modifier la copropriété
+											</div>
+										</Dropdown>
 									</div>
 								)}
 								<div className="card-button">

@@ -1,0 +1,14 @@
+services:
+
+  caddy:
+    build:
+      context: ./caddy
+      target: caddydev
+    
+  app:
+      environment:
+      - REACT_APP_ENV=dev
+
+  api:
+      environment:
+        - MAILER_DSN=smtp://da05d84c9b1d3b:7eea5701ac616d@smtp.mailtrap.io:2525?encryption=tls&auth_mode=login

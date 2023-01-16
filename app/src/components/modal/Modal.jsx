@@ -10,8 +10,8 @@ export const Modal = ({ title, children, handleCloseModal }) => {
     // }
 
     return (
-        <div className="inset-0 z-50 fixed h-screen w-screen md:bg-opacity-50 md:bg-black flex justify-center md:pt-[5em]">
-            <div className="flex flex-col dark:bg-dark bg-light bg-gradient-modal md:rounded rounded-none w-full md:w-[600px] h-full md:h-[700px] slide-modal scrollbar pl-6 pr-4">
+        <div className="inset-0 z-[100] fixed h-screen w-screen md:bg-opacity-50 md:bg-black flex justify-center md:pt-[5em]">
+            <div className="flex flex-col bg-white dark:bg-dark dark:bg-gradient-modal md:rounded rounded-none w-full md:w-[600px] h-full md:h-[700px] slide-modal scrollbar pl-6 pr-4">
                 <Header title={title} isModal={true}>
                     <Button
                         isBorder={false}

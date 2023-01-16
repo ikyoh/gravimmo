@@ -95,14 +95,17 @@ export const TrusteesPage = ({ title }) => {
 									<Td label="Code postal" text={data.postcode} />
 									<Td label="Ville" text={data.city} />
 									<Td label="" text={""} >
-										<div className='float-right'>
-											<Dropdown>
+											<Dropdown type='table'>
+												<div
+													onClick={() => navigate("/trustees/" + data.id, { state: { page: page, sortDirection: sortDirection, sortValue: sortValue, searchValue: searchValue } })}
+													>
+													Voir la fiche
+												</div>
 												<div
 													onClick={() => handleOpenModal({ title: "édition du syndic", content: <TrusteeForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
 													Modifier le syndic
 												</div>
 											</Dropdown>
-										</div>
 									</Td>
 								</Tr>
 							)}

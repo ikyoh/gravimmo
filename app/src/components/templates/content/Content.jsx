@@ -2,7 +2,7 @@ import React from 'react'
 
 const Content = ({children}) => {
     return (
-        <div className='md:my-5 md:rounded bg-white dark:bg-dark dark:md:bg-gradient-page text-white px-3 pb-3 scrollbar grow'>
+        <div className='md:rounded text-white px-3 pb-3 mx-5 bg-white dark:bg-dark dark:bg-gradient-page bg-fixed sticky grow'>
             {children}
         </div>
     )

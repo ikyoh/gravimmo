@@ -16,6 +16,7 @@ import { useSearch } from 'hooks/useSearch'
 import { useSortBy } from 'hooks/useSortBy'
 import { useState } from 'react'
 import Pagination from 'components/pagination/Pagination'
+import Dropdown from 'components/dropdown/Dropdown'
 
 export const ContactsPage = ({ title }) => {
 
@@ -74,6 +75,7 @@ export const ContactsPage = ({ title }) => {
 							/>
 							<Th label="Téléphone" />
 							<Th label="Email" />
+							<Th label="" style={{ width: 10 }} />
 						</Thead>
 						<Tbody>
 							{!isLoading && data['hydra:member'].map(data =>
@@ -86,7 +88,15 @@ export const ContactsPage = ({ title }) => {
 									<Td label="Fonction" text={data.title} />
 									<Td label="Téléphone" text={data.phone} />
 									<Td label="Email" text={data.email} />
-
+									<Td label="" text={""} >
+										<Dropdown type='table'>
+											<div
+												onClick={() => handleOpenModal({ title: "édition du contact", content: <ContactForm iri={data["@id"]} handleCloseModal={handleCloseModal} /> })}
+											>
+												Modifier le contact
+											</div>
+										</Dropdown>
+									</Td>
 								</Tr>
 							)}
 						</Tbody>

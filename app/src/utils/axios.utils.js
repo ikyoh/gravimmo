@@ -20,7 +20,7 @@ export const request = async ({ ...options }) => {
   return client(options).then(onSuccess).catch(onError)
 }
 
-const clientIRI = axios.create()
+const clientIRI = process.env.REACT_APP_ENV === "prod" ? axios.create() : axios.create({ baseURL: "https://localhost" })
 
 export const requestIRI = async ({ ...options }) => {
   // client.defaults.headers.common.Authorization = `Bearer token`

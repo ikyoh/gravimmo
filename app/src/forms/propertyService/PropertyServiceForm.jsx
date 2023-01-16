@@ -92,7 +92,7 @@ export default function PropertyServiceForm({ iri, propertyIRI, handleCloseModal
                 {isLoadingServices &&
                     <option value="">Chargement des prestations</option>
                 }
-                {!isLoadingServices && dataServices.length != 0 &&
+                {!isLoadingServices && dataServices.length !== 0 &&
                     <option value="">Choisir une prestation</option>
                 }
                 {!isLoadingServices && dataServices.length === 0 &&
@@ -102,7 +102,7 @@ export default function PropertyServiceForm({ iri, propertyIRI, handleCloseModal
                     <option key={data["@id"]} value={data["@id"]}>{data.title} - {data.price} € H.T.</option>
                 )}
             </FormSelect>
-            {dataService && dataService.material.length != 0 &&
+            {dataService && dataService.material.length !== 0 &&
                 <FormSelect
                     type="text"
                     name="material"
@@ -116,7 +116,7 @@ export default function PropertyServiceForm({ iri, propertyIRI, handleCloseModal
                     )}
                 </FormSelect>
             }
-            {dataService && dataService.size.length != 0 &&
+            {dataService && dataService.size.length !== 0 &&
                 <FormSelect
                     type="text"
                     name="size"
@@ -130,7 +130,7 @@ export default function PropertyServiceForm({ iri, propertyIRI, handleCloseModal
                     )}
                 </FormSelect>
             }
-            {dataService && dataService.color.length != 0 &&
+            {dataService && dataService.color.length !== 0 &&
                 <FormSelect
                     type="text"
                     name="color"
@@ -144,7 +144,7 @@ export default function PropertyServiceForm({ iri, propertyIRI, handleCloseModal
                     )}
                 </FormSelect>
             }
-            {dataService && dataService.font.length != 0 &&
+            {dataService && dataService.font.length !== 0 &&
                 <FormSelect
                     type="text"
                     name="font"
@@ -158,7 +158,7 @@ export default function PropertyServiceForm({ iri, propertyIRI, handleCloseModal
                     )}
                 </FormSelect>
             }
-            {dataService && dataService.margin.length != 0 &&
+            {dataService && dataService.margin.length !== 0 &&
                 <FormSelect
                     type="text"
                     name="margin"
@@ -178,7 +178,7 @@ export default function PropertyServiceForm({ iri, propertyIRI, handleCloseModal
                 </FormSelect>
             }
 
-            {dataService && dataService.finishing.length != 0 &&
+            {dataService && dataService.finishing.length !== 0 &&
                 <>
                     <FormLabel name="finishing" label="Façonnages" />
                     <div className='grid grid-cols-2'>

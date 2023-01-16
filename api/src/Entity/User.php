@@ -80,6 +80,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Trustee $trustee = null;
 
     #[ORM\ManyToMany(targetEntity: Property::class, mappedBy: 'contacts')]
+    #[Groups(["users:read", "user:read"])]
     private Collection $properties;
 
     public function __construct()

@@ -17,14 +17,12 @@ services:
       - php_socket:/var/run/php 
       - ./api:/srv/api
       - ./app/build:/srv/app
-      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
       - api
     networks:
-      - gravimmo
-
+      appnetwork: {}
 
   app:
     container_name: ${APP_NAME}-app
@@ -34,13 +32,14 @@ services:
     volumes:
       - ./app:/app
       - /app/node_modules
-    restart: on-failure  
+    restart: on-failure
     environment:
-      - CHOKIDAR_USEPOLLING=true  
+      - CHOKIDAR_USEPOLLING=true
     ports:
-      - "3000:3000"  
+      - "3000:3000"
     networks:
-      - gravimmo
+      appnetwork: {}
+
 
   api:
     container_name: ${APP_NAME}-api
@@ -62,8 +61,7 @@ services:
     depends_on:
       - database
     networks:
-      - gravimmo
-
+      appnetwork: {}
 
   database:
     container_name: ${APP_NAME}-database
@@ -73,14 +71,14 @@ services:
     volumes:
       - ./docker/database:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASS}
       MYSQL_DATABASE: ${DB_NAME}
     networks:
-      - gravimmo
-
+      appnetwork: {}
 
   phpmyadmin:
     container_name: ${APP_NAME}-phpmyadmin
@@ -92,11 +90,12 @@ services:
     depends_on:
       - database
     networks:
-      - gravimmo
+      appnetwork: {}
 
 
 networks:
-  gravimmo:
+  appnetwork:
+    name: ${APP_NAME}
     driver: bridge
 
 

@@ -13,8 +13,7 @@
     }
 
     body {
-        @apply bg-white md:bg-light dark:bg-dark;
-
+        @apply bg-light dark:bg-dark overflow-y-scroll;
     }
 
     html {

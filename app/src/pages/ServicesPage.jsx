@@ -16,6 +16,7 @@ import { useSearch } from 'hooks/useSearch'
 import { useSortBy } from 'hooks/useSortBy'
 import { useState } from 'react'
 import Pagination from 'components/pagination/Pagination'
+import Dropdown from 'components/dropdown/Dropdown'
 
 export const ServicesPage = ({ title }) => {
 
@@ -70,6 +71,7 @@ export const ServicesPage = ({ title }) => {
 								handleSort={handleSort}
 							/>
 							<Th label="Tarif H.T." />
+							<Th label="" style={{ width: 10 }} />
 						</Thead>
 						<Tbody>
 							{!isLoading && data['hydra:member'].map(data =>
@@ -80,6 +82,15 @@ export const ServicesPage = ({ title }) => {
 									<Td label="Intitulé" text={data.title} />
 									<Td label="Catégorie" text={data.category} />
 									<Td label="Tarif H.T" text={data.price + ' €'} />
+									<Td label="" text={""} >
+										<Dropdown type='table'>
+											<div
+												onClick={() => handleOpenModal({ title: "édition de la prestation", content: <ServiceForm iri={data["@id"]} handleCloseModal={handleCloseModal} /> })}
+											>
+												Modifier la prestation
+											</div>
+										</Dropdown>
+									</Td>
 								</Tr>
 							)}
 						</Tbody>

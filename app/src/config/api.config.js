@@ -1,4 +1,4 @@
-export const API_URL =  '/api';
+export const API_URL =  process.env.REACT_APP_ENV === "prod" ? '/api' : 'https://localhost/api';
 export const API_LOGIN = "/login"; 
 export const API_PASSWORD = "/forgot_password"; 
 export const API_LOGOUT = "/logout"; 

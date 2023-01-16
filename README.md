@@ -22,6 +22,7 @@ DB_NAME=
 ###> lexik/jwt-authentication-bundle ###
 JWT_PASSPHRASE=
 
+
 ###> nelmio/cors-bundle ###
 #CORS_ALLOW_ORIGIN='^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$'
 CORS_ALLOW_ORIGIN='^http?://.*?$'
@@ -35,10 +36,6 @@ CORS_ALLOW_ORIGIN='^http?://.*?$'
 ## 4 - docker exec -it cohealth-api php bin/console lexik:jwt:generate-keypair
 
 ## 5 - docker exec -it cohealth-api bash composer dump-env prod
-
-
-
-
 
 
 

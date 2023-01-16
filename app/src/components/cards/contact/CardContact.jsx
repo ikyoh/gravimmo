@@ -13,14 +13,12 @@ export const CardContact = ({ handleOpenModal, handleCloseModal, iri }) => {
                 <div>Loading</div>
                 :
                 <>
-                    <div className="absolute top-2 right-1">
-                        <Dropdown>
-                            <div
-                                onClick={() => handleOpenModal({ title: "modifier le contact", content: <ContactForm iri={data["@id"]} trusteeIRI={data.trustee} handleCloseModal={handleCloseModal} /> })}>
-                                Modifier le contact
-                            </div>
-                        </Dropdown>
-                    </div>
+                    <Dropdown>
+                        <div
+                            onClick={() => handleOpenModal({ title: "modifier le contact", content: <ContactForm iri={data["@id"]} trusteeIRI={data.trustee} handleCloseModal={handleCloseModal} /> })}>
+                            Modifier le contact
+                        </div>
+                    </Dropdown>
                     <div className='flex flex-col'>
                         <div className="mr-auto text-white bg-accent text-sm px-3 py-1 rounded-full">
                             {data.title}

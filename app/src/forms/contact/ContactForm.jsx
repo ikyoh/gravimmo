@@ -11,7 +11,7 @@ import { FormSelect } from 'components/form/select/FormSelect'
 export default function ContactForm({ iri, trusteeIRI, handleCloseModal }) {
 
     const { isLoading: isLoadingData, data, isError, error } = useGetOneData(iri)
-    const { isLoading: isLoadingTrustees, data: dataTrustees, isError: isErrorTrustees, error: errorTrustees } = useGetAllDatas("","title","ASC")
+    const { isLoading: isLoadingTrustees, data: dataTrustees, isError: isErrorTrustees, error: errorTrustees } = useGetAllDatas("", "title", "ASC")
     const { mutate: postData, isLoading: isPosting, isSuccess } = usePostData()
     const { mutate: putData } = usePutData()
 
@@ -46,10 +46,12 @@ export default function ContactForm({ iri, trusteeIRI, handleCloseModal }) {
     }, [isLoadingData, data])
 
     const onSubmit = form => {
+        const submitDatas = { ...form }
         if (!iri)
-            postData(form)
+            postData(submitDatas)
         else {
-            putData(form)
+            if (form.trustee !== data.trustee) submitDatas.properties = []
+            putData(submitDatas)
         }
         handleCloseModal()
     }
@@ -64,7 +66,7 @@ export default function ContactForm({ iri, trusteeIRI, handleCloseModal }) {
         }
     }
 
-    console.log('errors', errors)
+    console.log('data', data)
 
     return (
 

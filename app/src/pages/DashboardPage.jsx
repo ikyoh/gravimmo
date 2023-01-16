@@ -2,12 +2,11 @@ import { Layout } from '../components/templates/layout/Layout'
 import Content from '../components/templates/content/Content'
 import Header from '../components/templates/header/Header'
 import { AiOutlineSlack } from "react-icons/ai";
-
+import { env } from 'config/api.config';
 
 export const DashboardPage = ({ title }) => {
 
 	const PageContent = ({ handleOpenModal, handleCloseModal }) => {
-
 
 		const card = 'bg-dark/60 rounded p-10 flex gap-20 items-center'
 		const card2 = 'bg-dark/60 rounded p-10 flex justify-between items-center'
@@ -25,7 +24,7 @@ export const DashboardPage = ({ title }) => {
 								<AiOutlineSlack size={70} className="bg-accent rounded-full p-3 text-dark" />
 								<div>
 									<div className={cardtitle}>
-										123
+										12365656
 									</div>
 									<div className={text}>
 										Lorem Ipsum

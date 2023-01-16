@@ -63,7 +63,7 @@ export const Button = ({
                     : null
                 }
                 {info &&
-                    <div className='absolute z-10 left-[64px] text-white p-3 bg-dark rounded hidden group-hover:block'>
+                    <div className='absolute z-10 left-[64px] text-white p-3 bg-slate-400 dark:bg-dark rounded hidden group-hover:block whitespace-nowrap'>
                         {info}
                     </div>
                 }

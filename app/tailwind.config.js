@@ -18,6 +18,7 @@ module.exports = {
     borderRadius: {
       'none': '0',
       'sm': '0.125rem',
+      'md': '0.32rem',
       'DEFAULT': '10px',
       'full': '9999px',
     },
@@ -59,5 +60,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 }

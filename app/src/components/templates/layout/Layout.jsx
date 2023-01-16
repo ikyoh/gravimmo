@@ -1,6 +1,7 @@
 import React, { useState, PropsWithChildren } from 'react'
-import Menu from '../../menu/Menu'
+import Menu from '../menu/Menu'
 import { Modal } from '../../modal/Modal'
+import MenuMobile from '../menu/MenuMobile'
 
 
 export const Layout = ({ children }) => {
@@ -33,12 +34,13 @@ export const Layout = ({ children }) => {
     return (
         <>
             <RenderModal />
-            <div className='h-screen flex flex-col md:flex-row-reverse'>
-                <div className='w-full md:pb-3 md:px-6 md:pt-10 flex flex-col grow'>
-                    {React.cloneElement(children, { handleCloseModal, handleOpenModal })}
-                </div>
-                <div className='md:w-[110px] sticky bottom-0'>
+            <div className='flex flex-col-reverse md:flex-row min-h-screen'>
+                <div className='bg-purple-500 fixed bottom-0 w-full md:w-[110px] md:h-screen md:sticky md:top-0 z-10'>
+                    <MenuMobile />
                     <Menu />
+                </div>
+                <div className='grow flex flex-col mb-24'>
+                    {React.cloneElement(children, { handleCloseModal, handleOpenModal })}
                 </div>
             </div>
         </>

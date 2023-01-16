@@ -8,8 +8,8 @@ export const useSearch = (props) => {
     return {
         searchValue,
         searchbar:
-            <div className='md:flex items-center rounded-full border px-4 h-12 text-white gap-6 mr-6' >
-                <BsSearch size={26} />
+            <div className='md:flex items-center rounded-full border border-dark dark:border-white px-4 h-12 text-dark dark:text-white gap-6 mr-6' >
+                <BsSearch size={26} className="text-dark dark:text-white" />
                 <input
                     value={searchValue}
                     name='search'

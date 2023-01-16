@@ -42,7 +42,7 @@ export const PropertiesPage = ({ title }) => {
 					{searchbar}
 					<Button
 						size={ButtonSize.Big}
-						onClick={() => handleOpenModal({ title: "Nouvelle copropriété", content: <PropertyForm	 handleCloseModal={handleCloseModal} /> })}
+						onClick={() => handleOpenModal({ title: "Nouvelle copropriété", content: <PropertyForm handleCloseModal={handleCloseModal} /> })}
 					/>
 				</Header>
 				<Content>
@@ -98,14 +98,17 @@ export const PropertiesPage = ({ title }) => {
 									<Td label="Code postal" text={data.postcode} />
 									<Td label="Ville" text={data.city} />
 									<Td label="" text={""} >
-										<div className='float-right'>
-											<Dropdown>
-												<div
-													onClick={() => handleOpenModal({ title: "édition de la copropriété", content: <PropertyForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
-													Modifier la copropriété
-												</div>
-											</Dropdown>
-										</div>
+										<Dropdown type='table'>
+											<div
+												onClick={() => navigate("/properties/" + data.id, { state: { page: page, sortDirection: sortDirection, sortValue: sortValue, searchValue: searchValue } })}
+											>
+												Voir la fiche
+											</div>
+											<div
+												onClick={() => handleOpenModal({ title: "édition de la copropriété", content: <PropertyForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
+												Modifier la copropriété
+											</div>
+										</Dropdown>
 									</Td>
 								</Tr>
 							)}
