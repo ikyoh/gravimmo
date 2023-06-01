@@ -6,7 +6,7 @@ use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Post;
 use Doctrine\ORM\Mapping as ORM;
-use App\Filter\CustomSearchFilter;
+use App\Filter\MultipleFieldsSearchFilter;
 use App\Repository\UserRepository;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
@@ -32,8 +32,16 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
     ]
 )]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'title', 'lastname', 'email', 'phone', 'trustee.title'])]
-#[ApiFilter(CustomSearchFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: ['trustee' => 'exact'])]
+#[ApiFilter(MultipleFieldsSearchFilter::class, properties: [
+    "id",
+    "email",
+    "firstname",
+    "lastname",
+    "phone",
+    "title",
+    "trustee.title",
+])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]

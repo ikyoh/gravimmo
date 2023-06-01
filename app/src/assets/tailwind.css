@@ -13,7 +13,7 @@
     }
 
     body {
-        @apply bg-light dark:bg-dark overflow-y-scroll;
+        @apply bg-light dark:bg-dark scroll overflow-y-scroll ;
     }
 
     html {
@@ -84,4 +84,29 @@
 /* set button(top and bottom of the scrollbar) */
 .scrollbar::-webkit-scrollbar-button {
     display:none;
+}
+
+/* Global */
+.scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Fond */
+.scroll::-webkit-scrollbar-track {
+    @apply bg-white dark:bg-dark;
+}
+
+/* Ascenseur */
+.scroll::-webkit-scrollbar-thumb {
+    @apply bg-dark/40 dark:bg-white/10;
+    border-radius: 8px;
+}
+
+
+/* Boutons */
+.scroll::-webkit-scrollbar-button:single-button {
+    display: block;
+    border-style: solid;
+    height: 20px;
+    width: 16px;
 }

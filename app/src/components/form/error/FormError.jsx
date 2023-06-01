@@ -1,9 +1,9 @@
 import React from 'react'
 
-const FormError = ({ errors = false }) => {
+const FormError = ({ error = false }) => {
     return (
-        errors ?
-            <span className="text-error text-sm">{errors?.message}</span>
+        error ?
+            <span className="text-error text-sm">{error?.message}</span>
             : null
     )
 }

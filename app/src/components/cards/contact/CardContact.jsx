@@ -1,23 +1,42 @@
 import React from 'react'
-import { useGetOneData } from 'hooks/useContact'
+import { useGetIRI, usePutData } from 'queryHooks/useContact'
 import Dropdown from 'components/dropdown/Dropdown'
-import ContactForm from 'forms/contact/ContactForm'
+import ContactForm from 'components/forms/contact/ContactForm'
+import Loader from 'components/loader/Loader'
 
-export const CardContact = ({ handleOpenModal, handleCloseModal, iri }) => {
+export const CardContact = ({ handleOpenModal, handleCloseModal, iri, trustee, property }) => {
 
-    const { data = {}, isLoading, error } = useGetOneData(iri)
+    const { data = {}, isLoading, error } = useGetIRI(iri)
+    const { mutate: putData } = usePutData()
+
+    const handleRemoveContact = () => {
+        const submitDatas = { ...data }
+        if (trustee) {
+            submitDatas.trustee = null
+            submitDatas.properties = []
+            putData(submitDatas)
+        }
+        if (property) {
+            submitDatas.properties = submitDatas.properties.filter(propertyIRI=> propertyIRI != property)
+            putData(submitDatas)
+        }
+    }
 
     return (
         <div className="card">
             {isLoading ?
-                <div>Loading</div>
+                <Loader />
                 :
                 <>
                     <Dropdown>
-                        <div
+                        <button
+                            onClick={() => handleRemoveContact()}>
+                            Retirer le contact
+                        </button>
+                        <button
                             onClick={() => handleOpenModal({ title: "modifier le contact", content: <ContactForm iri={data["@id"]} trusteeIRI={data.trustee} handleCloseModal={handleCloseModal} /> })}>
                             Modifier le contact
-                        </div>
+                        </button>
                     </Dropdown>
                     <div className='flex flex-col'>
                         <div className="mr-auto text-white bg-accent text-sm px-3 py-1 rounded-full">

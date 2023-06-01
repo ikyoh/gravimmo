@@ -18,6 +18,7 @@ export type ButtonProps = PropsWithChildren<{
     link?: string;
     label?: string;
     info?: string;
+    disabled?: boolean;
     onClick?: () => void;
 }>
 
@@ -29,6 +30,7 @@ export const Button = ({
     link,
     label,
     info,
+    disabled = false,
     ...otherProps
 }: ButtonProps) => {
 
@@ -38,6 +40,7 @@ export const Button = ({
             "h-8 w-8": size === ButtonSize.Small,
             "h-14 w-14": size === ButtonSize.Big,
             "h-10 w-10": size === ButtonSize.Medium,
+            "cursor-not-allowed": disabled === true,
         })
 
     const iconClassName = classNames("w-full h-full flex items-center justify-center transition-all ease-in duration-75 dark:text-white text-dark group-hover:bg-gradient-to-br group-hover:from-purple-500 group-hover:to-accent rounded-full dark:bg-dark bg-light",
@@ -72,7 +75,7 @@ export const Button = ({
 
     return (
         <div className='flex flex-col md:flex-row items-center justify-center'>
-            <button type='button' onClick={onClick} className={buttonClassName} {...otherProps}>
+            <button type='button' onClick={onClick} className={buttonClassName} disabled={disabled}  {...otherProps}>
                 <div className={iconClassName}>
                     {children}
                 </div>

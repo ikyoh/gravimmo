@@ -24,19 +24,20 @@ module.exports = {
     },
     extend: {
       colors: {
-        'dark' : '#080A1D',
-        'medium' : '#475569',
-        'light' : '#F0F0F0',
+        'dark': '#080A1D',
+        'medium': '#475569',
+        'light': '#F0F0F0',
         'primary': '#26263F',
         'action': '#406BF5',
         'accent': 'rgb(59 130 246)',
-        'info': '#94C121',
-        'mention': '#5ac8fa',
-        'success': '#28a745',
-        'waiting': '#ffc107',
-        'error': '#ef4444',
-        'actiongradient' : '#1C46CD',
-      
+        'info': '#406BF5',
+        'mention': '#a55eea',
+        'success': '#A3CB38',
+        'waiting': '#009688',
+        'warning': '#FF9800',
+        'error': '#E91E63',
+        'actiongradient': '#1C46CD',
+
       },
       backgroundImage: {
         'gradient-page-head': "linear-gradient(0.75turn, #0b0d25,rgba(15, 20, 49,1))",
@@ -60,5 +61,28 @@ module.exports = {
       },
     },
   },
+  safelist: [
+    {
+      pattern: /bg-(action|info|mention|success|waiting|warning|error|accent)/,
+      variants: ['hover', 'focus', 'checked'],
+    },
+  ], daisyui: {
+    themes: [
+      {
+        mytheme: {
+          "primary": "#406BF5",
+          "secondary": "#3B3B98",
+          "accent": "#009688",
+          "neutral": "#26263F",
+          "base-100": "#2A303C",
+          "info": "#406BF5",
+          "success": "#A3CB38",
+          "warning": "#FF9800",
+          "error": "#E91E63",
+        },
+      },
+    ],
+  },
   plugins: [require("daisyui")],
 }
+

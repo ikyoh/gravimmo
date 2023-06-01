@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 
+.dropdown-content>button {
+    @apply m-1 hover:bg-accent hover:text-white rounded-md cursor-pointer whitespace-nowrap flex items-center h-10 p-2 w-full gap-1 disabled:cursor-not-allowed;
+} 
+
 .dropdown-content>div {
-    @apply m-1 hover:bg-accent hover:text-white rounded-md cursor-pointer whitespace-nowrap flex items-center h-10 p-2;
+    @apply mx-1 px-2 text-white/50 cursor-default;
 } 

@@ -7,7 +7,7 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ServiceRepository;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
-use App\Filter\CustomSearchFilter;
+use App\Filter\MultipleFieldsSearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
@@ -27,7 +27,11 @@ use ApiPlatform\Metadata\GetCollection;
     ]
 )]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'title', 'category'])]
-#[ApiFilter(CustomSearchFilter::class)]
+#[ApiFilter(MultipleFieldsSearchFilter::class, properties: [
+    "id",
+    "title",
+    "category"
+])]
 
 class Service
 {
@@ -69,7 +73,7 @@ class Service
     #[Groups(["services:read", "service:read", "service:write"])]
     private array $finishing = [];
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["services:read", "service:read", "service:write"])]
     private ?string $configuration = null;
 

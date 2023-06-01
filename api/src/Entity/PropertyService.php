@@ -35,11 +35,11 @@ class PropertyService
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "orders:read"])]
     private ?Service $service = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "orders:read"])]
     private ?string $material = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -47,7 +47,7 @@ class PropertyService
     private ?string $size = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "orders:read"])]
     private ?string $color = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -59,13 +59,17 @@ class PropertyService
     private ?string $margin = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "orders:read"])]
     private array $finishing = [];
 
     #[ORM\ManyToOne(inversedBy: 'services')]
     #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write"])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Property $property = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "orders:read"])]
+    private ?string $configuration = null;
 
     public function getId(): ?int
     {
@@ -164,6 +168,18 @@ class PropertyService
     public function setProperty(?Property $property): self
     {
         $this->property = $property;
+
+        return $this;
+    }
+
+    public function getConfiguration(): ?string
+    {
+        return $this->configuration;
+    }
+
+    public function setConfiguration(?string $configuration): self
+    {
+        $this->configuration = $configuration;
 
         return $this;
     }

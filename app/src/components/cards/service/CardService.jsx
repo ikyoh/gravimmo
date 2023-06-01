@@ -1,7 +1,8 @@
 import React from 'react'
-import { useGetOneData, useDeleteData } from 'hooks/usePropertyService'
+import { useGetOneData, useDeleteData } from 'queryHooks/usePropertyService'
 import Dropdown from 'components/dropdown/Dropdown'
-import PropertyServiceForm from 'forms/propertyService/PropertyServiceForm'
+import PropertyServiceForm from 'components/forms/propertyService/PropertyServiceForm'
+import Loader from 'components/loader/Loader'
 
 export const CardService = ({ handleOpenModal, handleCloseModal, iri }) => {
 
@@ -15,18 +16,18 @@ export const CardService = ({ handleOpenModal, handleCloseModal, iri }) => {
     return (
         <div className="card">
             {isLoading ?
-                <div>Loading</div>
+                <Loader />
                 :
                 <>
                     <div className="absolute top-2 right-1">
                         <Dropdown>
-                            <div onClick={() => handleOpenModal({ title: "Modifier une prestation", content: <PropertyServiceForm iri={data["@id"]} handleCloseModal={handleCloseModal} /> })}>
+                            <button onClick={() => handleOpenModal({ title: "Modifier une prestation", content: <PropertyServiceForm iri={data["@id"]} handleCloseModal={handleCloseModal} /> })}>
                                 Modifier la prestation
-                            </div>
-                            <div
+                            </button>
+                            <button
                                 onClick={() => deleteData(data.id)}>
                                 Retirer la prestation
-                            </div>
+                            </button>
                         </Dropdown>
                     </div>
                     <div className='flex flex-col'>
@@ -61,22 +62,16 @@ export const CardService = ({ handleOpenModal, handleCloseModal, iri }) => {
                                     {data.font}
                                 </p>
                             }
-                            {data.margin &&
-                                <p>
-                                    <span className='text-accent mr-3'>Marges :</span>
-                                    H : {parse(data.margin).top} - B : {parse(data.margin).bottom} - G : {parse(data.margin).left} - D : {parse(data.margin).right}
-                                </p>
-                            }
-                            {data.material &&
-                                <p>
-                                    <span className='text-accent mr-3'>Matière :</span>
-                                    {data.material}
-                                </p>
-                            }
                             {data.finishing.length > 0 &&
                                 <div>
                                     <span className='text-accent mr-3'>Façonnages :</span>
                                     {data.finishing.map(finishing => <p key={finishing}>{finishing}</p>)}
+                                </div>
+                            }
+                            {data.configuration &&
+                                <div>
+                                    <p className='text-accent'>Config. machine :</p>
+                                    <p>{data.configuration}</p>
                                 </div>
                             }
                         </div>

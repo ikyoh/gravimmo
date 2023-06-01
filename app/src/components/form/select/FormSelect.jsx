@@ -3,7 +3,7 @@ import Error from '../error/FormError'
 import Label from '../label/FormLabel'
 
 
-export const FormSelect = ({ name, label, register, errors, required, type, placeholder, validationSchema, children, defaultValue }) => (
+export const FormSelect = ({ name, label, register, error, required, type, placeholder, validationSchema, children, defaultValue }) => (
   <div className="w-full mb-2">
     <Label name={name} label={label} required={required} />
     <select
@@ -16,6 +16,6 @@ export const FormSelect = ({ name, label, register, errors, required, type, plac
     >
       {children}
     </select>
-    <Error errors={errors[name]} />
+    <Error error={error} />
   </div>
 );

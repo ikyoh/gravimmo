@@ -8,12 +8,11 @@ interface FormInputProps {
   type?: string,
   placeholder?: string,
   required?: boolean,
-  errors?: any,
+  error?: any,
   register?: any,
-  validationSchema?: any,
 }
 
-export const FormInput = ({ name, label, register, errors, required, type, placeholder, validationSchema }: FormInputProps) => (
+export const FormInput = ({ name, label, register, error, required, type, placeholder }: FormInputProps) => (
   <div className="w-full mb-2">
     <Label name={name} label={label} required={required} />
     <input
@@ -21,9 +20,9 @@ export const FormInput = ({ name, label, register, errors, required, type, place
       name={name}
       type={type}
       placeholder={placeholder}
-      {...register(name, validationSchema)}
+      {...register(name)}
       className="appearance-none bg-light dark:bg-dark text-dark dark:text-white h-[50px] rounded px-2 mt-2 w-full leading-tight focus:outline focus:outline-accent"
     />
-    <Error errors={errors[name]} />
+    <Error error={error} />
   </div>
 );

@@ -5,15 +5,17 @@ import classNames from "classnames";
 export enum StatusColor {
     Action = 'action',
     Info = 'info',
-    Mention = 'mention' ,
+    Mention = 'mention',
     Success = 'success',
     Waiting = 'waiting',
+    Warning = 'warning',
     Error = 'error',
     Accent = 'accent',
-    Dark = 'dark',
     Primary = 'primary',
     Black = 'black',
-  }
+    Dark = 'dark',
+    Light = 'light'
+}
 
 interface DotProps {
     color?: StatusColor;
@@ -35,10 +37,11 @@ export const Dot = (props: DotProps) => {
         "text-mention": color === StatusColor.Mention,
         "text-success": color === StatusColor.Success,
         "text-waiting": color === StatusColor.Waiting,
+        "text-warning": color === StatusColor.Warning,
         "text-error": color === StatusColor.Error,
     })
 
-    return(
+    return (
         <MdOutlineRadioButtonChecked size={24} className={defineClassName} />
     )
 

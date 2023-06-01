@@ -15,7 +15,7 @@ const Header = ({ title, children, isModal = false, isLoading, error }: HeaderPr
 
     const headerClassName = classNames("flex flex-row justify-between items-center sticky top-0 mx-6 md:mx-0 flex-none z-10",
         {
-            "bg-white dark:bg-dark dark:bg-gradient-modal-header border-b border-slate-600 py-4": isModal,
+            "bg-white dark:bg-dark dark:bg-gradient-modal-header border-b border-slate-600 py-5 md:mx-5": isModal,
             "px-5 border-b border-slate-600 md:border-0 h-32 bg-light dark:bg-dark": !isModal,
         })
 

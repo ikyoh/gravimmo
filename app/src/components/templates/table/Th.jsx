@@ -2,7 +2,7 @@ import React from 'react'
 import { BsSortDownAlt, BsSortDown } from "react-icons/bs";
 import classNames from 'classnames';
 
-const Th = ({ label, sortBy, sortValue, sortDirection, handleSort}) => {
+const Th = ({ label="", sortBy, sortValue, sortDirection, handleSort, children}) => {
 
     const className = classNames("text-dark dark:text-white leading-10 font-semibold p-0",
         {
@@ -37,8 +37,9 @@ const Th = ({ label, sortBy, sortValue, sortDirection, handleSort}) => {
             className={className}
         >
             <div className='px-2 py-2 border-b border-slate-200 dark:border-slate-600 h-[60px] items-center'>
-                <div className="">
+                <div className="h-full flex items-center">
                     {label}
+                    {children}
                 </div>
             </div>
         </th>

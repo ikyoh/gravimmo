@@ -1,17 +1,20 @@
-import { Layout } from '../components/templates/layout/Layout'
 import Content from '../components/templates/content/Content'
 import Header from '../components/templates/header/Header'
-import { AiOutlineSlack } from "react-icons/ai";
-import { env } from 'config/api.config';
+import { AiOutlineSlack } from "react-icons/ai"
+import { MdPendingActions} from "react-icons/md"
+import { useGetOrdersToInvoiceNumber, useGetOrdersToDeliverNumber } from 'queryHooks/useOrder'
+
 
 export const DashboardPage = ({ title }) => {
 
-	const PageContent = ({ handleOpenModal, handleCloseModal }) => {
 
 		const card = 'bg-dark/60 rounded p-10 flex gap-20 items-center'
 		const card2 = 'bg-dark/60 rounded p-10 flex justify-between items-center'
 		const cardtitle = 'text-3xl font-bold'
 		const text = 'text-white/50'
+
+		const {data : toInvoiceNumber} = useGetOrdersToInvoiceNumber()
+		const {data : toDeliverNumber} = useGetOrdersToDeliverNumber()
 
 		return (
 			<>
@@ -35,21 +38,21 @@ export const DashboardPage = ({ title }) => {
 								<AiOutlineSlack size={70} className="bg-green-500 rounded-full p-3 text-dark" />
 								<div>
 									<div className={cardtitle}>
-										456
+										{toDeliverNumber}
 									</div>
 									<div className={text}>
-										Lorem Ipsum
+										Commandes prêtes à poser
 									</div>
 								</div>
 							</div>
 							<div className={card}>
-								<AiOutlineSlack size={70} className="bg-red-500 rounded-full p-3 text-dark" />
+								<MdPendingActions size={70} className="bg-red-500 rounded-full p-3 text-dark" />
 								<div>
 									<div className={cardtitle}>
-										789
+										{toInvoiceNumber}
 									</div>
 									<div className={text}>
-										Lorem Ipsum
+										Commandes à facturer
 									</div>
 								</div>
 							</div>
@@ -110,14 +113,6 @@ export const DashboardPage = ({ title }) => {
 		)
 	}
 
-	return (
-		<Layout>
-			<PageContent />
-		</Layout>
-
-	)
-
-}
 
 
 

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
-use App\Filter\CustomSearchFilter;
+use App\Filter\MultipleFieldsSearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
@@ -30,30 +30,37 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
     ]
 )]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'title', 'postcode', 'city', 'zone', 'trustee.title'])]
-#[ApiFilter(CustomSearchFilter::class)]
 #[ApiFilter(SearchFilter::class, properties: ['trustee' => 'exact'])]
+#[ApiFilter(MultipleFieldsSearchFilter::class, properties: [
+    "id",
+    "title",
+    "city",
+    "zone",
+    "postcode",
+    "trustee.title",
+])]
 class Property
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["properties:read", "property:read", "trustee:read"])]
+    #[Groups(["properties:read", "property:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["properties:read", "property:read", "trustee:read", "property:write"])]
+    #[Groups(["properties:read", "property:read", "property:write", "orders:read"])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["properties:read", "property:read", "property:write"])]
+    #[Groups(["properties:read", "property:read", "property:write", "orders:read"])]
     private ?string $address = null;
 
     #[ORM\Column(length: 5)]
-    #[Groups(["properties:read", "property:read", "trustee:read", "property:write"])]
+    #[Groups(["properties:read", "property:read", "property:write", "orders:read"])]
     private ?string $postcode = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["properties:read", "property:read", "trustee:read", "property:write"])]
+    #[Groups(["properties:read", "property:read", "property:write", "orders:read"])]
     private ?string $city = null;
 
     #[ORM\Column]
@@ -61,15 +68,15 @@ class Property
     private ?float $tva = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["property:read", "property:write"])]
+    #[Groups(["property:read", "property:write", "orders:read"])]
     private ?string $contactName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["property:read", "property:write"])]
+    #[Groups(["property:read", "property:write", "orders:read"])]
     private ?string $contactPhone = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["properties:read", "property:read", "trustee:read", "property:write"])]
+    #[Groups(["properties:read", "property:read", "property:write", "orders:read"])]
     private ?string $zone = null;
 
     #[ORM\ManyToOne(inversedBy: 'properties')]
@@ -78,19 +85,19 @@ class Property
     private ?Trustee $trustee = null;
 
     #[ORM\OneToMany(mappedBy: 'property', targetEntity: PropertyService::class, orphanRemoval: true)]
-    #[Groups(["property:read", "property:write"])]
+    #[Groups(["property:read", "property:write", "orders:read"])]
     private Collection $services;
 
     #[ORM\Column(type: 'json', nullable: true)]
-    #[Groups(["property:read", "property:write"])]
+    #[Groups(["property:read", "property:write", "orders:read"])]
     private $params = [];
 
     #[ORM\Column(length: 255)]
-    #[Groups(["property:read", "property:write"])]
+    #[Groups(["property:read", "property:write", "orders:read"])]
     private ?string $accessType = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["property:read", "property:write"])]
+    #[Groups(["property:read", "property:write", "orders:read"])]
     private ?string $accessCode = null;
 
     #[ORM\OneToMany(mappedBy: 'property', targetEntity: Order::class)]

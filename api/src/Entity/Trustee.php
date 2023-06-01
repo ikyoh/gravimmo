@@ -9,9 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
-use App\Filter\CustomSearchFilter;
+use App\Filter\MultipleFieldsSearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
-use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Post;
@@ -28,7 +27,10 @@ use ApiPlatform\Metadata\GetCollection;
     ]
 )]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'title', 'postcode', 'city'])]
-#[ApiFilter(CustomSearchFilter::class)]
+#[ApiFilter(MultipleFieldsSearchFilter::class, properties: [
+    "id",
+    "title"
+])]
 class Trustee
 {
     #[ORM\Id]
@@ -38,7 +40,7 @@ class Trustee
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["trustees:read", "trustee:read", "users:read", "properties:read", "property:read"])]
+    #[Groups(["trustees:read", "trustee:read", "users:read", "properties:read", "property:read", "orders:read"])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
@@ -70,18 +72,23 @@ class Trustee
     private ?string $mobile = null;
 
     #[ORM\Column(length: 7, nullable: true)]
-    #[Groups(["trustees:read", "trustee:read"])]
+    #[Groups(["trustees:read", "trustee:read", "orders:read"])]
     private ?string $color = '#C00000';
 
     #[ORM\Column(length: 7, nullable: true)]
-    #[Groups(["trustees:read", "trustee:read"])]
+    #[Groups(["trustees:read", "trustee:read", "orders:read"])]
     private ?string $color2 = null;
 
-    #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: User::class)]
+    #[ORM\Column(nullable: true)]
     #[Groups(["trustee:read"])]
+    private array $orderTag = [];
+
+    #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: User::class)]
+    #[Groups(["trustee:read","property:read"])]
     private Collection $contacts;
 
     #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: Property::class)]
+    #[Groups(["trustee:read"])]
     private Collection $properties;
 
     #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: Order::class)]
@@ -217,6 +224,18 @@ class Trustee
     public function setColor2(?string $color2): self
     {
         $this->color2 = $color2;
+
+        return $this;
+    }
+
+    public function getOrderTag(): array
+    {
+        return $this->orderTag;
+    }
+
+    public function setOrderTag(?array $orderTag): self
+    {
+        $this->orderTag = $orderTag;
 
         return $this;
     }

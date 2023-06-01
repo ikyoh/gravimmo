@@ -1,13 +1,13 @@
 import React from 'react';
 import uuid from "react-uuid"
 import './style.css'
-import { useGetAllDatas } from 'hooks/useService';
+import { useGetAllDatas } from 'queryHooks/useService';
 import Label from '../label/FormLabel';
+import Error from '../error/FormError'
 
+export const SelectInput = ({ name, label, register, error, required, type, placeholder, validationSchema, setValue }) => {
 
-export const SelectInput = ({ name, label, register, errors, required, type, placeholder, validationSchema, setValue }) => {
-
-	const { data = [], isLoading, error } = useGetAllDatas()
+	const { data = [], isLoading } = useGetAllDatas()
 
 	const uniqCategories = () => {
 		return (data.reduce(
@@ -43,9 +43,7 @@ export const SelectInput = ({ name, label, register, errors, required, type, pla
 					: null
 				}
 			</div>
-			{errors && errors[name] && (
-				<span className="text-error text-sm">{errors[name]?.message}</span>
-			)}
+			<Error error={error} />
 		</div>
 	)
 }
