@@ -1,5 +1,6 @@
 import { Dot } from "components/dot/Dot";
 import Dropdown from "components/dropdown/Dropdown";
+import TourForm from "components/forms/tour/TourForm";
 import Loader from "components/loader/Loader";
 import { NoDataFound } from "components/noDataFound/NoDataFound";
 import Pagination from "components/pagination/Pagination";
@@ -30,7 +31,6 @@ import {
 } from "react-icons/io";
 import { MdPendingActions } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
-import ServiceForm from "../components/forms/service/ServiceForm";
 
 export const ToursPage = ({ title }) => {
     const navigate = useNavigate();
@@ -252,13 +252,11 @@ export const ToursPage = ({ title }) => {
                                                 <button
                                                     onClick={() =>
                                                         handleOpenModal({
-                                                            title: "édition de la prestation",
+                                                            title: "Date de la tournée",
                                                             content: (
-                                                                <ServiceForm
-                                                                    iri={
-                                                                        data[
-                                                                            "@id"
-                                                                        ]
+                                                                <TourForm
+                                                                    commands={
+                                                                        data.commands
                                                                     }
                                                                     handleCloseModal={
                                                                         handleCloseModal

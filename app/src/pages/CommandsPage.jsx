@@ -23,7 +23,6 @@ import { useSearch } from "hooks/useSearch";
 import { useSortBy } from "hooks/useSortBy";
 import _ from "lodash";
 import { useGetPaginatedDatas, usePutData } from "queryHooks/useCommand";
-import { usePostData as usePostTour } from "queryHooks/useTour";
 import { useEffect, useState } from "react";
 import { CSVLink } from "react-csv";
 import { BsPiggyBank } from "react-icons/bs";
@@ -65,7 +64,6 @@ export const CommandsPage = ({ title }) => {
         filters
     );
     const { mutate: putData } = usePutData();
-    const { mutate: postTour } = usePostTour();
     const [isCheckAll, setIsCheckAll] = useState(false);
     const [checkedList, setCheckedList] = useState([]);
 
