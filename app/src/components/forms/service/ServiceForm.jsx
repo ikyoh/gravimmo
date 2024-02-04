@@ -20,11 +20,13 @@ export default function ServiceForm({ iri, handleCloseModal }) {
         mutate: postData,
         isLoading: isPostLoading,
         error: postError,
+        isSuccess: isPostSuccess,
     } = usePostData();
     const {
         mutate: putData,
         isLoading: isPutLoading,
         error: putError,
+        isSuccess: isPutSuccess,
     } = usePutData();
 
     const validationSchema = yup.object({
@@ -72,13 +74,12 @@ export default function ServiceForm({ iri, handleCloseModal }) {
     };
 
     useEffect(() => {
-        if (iri && !isPutLoading && isSubmitted && !putError)
-            handleCloseModal();
-    }, [isPutLoading]);
+        if (isPutSuccess) handleCloseModal();
+    }, [isPutSuccess]);
 
     useEffect(() => {
-        if (isPostLoading && isSubmitted && !postError) handleCloseModal();
-    }, [isPostLoading]);
+        if (isPostSuccess) handleCloseModal();
+    }, [isPostSuccess]);
 
     useEffect(() => {
         if (putError) {
