@@ -11,13 +11,13 @@ export const CardProduction = ({ handleOpenModal, handleCloseModal, iri }) => {
     const { mutate: deleteData } = useDeleteData()
 
     return (
-        <div className="card">
+        <div className="_card">
             {isLoading ?
                 <Loader />
                 :
                 <>
-                    <div className='flex flex-col'>
-                        <div className="mr-auto text-white bg-accent text-sm px-3 py-1 rounded-full">
+                    <div className='flex flex-col '>
+                        <div className="mr-auto text-white bg-neutral text-sm px-3 py-1 rounded-full">
                             {data.service.category}
                         </div>
                         <div className="subtitle mt-3">

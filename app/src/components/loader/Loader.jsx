@@ -1,10 +1,12 @@
 import React from 'react'
-import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 
-const Loader = () => {
+const Loader = ({ text = null }) => {
   return (
-    <div className='flex items-center justify-center h-full w-full'>
-      <AiOutlineLoading3Quarters className='text-4xl animate-spin my-4'/>
+    <div className='flex flex-col items-center justify-center h-full w-full gap-3'>
+      <span className="loading loading-spinner loading-md my-4"></span>
+      {text &&
+        <p className="">{text}</p>
+      }
     </div>
   )
 }

@@ -16,7 +16,13 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\GetCollection;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 #[ORM\Entity(repositoryClass: TrusteeRepository::class)]
+#[UniqueEntity(
+    fields: ['reference'],
+    message: "Donnée déjà enregistrée dans la base",
+)]
 #[ApiResource(
     normalizationContext: ['groups' => ['trustees:read']],
     operations: [
@@ -26,21 +32,23 @@ use ApiPlatform\Metadata\GetCollection;
         new Post()
     ]
 )]
-#[ApiFilter(OrderFilter::class, properties: ['id', 'title', 'postcode', 'city'])]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'reference', 'title', 'postcode', 'city'])]
 #[ApiFilter(MultipleFieldsSearchFilter::class, properties: [
     "id",
-    "title"
+    "title",
+    "reference",
+    "city",
 ])]
 class Trustee
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["trustees:read", "trustee:read"])]
+    #[Groups(["trustees:read", "trustee:read", "tour:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["trustees:read", "trustee:read", "users:read", "properties:read", "property:read", "orders:read"])]
+    #[Groups(["trustees:read", "trustee:read", "users:read", "properties:read", "property:read", "commands:read", "invoices:read"])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
@@ -72,15 +80,15 @@ class Trustee
     private ?string $mobile = null;
 
     #[ORM\Column(length: 7, nullable: true)]
-    #[Groups(["trustees:read", "trustee:read", "orders:read"])]
+    #[Groups(["trustees:read", "trustee:read", "commands:read"])]
     private ?string $color = '#C00000';
 
     #[ORM\Column(length: 7, nullable: true)]
-    #[Groups(["trustees:read", "trustee:read", "orders:read"])]
+    #[Groups(["trustees:read", "trustee:read", "commands:read"])]
     private ?string $color2 = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(["trustee:read"])]
+    #[Groups(["trustee:read", "property:read"])]
     private array $orderTag = [];
 
     #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: User::class)]
@@ -91,14 +99,23 @@ class Trustee
     #[Groups(["trustee:read"])]
     private Collection $properties;
 
-    #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: Order::class)]
-    private Collection $orders;
+    #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: Command::class)]
+    private Collection $commands;
+
+    #[ORM\Column(name: 'reference', type: 'string', length: 5, unique: true)]
+    #[Groups(["trustees:read", "trustee:read", "users:read", "properties:read", "property:read", "commands:read", "invoices:read"])]
+    private ?string $reference = null;
+
+    #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: Invoice::class)]
+    private Collection $invoices;
+
 
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
         $this->properties = new ArrayCollection();
-        $this->orders = new ArrayCollection();
+        $this->commands = new ArrayCollection();
+        $this->invoices = new ArrayCollection();
     }
 
 
@@ -301,32 +318,75 @@ class Trustee
     }
 
     /**
-     * @return Collection<int, Order>
+     * @return Collection<int, Command>
      */
-    public function getOrders(): Collection
+    public function getCommands(): Collection
     {
-        return $this->orders;
+        return $this->commands;
     }
 
-    public function addOrder(Order $order): self
+    public function addCommand(Command $command): self
     {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-            $order->setTrustee($this);
+        if (!$this->commands->contains($command)) {
+            $this->commands->add($command);
+            $command->setTrustee($this);
         }
 
         return $this;
     }
 
-    public function removeOrder(Order $order): self
+    public function removeCommand(Command $command): self
     {
-        if ($this->orders->removeElement($order)) {
+        if ($this->commands->removeElement($command)) {
             // set the owning side to null (unless already changed)
-            if ($order->getTrustee() === $this) {
-                $order->setTrustee(null);
+            if ($command->getTrustee() === $this) {
+                $command->setTrustee(null);
             }
         }
 
         return $this;
     }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(string $reference): self
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Invoice>
+     */
+    public function getInvoices(): Collection
+    {
+        return $this->invoices;
+    }
+
+    public function addInvoice(Invoice $invoice): self
+    {
+        if (!$this->invoices->contains($invoice)) {
+            $this->invoices->add($invoice);
+            $invoice->setTrusteeIri($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvoice(Invoice $invoice): self
+    {
+        if ($this->invoices->removeElement($invoice)) {
+            // set the owning side to null (unless already changed)
+            if ($invoice->getTrusteeIri() === $this) {
+                $invoice->setTrusteeIri(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

@@ -2,7 +2,7 @@ import React from 'react'
 
 const Tbody = ({ children }) => {
     return (
-        <tbody>
+        <tbody className='divide-y dark:divide-gray-800'>
             {children}
         </tbody>
     )

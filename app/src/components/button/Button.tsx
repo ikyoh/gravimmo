@@ -42,12 +42,14 @@ export const Button = ({
             "h-10 w-10": size === ButtonSize.Medium,
             "cursor-not-allowed": disabled === true,
         })
-
-    const iconClassName = classNames("w-full h-full flex items-center justify-center transition-all ease-in duration-75 dark:text-white text-dark group-hover:bg-gradient-to-br group-hover:from-purple-500 group-hover:to-accent rounded-full dark:bg-dark bg-light",
+        
+        const iconClassName = classNames("w-full h-full flex items-center justify-center transition-all ease-in duration-75 dark:text-white text-dark rounded-full dark:bg-dark bg-light",
         {
             "text-2xl": size === ButtonSize.Small,
             "text-3xl": size === ButtonSize.Medium,
             "text-4xl": size === ButtonSize.Big,
+            "group-hover:bg-gradient-to-br group-hover:from-purple-500 group-hover:to-accent": disabled === false,
+            "group-hover:bg-base-100": disabled === true,
         })
 
 

@@ -20,7 +20,7 @@ const MenuMobile = () => {
     const location = useLocation();
 
     return (
-        <div className='md:hidden bg-sky-500 w-full'>
+        <div className='md:hidden bg-dark w-full'>
             <div className='flex flex-row h-[100px] items-start pt-2 justify-around'>
                 <Button
                     isBorder={location.pathname === "/home"}

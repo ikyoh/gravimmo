@@ -17,10 +17,9 @@ const fetchFilteredDatas = (sortValue, sortDirection, searchValue) => {
 }
 
 const fetchPaginatedDatas = (page, sortValue, sortDirection, searchValue) => {
-    if (searchValue)
-    return request({ url: API + "?page=" + page + "&itemsPerPage=" + itemsPerPage + "&order[" + sortValue + "]=" + sortDirection + "&search=" + searchValue, method: 'get' })
-    else
-    return request({ url: API + "?page=" + page + "&itemsPerPage=" + itemsPerPage + "&order[" + sortValue + "]=" + sortDirection, method: 'get' })
+    let options = "?page=" + page + "&itemsPerPage=" + itemsPerPage + "&order[" + sortValue + "]=" + sortDirection + "&roles=ROLE_USER"
+    if (searchValue) options += "&search=" + searchValue
+    return request({ url: API + options, method: 'get' })
 }
 
 const fetchOneData = ({ queryKey }) => {
@@ -45,7 +44,8 @@ const putData = form => {
 /* HOOKS */
 export const useGetAllDatas = (search = '', sortValue, sortDirection) => {
     return useQuery([queryKey], fetchAllDatas, {
-        staleTime: 60_000,
+        cacheTime: 60000,
+        staleTime: 60000,
         select: data => {
             if (search === '') return _.orderBy(data['hydra:member'], sortValue, sortDirection)
             else return _.orderBy(data['hydra:member'].filter(f =>
@@ -60,7 +60,8 @@ export const useGetFilteredDatas = (sortValue, sortDirection, searchValue) => {
         queryKey: [queryKey, sortValue, sortDirection, searchValue],
         queryFn: () => fetchFilteredDatas(sortValue, sortDirection, searchValue),
         keepPreviousData: true,
-        staleTime: 60_000,
+        cacheTime: 60000,
+        staleTime: 60000,
         //select: data => {return data['hydra:member']}
     })
 }
@@ -70,21 +71,24 @@ export const useGetPaginatedDatas = (page, sortValue, sortDirection, searchValue
         queryKey: [queryKey, page, sortValue, sortDirection, searchValue],
         queryFn: () => fetchPaginatedDatas(page, sortValue, sortDirection, searchValue),
         keepPreviousData: true,
-        staleTime: 60_000,
+        cacheTime: 60000,
+        staleTime: 60000,
         //select: data => {return data['hydra:member']}
     })
 }
 
 export const useGetOneData = (id) => {
     return useQuery([queryKey, id], fetchOneData, {
-        cacheTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
         enabled: id ? true : false
     })
 }
 
 export const useGetIRI = (iri) => {
     return useQuery([queryKey, iri], fetchIRI, {
-        cacheTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
         enabled: iri ? true : false
     })
 }

@@ -19,6 +19,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use App\EntityListener\UserListener;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use App\Controller\AppUsersController;
+use App\Controller\CurrentUserController;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\EntityListeners([UserListener::class])]
@@ -28,11 +30,19 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
         new GetCollection(),
         new Get(normalizationContext: ['groups' => ['user:read']]),
         new Put(),
-        new Post()
+        new Post(),
+        new Get(
+            name: 'currentUser',
+            uriTemplate: '/current_user',
+            paginationEnabled: false,
+            controller: CurrentUserController::class,
+            read: false,
+            security: "is_granted('ROLE_USER')"
+        ),
     ]
 )]
-#[ApiFilter(OrderFilter::class, properties: ['id', 'title', 'lastname', 'email', 'phone', 'trustee.title'])]
-#[ApiFilter(SearchFilter::class, properties: ['trustee' => 'exact'])]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'title', 'lastname', 'email', 'phone', 'trustee.title', 'isActive'])]
+#[ApiFilter(SearchFilter::class, properties: ['trustee' => 'exact', 'roles' => 'partial'])]
 #[ApiFilter(MultipleFieldsSearchFilter::class, properties: [
     "id",
     "email",
@@ -55,7 +65,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     #[ORM\Column]
-    #[Groups(["users:read", "user:read"])]
+    #[Groups(["users:read", "user:read", "user:write"])]
     private array $roles = [];
 
     private ?string $plainPassword = null;
@@ -68,11 +78,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["users:read", "user:read"])]
+    #[Groups(["users:read", "user:read", "tours:read", "tour:read", "commands:read", "command:read"])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["users:read", "user:read"])]
+    #[Groups(["users:read", "user:read", "tours:read", "tour:read", "commands:read", "command:read"])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -91,9 +101,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(["users:read", "user:read"])]
     private Collection $properties;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Tour::class, orphanRemoval: true)]
+    private Collection $tours;
+
+    #[ORM\Column]
+    #[Groups(["users:read", "user:read", "user:write"])]
+    private ?bool $isActive = true;
+
     public function __construct()
     {
         $this->properties = new ArrayCollection();
+        $this->tours = new ArrayCollection();
     }
 
 
@@ -178,7 +196,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    
+
     /**
      * @see UserInterface
      */
@@ -275,4 +293,45 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /**
+     * @return Collection<int, Tour>
+     */
+    public function getTours(): Collection
+    {
+        return $this->tours;
+    }
+
+    public function addTour(Tour $tour): self
+    {
+        if (!$this->tours->contains($tour)) {
+            $this->tours->add($tour);
+            $tour->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTour(Tour $tour): self
+    {
+        if ($this->tours->removeElement($tour)) {
+            // set the owning side to null (unless already changed)
+            if ($tour->getUser() === $this) {
+                $tour->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): self
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
 }

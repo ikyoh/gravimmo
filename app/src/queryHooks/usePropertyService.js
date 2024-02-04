@@ -1,7 +1,7 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { request, requestIRI } from '../utils/axios.utils'
-import { API_PROPERTYSERVICES as API, itemsPerPage } from '../config/api.config'
+import { API_PROPERTY_SERVICES as API, itemsPerPage } from '../config/api.config'
 import _ from 'lodash'
 
 /* CONFIG */
@@ -25,6 +25,11 @@ const fetchOneData = ({ queryKey }) => {
     return requestIRI({ url: iri, method: 'get' })
 }
 
+const fetchIRI = ({ queryKey }) => {
+    const iri = queryKey[1]
+    return requestIRI({ url: iri, method: 'get' })
+}
+
 const postData = form => {
     return request({ url: API, method: 'post', data: form })
 }
@@ -40,7 +45,8 @@ const deleteData = id => {
 /* HOOKS */
 export const useGetAllDatas = (search = '', sortValue, sortDirection) => {
     return useQuery([queryKey], fetchAllDatas, {
-        staleTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
         select: data => {
             if (search === '') return _.orderBy(data['hydra:member'], sortValue, sortDirection)
             else return _.orderBy(data['hydra:member'].filter(f =>
@@ -55,7 +61,8 @@ export const useGetFilteredDatas = (sortValue, sortDirection, searchValue) => {
         queryKey: [queryKey, sortValue, sortDirection, searchValue],
         queryFn: () => fetchFilteredDatas(sortValue, sortDirection, searchValue),
         keepPreviousData: true,
-        staleTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
         //select: data => {return data['hydra:member']}
     })
 }
@@ -65,7 +72,8 @@ export const useGetPaginatedDatas = (page, sortValue, sortDirection, searchValue
         queryKey: [queryKey, page, sortValue, sortDirection, searchValue],
         queryFn: () => fetchPaginatedDatas(page, sortValue, sortDirection, searchValue),
         keepPreviousData: true,
-        staleTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
         //select: data => {return data['hydra:member']}
     })
 
@@ -73,7 +81,17 @@ export const useGetPaginatedDatas = (page, sortValue, sortDirection, searchValue
 
 export const useGetOneData = (iri) => {
     return useQuery([queryKey, iri], fetchOneData, {
-        cacheTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
+        enabled: iri ? true : false
+    })
+}
+
+export const useGetIRI = (iri) => {
+    const queryClient = useQueryClient()
+    return useQuery([queryKey, iri], fetchIRI, {
+        staleTime: 60000,
+        cacheTime: 60000,
         enabled: iri ? true : false
     })
 }

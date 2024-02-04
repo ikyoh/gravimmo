@@ -3,6 +3,8 @@ import { useGetIRI, usePutData } from 'queryHooks/useContact'
 import Dropdown from 'components/dropdown/Dropdown'
 import ContactForm from 'components/forms/contact/ContactForm'
 import Loader from 'components/loader/Loader'
+import { LuSettings2 } from 'react-icons/lu'
+import { IoIosCloseCircle } from 'react-icons/io'
 
 export const CardContact = ({ handleOpenModal, handleCloseModal, iri, trustee, property }) => {
 
@@ -23,19 +25,21 @@ export const CardContact = ({ handleOpenModal, handleCloseModal, iri, trustee, p
     }
 
     return (
-        <div className="card">
+        <div className="_card">
             {isLoading ?
                 <Loader />
                 :
                 <>
                     <Dropdown>
                         <button
-                            onClick={() => handleRemoveContact()}>
-                            Retirer le contact
+                            onClick={() => handleOpenModal({ title: "modifier le contact", content: <ContactForm iri={data["@id"]} trusteeIRI={data.trustee} handleCloseModal={handleCloseModal} /> })}>
+                            <LuSettings2  size={30} />
+                            Modifier le contact
                         </button>
                         <button
-                            onClick={() => handleOpenModal({ title: "modifier le contact", content: <ContactForm iri={data["@id"]} trusteeIRI={data.trustee} handleCloseModal={handleCloseModal} /> })}>
-                            Modifier le contact
+                            onClick={() => handleRemoveContact()}>
+                                <IoIosCloseCircle size={30} />
+                            Retirer le contact
                         </button>
                     </Dropdown>
                     <div className='flex flex-col'>

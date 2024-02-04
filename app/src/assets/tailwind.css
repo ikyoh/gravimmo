@@ -13,7 +13,7 @@
     }
 
     body {
-        @apply bg-light dark:bg-dark scroll overflow-y-scroll ;
+        @apply bg-light dark:bg-dark scroll overflow-y-scroll;
     }
 
     html {
@@ -30,16 +30,11 @@
 }
 
 .submit-button {
-    @apply text-white font-semibold uppercase p-3 rounded w-[220px] h-[50px] flex justify-center items-center
-    bg-gradient-to-b from-action to-actiongradient drop-shadow-[0_5px_5px_rgba(0,0,0,0.95)]
-    focus:bg-gradient-to-b focus:from-actiongradient focus:to-action focus:drop-shadow-[0_5px_5px_rgba(0,0,0,0.95)]
-    ;
+    @apply text-white font-semibold uppercase p-3 rounded w-[220px] h-[50px] flex justify-center items-center bg-gradient-to-b from-action to-actiongradient focus:bg-gradient-to-b focus:from-actiongradient focus:to-action;
 }
 
 .submit-button-disabled {
-    @apply text-white font-semibold uppercase p-3 rounded w-[220px] h-[50px] flex justify-center items-center
-    bg-gradient-to-b from-slate-400 to-slate-500 drop-shadow-[0_5px_5px_rgba(0,0,0,0.95)]
-    ;
+    @apply text-white font-semibold uppercase p-3 rounded w-[220px] h-[50px] flex justify-center items-center bg-gradient-to-b from-slate-400 to-slate-500;
 }
 
 
@@ -54,10 +49,11 @@
 
 @keyframes slidein {
     from {
-    margin-top: -100%;
-}
+        margin-top: -100%;
+    }
+
     to {
-    margin-top: 0%;
+        margin-top: 0%;
     }
 }
 
@@ -83,7 +79,7 @@
 
 /* set button(top and bottom of the scrollbar) */
 .scrollbar::-webkit-scrollbar-button {
-    display:none;
+    display: none;
 }
 
 /* Global */
@@ -109,4 +105,39 @@
     border-style: solid;
     height: 20px;
     width: 16px;
+}
+
+
+section {
+    @apply rounded flex flex-col gap-8 !p-6 dark:bg-gradient-page;
+    @apply text-dark dark:text-white;
+    @apply bg-dark/10 dark:bg-dark/60;
+}
+
+.title {
+    @apply font-bold text-xl uppercase underline decoration-accent decoration-[6px] underline-offset-8;
+    @apply text-dark dark:text-white;
+}
+
+.section-title {
+    @apply font-bold text-xl uppercase underline decoration-accent decoration-[6px] underline-offset-8 w-full;
+    @apply text-dark dark:text-white;
+}
+
+.subtitle {
+    @apply	text-accent text-xl mb-2 font-semibold;
+}
+
+.cards-container {
+    @apply grid grid-cols-1 md:grid-cols-4 gap-5 md:gap-8;
+}
+
+._card {
+    @apply card rounded shadow-sm shadow-dark/40 dark:shadow-white/10 !p-4 relative;
+    @apply text-dark dark:text-white;
+    @apply bg-dark/10 dark:bg-dark/60;
+}
+
+.card-button {
+    @apply py-5 flex gap-5 items-center font-bold uppercase text-white xl:col-span-5;
 }

@@ -1,18 +1,19 @@
 import { useEffect } from 'react';
 import { useForm } from "react-hook-form";
-import { usePostData, usePutData, useGetOneData } from 'queryHooks/useTrustee';
+import { usePostData, usePutData, useGetID } from 'queryHooks/useTrustee';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import Form from "components/form/form/Form";
 import { FormInput } from "components/form/input/FormInput";
 import FieldArray from "components/form/field-array/FieldArray";
+import Loader from 'components/loader/Loader';
 
 
 export default function TrusteeForm({ id, handleCloseModal }) {
 
-    const { isLoading: isLoadingData, data, isError, error } = useGetOneData(id)
-    const { mutate: postData, isLoading: isPosting, isSuccess } = usePostData()
-    const { mutate: putData } = usePutData()
+    const { isLoading: isLoadingData, data, isError, error } = useGetID(id)
+    const { mutate: postData, isLoading: isLoadingPost, isSuccess: isSuccessPost, error: errorPost } = usePostData()
+    const { mutate: putData, isLoading: isLoadingPut, isSuccess: isSuccessPut, error: errorPut } = usePutData()
 
     const validationSchema = yup.object({
         title: yup.string().required("Champ obligatoire"),
@@ -20,11 +21,12 @@ export default function TrusteeForm({ id, handleCloseModal }) {
         address: yup.string().required("Champ obligatoire"),
         postcode: yup.string().required("Champ obligatoire"),
         city: yup.string().required("Champ obligatoire"),
+        reference: yup.string().required("Champ obligatoire").max(5, '5 caractères maximum autorisé'),
         email: yup.string().email('Email non valide').required('Champ obligatoire'),
         billingEmail: yup.string().email('Email non valide').required('Champ obligatoire'),
     })
 
-    const { register, handleSubmit, setValue, reset, control, formState: { errors, isSubmitting } } = useForm({
+    const { register, handleSubmit, setValue, setError, setFocus, reset, control, formState: { errors, isSubmitting, isSubmitted } } = useForm({
         resolver: yupResolver(validationSchema),
         defaultValues: id ? data : {}
     })
@@ -42,6 +44,26 @@ export default function TrusteeForm({ id, handleCloseModal }) {
         }
     }, [isLoadingData, data])
 
+    useEffect(() => {
+        if (errorPut) {
+            errorPut.response.data.violations.forEach(({ propertyPath, message }) => {
+                setError(propertyPath, { type: 'custom', message: message })
+            })
+            setFocus(errorPut.response.data.violations[0].propertyPath)
+        }
+        if (errorPost) {
+            errorPost.response.data.violations.forEach(({ propertyPath, message }) => {
+                setError(propertyPath, { type: 'custom', message: message })
+            })
+            setFocus(errorPut.response.data.violations[0].propertyPath)
+        }
+    }, [errorPut, errorPost])
+
+    useEffect(() => {
+        if (isSuccessPost || isSuccessPut) handleCloseModal()
+    }, [isSuccessPost, isSuccessPut])
+
+
     const onSubmit = form => {
         console.log('form', form)
         if (!id)
@@ -49,12 +71,11 @@ export default function TrusteeForm({ id, handleCloseModal }) {
         else {
             putData(form)
         }
-        handleCloseModal()
     }
 
     if (id) {
         if (isLoadingData) {
-            return <h2>Loading...</h2>
+            return <Loader />
         }
 
         if (isError) {
@@ -65,13 +86,21 @@ export default function TrusteeForm({ id, handleCloseModal }) {
     return (
 
         <Form onSubmit={handleSubmit(onSubmit)}
-            isLoading={isSubmitting}
-            isDisabled={isSubmitting}>
+            isLoading={isSubmitting || isLoadingPost || isLoadingPut}
+            isDisabled={isSubmitting || isLoadingPost || isLoadingPut}>
             <FormInput
                 type="text"
                 name="title"
                 label="Nom"
                 error={errors['title']}
+                register={register}
+                required={true}
+            />
+            <FormInput
+                type="text"
+                name="reference"
+                label="Référence"
+                error={errors['reference']}
                 register={register}
                 required={true}
             />

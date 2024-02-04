@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { request, requestIRI } from '../utils/axios.utils'
 import { API_PROPERTIES as API, itemsPerPage, API_URL } from '../config/api.config'
+import dayjs from 'dayjs'
 import _ from 'lodash'
 
 /* CONFIG */
@@ -41,18 +42,23 @@ const fetchIRI = ({ queryKey }) => {
 }
 
 const postData = form => {
-    return request({ url: API, method: 'post', data: form })
+    const _form = {...form}
+    _form.deliveredAt = dayjs.utc(form.deliveredAt).local().format()
+    return request({ url: API, method: 'post', data: _form })
 }
 
 const putData = form => {
-    return request({ url: API + "/" + form.id, method: 'put', data: form })
+    const _form = {...form}
+    _form.deliveredAt = dayjs.utc(form.deliveredAt).local().format()
+    return request({ url: API + "/" + form.id, method: 'put', data: _form })
 }
 
 
 /* HOOKS */
 export const useGetAllDatas = (search = '', sortValue, sortDirection) => {
     return useQuery([queryKey], fetchAllDatas, {
-        staleTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
         select: data => {
             if (search === '') return _.orderBy(data['hydra:member'], sortValue, sortDirection)
             else return _.orderBy(data['hydra:member'].filter(f =>
@@ -67,7 +73,8 @@ export const useGetFilteredDatas = (sortValue, sortDirection, searchValue) => {
         queryKey: [queryKey, sortValue, sortDirection, searchValue],
         queryFn: () => fetchFilteredDatas(sortValue, sortDirection, searchValue),
         keepPreviousData: true,
-        staleTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
         //select: data => {return data['hydra:member']}
     })
 }
@@ -77,7 +84,8 @@ export const useGetFilteredDatasByTrustee = (trusteeIRI) => {
         queryKey: [queryKey, trusteeIRI],
         queryFn: () => fetchDatasByTrusteeIRI(trusteeIRI),
         keepPreviousData: true,
-        staleTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
         select: data => { return data['hydra:member'] }
     })
 }
@@ -87,22 +95,24 @@ export const useGetPaginatedDatas = (page, sortValue, sortDirection, searchValue
         queryKey: [queryKey, page, sortValue, sortDirection, searchValue],
         queryFn: () => fetchPaginatedDatas(page, sortValue, sortDirection, searchValue),
         keepPreviousData: true,
-        staleTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
         //select: data => {return data['hydra:member']}
     })
 }
 
 export const useGetOneData = (id) => {
     return useQuery([queryKey, id], fetchOneData, {
-        cacheTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
         enabled: id ? true : false
     })
 }
 
 export const useGetIRI = (iri) => {
-    const queryClient = useQueryClient()
     return useQuery([queryKey, iri], fetchIRI, {
-        cacheTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
         enabled: iri ? true : false
     })
 }
@@ -113,8 +123,8 @@ export const usePostData = () => {
         onError: (error, _, context) => {
             console.log('error', error)
         },
-        onSettled: () => {
-            queryClient.invalidateQueries([queryKey])
+        onSettled: (newProperty) => {
+            queryClient.invalidateQueries([newProperty.trustee["@id"]])
         }
     })
 }

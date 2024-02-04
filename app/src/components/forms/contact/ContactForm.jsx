@@ -7,13 +7,14 @@ import { useGetAllDatas } from 'queryHooks/useTrustee'
 import Form from "components/form/form/Form";
 import { FormInput } from "components/form/input/FormInput";
 import { FormSelect } from 'components/form/select/FormSelect'
+import Loader from 'components/loader/Loader';
 
 export default function ContactForm({ iri, trusteeIRI, handleCloseModal }) {
 
     const { isLoading: isLoadingData, data, isError, error } = useGetIRI(iri)
     const { isLoading: isLoadingTrustees, data: dataTrustees, isError: isErrorTrustees, error: errorTrustees } = useGetAllDatas("", "title", "ASC")
-    const { mutate: postData, isLoading: isPosting, isSuccess } = usePostData()
-    const { mutate: putData } = usePutData()
+    const { mutate: postData, isLoading: isPostLoading, isSuccess: isPostSuccess } = usePostData()
+    const { mutate: putData, isLoading: isPutLoading, isSuccess: isPutSuccess } = usePutData()
 
     const validationSchema = yup.object({
         trustee: yup.string().required("Champ obligatoire"),
@@ -53,12 +54,16 @@ export default function ContactForm({ iri, trusteeIRI, handleCloseModal }) {
             if (form.trustee !== data.trustee) submitDatas.properties = []
             putData(submitDatas)
         }
-        handleCloseModal()
     }
+
+    useEffect(() => {
+        if (isPutSuccess || isPostSuccess)
+            handleCloseModal()
+    }, [isPutSuccess, isPostSuccess])
 
     if (iri) {
         if (isLoadingData) {
-            return <h2>Loading...</h2>
+            return <Loader />
         }
 
         if (isError) {
@@ -66,13 +71,12 @@ export default function ContactForm({ iri, trusteeIRI, handleCloseModal }) {
         }
     }
 
-    console.log('errors', errors)
-
     return (
 
         <Form onSubmit={handleSubmit(onSubmit)}
-            isLoading={isSubmitting}
-            isDisabled={isSubmitting}>
+            isLoading={isSubmitting || isPutLoading || isPostLoading}
+            isDisabled={isSubmitting || isPutLoading || isPostLoading}
+        >
             {!trusteeIRI &&
                 <FormSelect
                     type="text"

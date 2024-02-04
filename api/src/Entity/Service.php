@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use NumberFormatter;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Metadata\ApiResource;
@@ -14,11 +15,12 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\GetCollection;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: ServiceRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['services:read']],
-    denormalizationContext : ['groups' => ["service:write"]],
+    denormalizationContext: ['groups' => ["service:write"]],
     operations: [
         new GetCollection(),
         new Get(normalizationContext: ['groups' => ['service:read']]),
@@ -26,11 +28,17 @@ use ApiPlatform\Metadata\GetCollection;
         new Post()
     ]
 )]
-#[ApiFilter(OrderFilter::class, properties: ['id', 'title', 'category'])]
+#[UniqueEntity(
+    fields: ['reference'],
+    errorPath: 'reference',
+    message: "Référence déjà présente dans la base de données.",
+)]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'title', 'category', 'reference'])]
 #[ApiFilter(MultipleFieldsSearchFilter::class, properties: [
     "id",
     "title",
-    "category"
+    "category",
+    "reference"
 ])]
 
 class Service
@@ -42,7 +50,7 @@ class Service
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["services:read", "service:read", "service:write", "propertyservice:read"])]
+    #[Groups(["commands:read", "services:read", "service:read", "service:write", "propertyservice:read", "command:read"])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
@@ -80,6 +88,22 @@ class Service
     #[ORM\Column]
     #[Groups(["services:read", "service:read", "service:write"])]
     private ?float $price = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups(["commands:read", "services:read", "service:read", "service:write"])]
+    private ?string $reference = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["commands:read", "services:read", "service:read", "service:write", "command:read"])]
+    private ?string $invoiceTitle = null;
+
+
+    #[Groups(["services:read", "service:read"])]
+    public function getFormattedPrice(): ?string
+    {
+        $fmt = numfmt_create( 'fr_FR', NumberFormatter::CURRENCY );
+        return numfmt_format_currency($fmt, $this->price, "EUR");
+    }
 
 
     public function getId(): ?int
@@ -203,6 +227,30 @@ class Service
     public function setPrice(float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(string $reference): self
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    public function getInvoiceTitle(): ?string
+    {
+        return $this->invoiceTitle;
+    }
+
+    public function setInvoiceTitle(?string $invoiceTitle): self
+    {
+        $this->invoiceTitle = $invoiceTitle;
 
         return $this;
     }

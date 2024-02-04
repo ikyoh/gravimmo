@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { request, requestIRI } from '../utils/axios.utils'
-import { API_TRUSTEES as API, itemsPerPage } from '../config/api.config'
+import { API_TRUSTEES as API, IRI, itemsPerPage } from '../config/api.config'
 import _ from 'lodash'
 
 /* CONFIG */
@@ -18,12 +18,7 @@ const fetchPaginatedDatas = (page, sortValue, sortDirection, searchValue) => {
         return request({ url: API + "?page=" + page + "&itemsPerPage=" + itemsPerPage + "&order[" + sortValue + "]=" + sortDirection, method: 'get' })
 }
 
-const fetchOneData = ({ queryKey }) => {
-    const id = queryKey[1]
-    return request({ url: API + "/" + id, method: 'get' })
-}
-
-const fetchIRI = ({ queryKey }) => {
+const fetchData = ({ queryKey }) => {
     const iri = queryKey[1]
     return requestIRI({ url: iri, method: 'get' })
 }
@@ -36,11 +31,11 @@ const putData = form => {
     return request({ url: API + "/" + form.id, method: 'put', data: form })
 }
 
-
 /* HOOKS */
 export const useGetAllDatas = (search = '', sortValue, sortDirection) => {
     return useQuery([queryKey], fetchAllDatas, {
-        staleTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
         select: data => {
             if (search === '') return _.orderBy(data['hydra:member'], sortValue, sortDirection)
             else return _.orderBy(data['hydra:member'].filter(f =>
@@ -55,22 +50,25 @@ export const useGetPaginatedDatas = (page, sortValue, sortDirection, searchValue
         queryKey: [queryKey, page, sortValue, sortDirection, searchValue],
         queryFn: () => fetchPaginatedDatas(page, sortValue, sortDirection, searchValue),
         keepPreviousData: true,
-        staleTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
         //select: data => {return data['hydra:member']}
     })
 
 }
 
-export const useGetOneData = (id) => {
-    return useQuery([queryKey, id], fetchOneData, {
-        cacheTime: 60_000,
+export const useGetID = (id) => {
+    return useQuery([queryKey, IRI + API + "/" + id], fetchData, {
+        staleTime: 60000,
+        cacheTime: 60000,
         enabled: id ? true : false
     })
 }
 
 export const useGetIRI = (iri) => {
-    return useQuery([queryKey, iri], fetchIRI, {
-        cacheTime: 60_000,
+    return useQuery([queryKey, iri], fetchData, {
+        staleTime: 60000,
+        cacheTime: 60000,
         enabled: iri ? true : false
     })
 }

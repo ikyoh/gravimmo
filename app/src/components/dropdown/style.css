@@ -4,9 +4,17 @@
 
 
 .dropdown-content>button {
-    @apply m-1 hover:bg-accent hover:text-white rounded-md cursor-pointer whitespace-nowrap flex items-center h-10 p-2 w-full gap-1 disabled:cursor-not-allowed;
-} 
+    @apply m-1 hover:bg-accent hover:text-white rounded-md cursor-pointer whitespace-nowrap flex items-center h-10 px-3 py-2 w-full gap-2 disabled:cursor-not-allowed;
+}
+
+.dropdown-content>a {
+    @apply m-1 hover:bg-accent hover:text-white rounded-md cursor-pointer whitespace-nowrap flex items-center h-10 px-3 py-2 w-full gap-2 disabled:cursor-not-allowed;
+}
 
 .dropdown-content>div {
-    @apply mx-1 px-2 text-white/50 cursor-default;
-} 
+    @apply mx-1 px-2 mt-3 text-white/50 cursor-default;
+}
+
+.dropdown-title {
+    @apply mx-1 px-2 mt-3 text-white/50 cursor-default font-semibold text-xl;
+}

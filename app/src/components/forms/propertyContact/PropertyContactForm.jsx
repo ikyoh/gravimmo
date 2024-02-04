@@ -3,6 +3,7 @@ import { usePutData, useGetIRI } from 'queryHooks/useProperty'
 import { useGetIRI as useGetContact } from 'queryHooks/useContact'
 import Form from "components/form/form/Form";
 import classNames from 'classnames'
+import Loader from 'components/loader/Loader';
 
 export default function PropertyContactForm({ iri, handleCloseModal }) {
 
@@ -38,12 +39,12 @@ export default function PropertyContactForm({ iri, handleCloseModal }) {
 
         const { data, isLoading, error, isError } = useGetContact(iri)
 
-        const className = classNames("card cursor-pointer",
+        const className = classNames("_card cursor-pointer",
             {
-                "ring-2 ring-accent ring-inset": contacts.includes(iri)
+                "ring-2 ring-accent ring-offset-2 ring-offset-transparent": contacts.includes(iri)
             })
 
-        if (isLoading) return null
+        if (isLoading) return <Loader />
         else return (
             <div className={className} onClick={() => handleUpdateContact(iri)}>
                 <div className='flex flex-col'>
@@ -66,7 +67,7 @@ export default function PropertyContactForm({ iri, handleCloseModal }) {
 
     if (iri) {
         if (isLoading) {
-            return <h2>Loading...</h2>
+            return <Loader />
         }
         if (isError) {
             return <h2 className='py-3'>Error : {error.message}</h2>
@@ -74,7 +75,7 @@ export default function PropertyContactForm({ iri, handleCloseModal }) {
     }
     return (
         <Form onSubmit={onSubmit}>
-            <div className='mt-3 grid grid-cols-2 gap-3'>
+            <div className='mt-3 grid grid-cols-2 gap-5'>
                 {data.trustee.contacts.map(iri => (
                     <ContactCard handleUpdateContact={handleUpdateContact} iri={iri} key={iri} />
                 ))}

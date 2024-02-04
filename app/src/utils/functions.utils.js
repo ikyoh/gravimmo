@@ -1,4 +1,4 @@
-import { orderStatusColor } from 'config/translations.config'
+import { statusColor } from 'config/translations.config'
 import { StatusColor } from 'components/dot/Dot'
 import dayjs from 'dayjs'
 
@@ -13,13 +13,36 @@ export const generatePassword = (length = 8) => {
     return password
 }
 
-export const orderStatus = (status, date) => {
+
+export const commandStatus = (status, date) => {
     if (status)
-        return orderStatusColor[status]
+        return statusColor[status]
     else {
         if (dayjs().diff(dayjs(date), 'day') > 7)
             return StatusColor.Error
         else
             return StatusColor.Action
     }
+}
+
+export const removeDuplicates = (array) => {
+    return array.reduce((accumulator, currentValue) =>
+        accumulator.includes(currentValue) ? accumulator : [...accumulator, currentValue]
+        , [])
+}
+
+// return an array of IRIs
+export const arrayOfIris = (array) => {
+    return array.reduce((accumulator, currentValue) =>
+        [...accumulator, currentValue["@id"]], [])
+}
+
+
+export const roundPrice = (price) => {
+    return Math.round((price + Number.EPSILON) * 100) / 100
+}
+
+
+export const price = (number) => {
+    return new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(number)
 }

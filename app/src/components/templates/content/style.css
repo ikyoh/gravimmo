@@ -1,4 +1,0 @@
-.inverted-corners {
-    -webkit-mask-image:
-        radial-gradient(circle at top left, transparent 0, transparent 20px, black 21px),
-}

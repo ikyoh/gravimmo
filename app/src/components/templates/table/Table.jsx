@@ -1,11 +1,11 @@
-import React from 'react'
-
-const Table = ({children}) => {
+const Table = ({ children }) => {
     return (
-        <table className="w-full table-fixed text-left border-collapse">
-            {children}
-        </table>
-    )
-}
+        <div className="px-5 md:px-10 relative mb-5 mt-8 md:mt-0">
+            <table className="w-full table-fixed text-left border-collapse dark:bg-gradient-page bg-fixed rounded">
+                {children}
+            </table>
+        </div>
+    );
+};
 
-export default Table
+export default Table;

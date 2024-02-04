@@ -3,7 +3,7 @@ import classNames from 'classnames'
 
 const Tr = ({ onClick, children }) => {
 
-    const ClassNames = classNames("flex flex-col md:table-row border-b border-slate-500/20 text-dark dark:text-white leading-8 md:leading-[3em]",
+    const ClassNames = classNames("flex flex-col md:table-row text-dark dark:text-white leading-8 lg:leading-normal xl:leading-[3em]",
         {
             "hover:bg-light dark:hover:bg-dark cursor-pointer": onClick,
         })

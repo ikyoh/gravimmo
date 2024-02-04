@@ -35,11 +35,11 @@ class PropertyService
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "orders:read"])]
+    #[Groups(["commands:read", "propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
     private ?Service $service = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "orders:read"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
     private ?string $material = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -47,7 +47,7 @@ class PropertyService
     private ?string $size = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "orders:read"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
     private ?string $color = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -59,7 +59,7 @@ class PropertyService
     private ?string $margin = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "orders:read"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
     private array $finishing = [];
 
     #[ORM\ManyToOne(inversedBy: 'services')]
@@ -68,7 +68,7 @@ class PropertyService
     private ?Property $property = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "orders:read"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
     private ?string $configuration = null;
 
     public function getId(): ?int

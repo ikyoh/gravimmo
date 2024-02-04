@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Layout } from 'components/templates/layout/Layout'
-import Content from 'components/templates/content/Content'
 import Header from 'components/templates/header/Header'
 import { Button, ButtonSize } from 'components/button/Button'
 import ContactForm from '../components/forms/contact/ContactForm'
@@ -18,6 +16,8 @@ import Pagination from 'components/pagination/Pagination'
 import Dropdown from 'components/dropdown/Dropdown'
 import { useModal } from 'hooks/useModal'
 import Loader from 'components/loader/Loader'
+import { LuSettings2 } from 'react-icons/lu'
+import { NoDataFound } from 'components/noDataFound/NoDataFound'
 
 export const ContactsPage = ({ title }) => {
 
@@ -39,19 +39,24 @@ export const ContactsPage = ({ title }) => {
 		}
 	}, [searchValue, sortValue])
 
-	if(isLoading) return (<Loader />)
+	if (isLoading) return (<Loader />)
 	return (
 		<>
 			<Modal />
-			<Header title={title} isLoading={isLoading} error={error}>
+			<Header
+				title={title}
+				subtitle={data["hydra:totalItems"].toString()}
+				error={error}
+			>
 				{searchbar}
 				<Button
 					size={ButtonSize.Big}
 					onClick={() => handleOpenModal({ title: "Nouveau contact", content: <ContactForm handleCloseModal={handleCloseModal} /> })}
 				/>
 			</Header>
-			<Content>
-				<Table>
+			{data["hydra:totalItems"] === 0
+				? <NoDataFound />
+				: <Table>
 					<Thead>
 						<Th
 							label="#"
@@ -98,6 +103,7 @@ export const ContactsPage = ({ title }) => {
 										<button
 											onClick={() => handleOpenModal({ title: "édition du contact", content: <ContactForm iri={data["@id"]} handleCloseModal={handleCloseModal} /> })}
 										>
+											<LuSettings2 size={30} />
 											Modifier le contact
 										</button>
 									</Dropdown>
@@ -106,7 +112,7 @@ export const ContactsPage = ({ title }) => {
 						)}
 					</Tbody>
 				</Table>
-			</Content>
+			}
 			<Pagination totalItems={data['hydra:totalItems']} page={page} setPage={setPage} />
 		</>
 	)

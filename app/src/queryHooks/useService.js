@@ -41,7 +41,8 @@ const putData = form => {
 /* HOOKS */
 export const useGetAllDatas = (search='', sortValue, sortDirection) => {
     return useQuery([queryKey], fetchAllDatas, {
-        staleTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
         select: data => {
             if (search === '') return _.orderBy(data['hydra:member'], sortValue, sortDirection)
             else return _.orderBy(data['hydra:member'].filter(f =>
@@ -57,7 +58,8 @@ export const useGetPaginatedDatas = (page, sortValue, sortDirection, searchValue
         queryKey: [queryKey, page, sortValue, sortDirection, searchValue],
         queryFn: () => fetchPaginatedDatas(page, sortValue, sortDirection, searchValue),
         keepPreviousData: true,
-        staleTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
         //select: data => {return data['hydra:member']}
     })
 
@@ -65,7 +67,8 @@ export const useGetPaginatedDatas = (page, sortValue, sortDirection, searchValue
 
 export const useGetOneData = (id) => {
     return useQuery([queryKey, id], fetchOneData, {
-        cacheTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
         enabled: id ? true : false
     })
 }
@@ -73,7 +76,8 @@ export const useGetOneData = (id) => {
 export const useGetIRI = (iri) => {
     const queryClient = useQueryClient()
     return useQuery([queryKey, iri], fetchIRI, {
-        cacheTime: 60_000,
+        staleTime: 60000,
+        cacheTime: 60000,
         enabled: iri ? true : false
     })
 }

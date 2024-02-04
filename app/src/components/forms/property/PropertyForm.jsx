@@ -7,30 +7,37 @@ import { useGetAllDatas } from 'queryHooks/useTrustee'
 import Form from "components/form/form/Form"
 import { FormInput } from "components/form/input/FormInput"
 import FormCheckbox from 'components/form/checkbox/FormCheckbox'
+import FieldArray from "components/form/field-array/FieldArray"
 import { FormSelect } from 'components/form/select/FormSelect'
-import { orderDetails } from 'config/translations.config'
+import { commandDetails } from 'config/translations.config'
+import Loader from 'components/loader/Loader'
 
 export default function PropertyForm({ id, trusteeIRI, handleCloseModal }) {
 
     const { isLoading: isLoadingData, data, isError, error } = useGetOneData(id)
     const { isLoading: isLoadingTrustees, data: dataTrustees, isError: isErrorTrustees, error: errorTrustees } = useGetAllDatas("", "title", "ASC")
-    const { mutate: postData, isLoading: isPosting, isSuccess } = usePostData()
-    const { mutate: putData } = usePutData()
+    const { mutate: postData, isLoading: isPostLoading, isSuccess: isPostSuccess } = usePostData()
+    const { mutate: putData, isLoading: isPutLoading, isSuccess: isPutSuccess } = usePutData()
 
     const validationSchema = yup.object({
         trustee: yup.string().required("Champ obligatoire"),
+        reference: yup.string().required("Champ obligatoire"),
         title: yup.string().required("Champ obligatoire"),
         address: yup.string().required("Champ obligatoire"),
         postcode: yup.string().required("Champ obligatoire"),
         city: yup.string().required("Champ obligatoire"),
         zone: yup.string().required("Champ obligatoire"),
-        tva: yup.number().typeError("Champ obligatoire"),
+        deliveredAt: yup.date().typeError("Champ obligatoire"),
 
     })
 
-    const defaultValues = { params: [] }
+    const defaultValues = {
+        deliveredAt: "2000-01-01",
+        params: [],
+        accesses: [],
+    }
 
-    const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm({
+    const { register, handleSubmit, reset, control, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(validationSchema),
         defaultValues: defaultValues
     })
@@ -55,12 +62,16 @@ export default function PropertyForm({ id, trusteeIRI, handleCloseModal }) {
         else {
             putData(form)
         }
-        handleCloseModal()
     }
+
+    useEffect(() => {
+        if (isPutSuccess || isPostSuccess)
+            handleCloseModal()
+    }, [isPutSuccess, isPostSuccess])
 
     if (id) {
         if (isLoadingData) {
-            return <h2>Loading...</h2>
+            return <Loader />
         }
         if (isError) {
             return <h2 className='py-3'>Error : {error.message}</h2>
@@ -69,8 +80,8 @@ export default function PropertyForm({ id, trusteeIRI, handleCloseModal }) {
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}
-            isLoading={isSubmitting}
-            isDisabled={isSubmitting}
+            isLoading={isSubmitting || isPutLoading || isPostLoading}
+            isDisabled={isSubmitting || isPutLoading || isPostLoading}
         >
             {!trusteeIRI &&
                 <FormSelect
@@ -82,19 +93,27 @@ export default function PropertyForm({ id, trusteeIRI, handleCloseModal }) {
                     required={true}
                 >
                     {isLoadingTrustees &&
-                        <option value="">Chargement des syndics</option>
+                        <option disabled>Chargement des syndics</option>
                     }
                     {!isLoadingTrustees && dataTrustees.length != 0 &&
-                        < option value="">Choisir un syndic</option>
+                        <option disabled>Choisir un syndic</option>
                     }
                     {!isLoadingTrustees && dataTrustees.length === 0 &&
-                        < option value="">Aucun syndic trouvé</option>
+                        <option disabled>Aucun syndic trouvé</option>
                     }
                     {!isLoadingTrustees && dataTrustees.map(data =>
                         <option key={data["@id"]} value={data["@id"]}>{data.title}</option>
                     )}
                 </FormSelect>
             }
+            <FormInput
+                type="text"
+                name="reference"
+                label="Référence"
+                error={errors['reference']}
+                register={register}
+                required={true}
+            />
             <FormInput
                 type="text"
                 name="title"
@@ -151,44 +170,36 @@ export default function PropertyForm({ id, trusteeIRI, handleCloseModal }) {
                 register={register}
                 required={false}
             />
-            <FormInput
-                type="text"
-                name="accessType"
-                label="Type d'accès"
-                error={errors['accessType']}
-                register={register}
+            <FieldArray
+                name="accesses"
+                label="Accès"
+                placeholder="ex : VIGIK-123456"
+                error={errors['accesses']}
+                control={control}
                 required={false}
             />
             <FormInput
-                type="text"
-                name="accessCode"
-                label="Code d'accès"
-                error={errors['accessCode']}
-                register={register}
-                required={false}
-            />
-            <FormInput
-                type="text"
-                name="tva"
-                label="Taux de TVA %"
-                error={errors['tva']}
+                type="date"
+                name="deliveredAt"
+                label="Date de livraison"
+                error={errors['deliveredAt']}
                 register={register}
                 required={true}
             />
             <div className="grid grid-cols-2">
-                {Object.keys(orderDetails)
-                .filter(f => f !== 'proprietaire' &&  f !== 'nouveloccupant' &&  f !== 'ancienoccupant')
-                .map((key, index) => (
-                    <FormCheckbox
-                        key={index}
-                        name="params"
-                        label={orderDetails[key]}
-                        value={key}
-                        error={errors['params']}
-                        register={register}
-                        required={true}
-                    />
-                ))}
+                {Object.keys(commandDetails)
+                    .filter(f => f !== 'proprietaire' && f !== 'nouveloccupant' && f !== 'ancienoccupant')
+                    .map((key, index) => (
+                        <FormCheckbox
+                            key={index}
+                            name="params"
+                            label={commandDetails[key]}
+                            value={key}
+                            error={errors['params']}
+                            register={register}
+                            required={true}
+                        />
+                    ))}
             </div>
         </Form>
     )

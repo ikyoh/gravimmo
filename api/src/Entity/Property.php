@@ -18,6 +18,8 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
+use DateTime;
+
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['properties:read']],
@@ -29,10 +31,11 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
         new Post()
     ]
 )]
-#[ApiFilter(OrderFilter::class, properties: ['id', 'title', 'postcode', 'city', 'zone', 'trustee.title'])]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'reference', 'title', 'postcode', 'city', 'zone', 'trustee.title'])]
 #[ApiFilter(SearchFilter::class, properties: ['trustee' => 'exact'])]
 #[ApiFilter(MultipleFieldsSearchFilter::class, properties: [
     "id",
+    "reference",
     "title",
     "city",
     "zone",
@@ -48,35 +51,31 @@ class Property
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["properties:read", "property:read", "property:write", "orders:read"])]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read", "invoices:read", "tour:read"])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["properties:read", "property:read", "property:write", "orders:read"])]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read"])]
     private ?string $address = null;
 
     #[ORM\Column(length: 5)]
-    #[Groups(["properties:read", "property:read", "property:write", "orders:read"])]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read"])]
     private ?string $postcode = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["properties:read", "property:read", "property:write", "orders:read"])]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read"])]
     private ?string $city = null;
 
-    #[ORM\Column]
-    #[Groups(["property:read", "property:write"])]
-    private ?float $tva = null;
-
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["property:read", "property:write", "orders:read"])]
+    #[Groups(["property:read", "property:write", "commands:read"])]
     private ?string $contactName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["property:read", "property:write", "orders:read"])]
+    #[Groups(["property:read", "property:write", "commands:read"])]
     private ?string $contactPhone = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["properties:read", "property:read", "property:write", "orders:read"])]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read", "tour:read"])]
     private ?string $zone = null;
 
     #[ORM\ManyToOne(inversedBy: 'properties')]
@@ -85,35 +84,66 @@ class Property
     private ?Trustee $trustee = null;
 
     #[ORM\OneToMany(mappedBy: 'property', targetEntity: PropertyService::class, orphanRemoval: true)]
-    #[Groups(["property:read", "property:write", "orders:read"])]
+    #[Groups(["property:read", "property:write", "commands:read"])]
     private Collection $services;
 
     #[ORM\Column(type: 'json', nullable: true)]
-    #[Groups(["property:read", "property:write", "orders:read"])]
+    #[Groups(["property:read", "property:write", "commands:read"])]
     private $params = [];
 
-    #[ORM\Column(length: 255)]
-    #[Groups(["property:read", "property:write", "orders:read"])]
-    private ?string $accessType = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["property:read", "property:write", "orders:read"])]
-    private ?string $accessCode = null;
-
-    #[ORM\OneToMany(mappedBy: 'property', targetEntity: Order::class)]
-    private Collection $orders;
+    #[ORM\OneToMany(mappedBy: 'property', targetEntity: Command::class)]
+    private Collection $commands;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'properties')]
     #[Groups(["property:read", "property:write"])]
     private Collection $contacts;
 
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups(["property:read", "property:write"])]
+    private ?\DateTimeInterface $deliveredAt = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(["property:read", "property:write", "commands:read"])]
+    private array $accesses = [];
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["properties:read", "property:read", "property:write"])]
+    private ?string $reference = null;
+
+    #[ORM\OneToMany(mappedBy: 'property', targetEntity: Invoice::class)]
+    private Collection $invoices;
+
 
     public function __construct()
     {
         $this->services = new ArrayCollection();
-        $this->orders = new ArrayCollection();
+        $this->services = new ArrayCollection();
+        $this->commands = new ArrayCollection();
         $this->contacts = new ArrayCollection();
+        $this->invoices = new ArrayCollection();
     }
+
+
+     // Récupérer le montant de la TVA en fonction de la date de livraison )
+    #[Groups(["property:read"])]
+    public function getTva()
+    {
+        $deliveredDate = new DateTime($this->getDeliveredAt());
+
+        $today = new DateTime();
+
+        // Calcul de l'écart en années
+        $yearsInterval = ($deliveredDate)->diff(($today))->y;
+
+
+        if ($yearsInterval < 2) {
+            return(10);
+        } else {
+            return(20);
+        }
+        
+    }
+
 
     public function getId(): ?int
     {
@@ -164,18 +194,6 @@ class Property
     public function setCity(string $city): self
     {
         $this->city = $city;
-
-        return $this;
-    }
-
-    public function getTva(): ?float
-    {
-        return $this->tva;
-    }
-
-    public function setTva(float $tva): self
-    {
-        $this->tva = $tva;
 
         return $this;
     }
@@ -273,54 +291,30 @@ class Property
         return $this;
     }
 
-    public function getAccessType(): ?string
-    {
-        return $this->accessType;
-    }
-
-    public function setAccessType(string $accessType): self
-    {
-        $this->accessType = $accessType;
-
-        return $this;
-    }
-
-    public function getAccessCode(): ?string
-    {
-        return $this->accessCode;
-    }
-
-    public function setAccessCode(?string $accessCode): self
-    {
-        $this->accessCode = $accessCode;
-
-        return $this;
-    }
-
     /**
-     * @return Collection<int, Order>
+     * @return Collection<int, Command>
      */
-    public function getOrders(): Collection
+    public function getCommands(): Collection
     {
-        return $this->orders;
+        return $this->commands;
     }
 
-    public function addOrder(Order $order): self
+    public function addCommand(Command $command): self
     {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-            $order->setProperty($this);
+        if (!$this->commands->contains($command)) {
+            $this->commands->add($command);
+            $command->setProperty($this);
         }
 
         return $this;
     }
 
-    public function removeOrder(Order $order): self
+    public function removeCommand(Command $command): self
     {
-        if ($this->orders->removeElement($order)) {
+        if ($this->commands->removeElement($command)) {
             // set the owning side to null (unless already changed)
-            if ($order->getProperty() === $this) {
-                $order->setProperty(null);
+            if ($command->getProperty() === $this) {
+                $command->setProperty(null);
             }
         }
 
@@ -347,6 +341,76 @@ class Property
     public function removeContact(User $contact): self
     {
         $this->contacts->removeElement($contact);
+
+        return $this;
+    }
+
+    public function getDeliveredAt(): ?string
+    {
+        if ($this->deliveredAt) {
+            return $this->deliveredAt->format('Y-m-d');
+        } else {
+            return $this->deliveredAt;
+        }
+    }
+
+    public function setDeliveredAt(\DateTimeInterface $deliveredAt): self
+    {
+        $this->deliveredAt = $deliveredAt;
+
+        return $this;
+    }
+
+    public function getAccesses(): array
+    {
+        return $this->accesses;
+    }
+
+    public function setAccesses(?array $accesses): self
+    {
+        $this->accesses = $accesses;
+
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(?string $reference): self
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Invoice>
+     */
+    public function getInvoices(): Collection
+    {
+        return $this->invoices;
+    }
+
+    public function addInvoice(Invoice $invoice): self
+    {
+        if (!$this->invoices->contains($invoice)) {
+            $this->invoices->add($invoice);
+            $invoice->setProperty($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInvoice(Invoice $invoice): self
+    {
+        if ($this->invoices->removeElement($invoice)) {
+            // set the owning side to null (unless already changed)
+            if ($invoice->getProperty() === $this) {
+                $invoice->setProperty(null);
+            }
+        }
 
         return $this;
     }

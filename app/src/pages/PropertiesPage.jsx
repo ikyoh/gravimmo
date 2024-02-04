@@ -17,6 +17,7 @@ import Pagination from 'components/pagination/Pagination'
 import PropertyForm from 'components/forms/property/PropertyForm'
 import Dropdown from 'components/dropdown/Dropdown'
 import Loader from 'components/loader/Loader'
+import { NoDataFound } from 'components/noDataFound/NoDataFound'
 
 export const PropertiesPage = ({ title }) => {
 
@@ -37,23 +38,34 @@ export const PropertiesPage = ({ title }) => {
 		}
 	}, [searchValue, sortValue])
 
-	if(isLoading) return (<Loader />)
+	if (isLoading) return (<Loader />)
 	else return (
 		<>
 			<Modal />
-			<Header title={title + " - " + data['hydra:totalItems']} isLoading={isLoading} error={error}>
+			<Header
+				title={title}
+				subtitle={data["hydra:totalItems"].toString()}
+				error={error}
+			>
 				{searchbar}
 				<Button
 					size={ButtonSize.Big}
 					onClick={() => handleOpenModal({ title: "Nouvelle copropriété", content: <PropertyForm handleCloseModal={handleCloseModal} /> })}
 				/>
 			</Header>
-			<Content>
-				<Table>
+			{data["hydra:totalItems"] === 0
+				? <NoDataFound />
+				: <Table>
 					<Thead>
 						<Th
 							label="#"
 							sortBy='id'
+							sortValue={sortValue}
+							sortDirection={sortDirection}
+							handleSort={handleSort}
+						/>
+						<Th label="Référence"
+							sortBy='reference'
 							sortValue={sortValue}
 							sortDirection={sortDirection}
 							handleSort={handleSort}
@@ -95,6 +107,7 @@ export const PropertiesPage = ({ title }) => {
 						{!isLoading && data['hydra:member'].map(data =>
 							<Tr key={data.id} onClick={() => navigate("/properties/" + data.id, { state: { page: page, sortDirection: sortDirection, sortValue: sortValue, searchValue: searchValue } })}>
 								<Td text={data.id} />
+								<Td label="Référence" text={data.reference} />
 								<Td label="Nom" text={data.title} />
 								<Td label="Syndic" text={data.trustee.title} />
 								<Td label="Secteur" text={data.zone} />
@@ -117,7 +130,7 @@ export const PropertiesPage = ({ title }) => {
 						)}
 					</Tbody>
 				</Table>
-			</Content>
+			}
 			<Pagination totalItems={data['hydra:totalItems']} page={page} setPage={setPage} />
 		</>
 	)

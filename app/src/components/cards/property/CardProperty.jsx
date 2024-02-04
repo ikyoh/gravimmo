@@ -1,28 +1,24 @@
 import React from 'react'
 import { useGetIRI } from 'queryHooks/useProperty'
 import Dropdown from 'components/dropdown/Dropdown'
-import PropertyServiceForm from 'components/forms/propertyService/PropertyServiceForm'
+import PropertyForm from 'components/forms/property/PropertyForm'
 import Loader from 'components/loader/Loader'
 
 export const CardProperty = ({ handleOpenModal, handleCloseModal, iri }) => {
 
-    const { data = {}, isLoading, error } = useGetIRI(iri)
+    const { data, isLoading, error } = useGetIRI(iri)
 
     return (
-        <div className="card">
+        <div className="_card">
             {isLoading ?
                 <Loader />
                 :
                 <>
-                        <Dropdown>
-                            {/* <button onClick={() => handleOpenModal({ title: "Modifier une prestation", content: <PropertyServiceForm iri={data["@id"]} handleCloseModal={handleCloseModal} /> })}>
-                                Modifier la prestation
-                            </button>
-                            <button
-                                onClick={() => deleteData(data.id)}>
-                                Retirer la prestation
-                            </button> */}
-                        </Dropdown>
+                    <Dropdown type="card">
+                        <button onClick={() => handleOpenModal({ title: "Modifier la copropriété", content: <PropertyForm id={data.id} handleCloseModal={handleCloseModal} /> })}>
+                            Modifier la copropriété
+                        </button>
+                    </Dropdown>
                     <div className='flex flex-col'>
                         <div className="subtitle">
                             {data.title}

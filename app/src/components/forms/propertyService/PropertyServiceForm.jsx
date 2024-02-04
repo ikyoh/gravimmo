@@ -62,8 +62,6 @@ export default function PropertyServiceForm({ iri, propertyIRI, handleCloseModal
     //     }
     // }, [dataService])
 
-
-
     const onSubmit = form => {
         if (!iri)
             postData(form)
@@ -81,8 +79,6 @@ export default function PropertyServiceForm({ iri, propertyIRI, handleCloseModal
             return <h2 className='py-3'>Error : {error.message}</h2>
         }
     }
-
-    console.log('dataService', dataService)
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}

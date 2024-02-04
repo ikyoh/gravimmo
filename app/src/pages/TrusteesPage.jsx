@@ -1,7 +1,5 @@
 import { useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Layout } from 'components/templates/layout/Layout'
-import Content from 'components/templates/content/Content'
 import Header from 'components/templates/header/Header'
 import { Button, ButtonSize } from 'components/button/Button'
 import TrusteeForm from '../components/forms/trustee/TrusteeForm'
@@ -14,12 +12,13 @@ import Td from 'components/templates/table/Td'
 import { useGetPaginatedDatas } from 'queryHooks/useTrustee'
 import { useSearch } from 'hooks/useSearch'
 import { useSortBy } from 'hooks/useSortBy'
-import { GoPrimitiveDot } from 'react-icons/go'
+import { GoDotFill } from 'react-icons/go'
 import { useState } from 'react'
 import Pagination from 'components/pagination/Pagination'
 import Dropdown from 'components/dropdown/Dropdown'
 import { useModal } from 'hooks/useModal'
 import Loader from 'components/loader/Loader'
+import { NoDataFound } from 'components/noDataFound/NoDataFound'
 
 export const TrusteesPage = ({ title }) => {
 
@@ -44,19 +43,30 @@ export const TrusteesPage = ({ title }) => {
 	else return (
 		<>
 			<Modal />
-			<Header title={title} isLoading={isLoading} error={error}>
+			<Header
+				title={title}
+				subtitle={data["hydra:totalItems"].toString()}
+				error={error}
+			>
 				{searchbar}
 				<Button
 					size={ButtonSize.Big}
 					onClick={() => handleOpenModal({ title: "Nouveau syndic", content: <TrusteeForm handleCloseModal={handleCloseModal} /> })}
 				/>
 			</Header>
-			<Content>
-				<Table>
+			{data["hydra:totalItems"] === 0
+				? <NoDataFound />
+				: <Table>
 					<Thead>
 						<Th
 							label="#"
 							sortBy='id'
+							sortValue={sortValue}
+							sortDirection={sortDirection}
+							handleSort={handleSort}
+						/>
+						<Th label="Référence"
+							sortBy='reference'
 							sortValue={sortValue}
 							sortDirection={sortDirection}
 							handleSort={handleSort}
@@ -88,12 +98,13 @@ export const TrusteesPage = ({ title }) => {
 						{!isLoading && data['hydra:member'].map(data =>
 							<Tr key={data.id} onClick={() => navigate("/trustees/" + data.id, { state: { page: page, sortDirection: sortDirection, sortValue: sortValue, searchValue: searchValue } })}>
 								<Td text={data.id} />
-								<Td label="Nom" text={data.title}>
+								<Td label="Référence" text={data.reference}>
 									<div className="flex flex-col mr-3">
-										<GoPrimitiveDot size={20} color={data.color} />
-										<GoPrimitiveDot size={20} color={data.color2} />
+										<GoDotFill size={20} color={data.color} />
+										<GoDotFill size={20} color={data.color2} />
 									</div>
 								</Td>
+								<Td label="Nom" text={data.title} />
 								<Td label="Téléphone" text={data.phone} />
 								<Td label="Email" text={data.email} />
 								<Td label="Code postal" text={data.postcode} />
@@ -115,7 +126,7 @@ export const TrusteesPage = ({ title }) => {
 						)}
 					</Tbody>
 				</Table>
-			</Content>
+			}
 			<Pagination totalItems={data['hydra:totalItems']} page={page} setPage={setPage} />
 		</>
 	)
