@@ -125,8 +125,8 @@ const SelectTrustee = ({ watch, setValue }) => {
                                 : "btn-neutral"
                         }`}
                         onClick={() => {
-                            setValue("property", data["@id"]),
-                                setValue("trustee", data.trustee["@id"]);
+                            setValue("property", data["@id"]);
+                            setValue("trustee", data.trustee["@id"]);
                         }}
                     >
                         <div>Copro : {data.title}</div>
