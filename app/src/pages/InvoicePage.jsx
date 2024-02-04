@@ -75,11 +75,11 @@ export const InvoicePage = ({ title }) => {
     };
 
     const downloadFile = (id, chrono) => {
-        console.log("chrono", chrono);
         axios({
             url: "/api/pdf/invoice/" + id,
             method: "GET",
             responseType: "blob",
+            responseEncoding: "base64",
         }).then((response) => {
             fileDownload(response.data, "facture_" + chrono + ".pdf");
         });
