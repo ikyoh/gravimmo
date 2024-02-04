@@ -159,7 +159,7 @@ class PdfInvoiceController extends AbstractController
         $dompdf = new Dompdf();
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->loadHtml($html);
-        //$dompdf->render();
+        $dompdf->render();
 
         return $dompdf->stream();
 

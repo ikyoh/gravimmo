@@ -13,6 +13,7 @@ export default function InvoiceCashedForm({ id, handleCloseModal }) {
     const defaultValues = {
         id: id,
         cashedAt: dayjs().format("YYYY-MM-DD"),
+        status: "lettré",
     };
 
     const validationSchema = yup.object({
@@ -47,7 +48,9 @@ export default function InvoiceCashedForm({ id, handleCloseModal }) {
             isDisabled={isLoading}
         >
             <Calendar
-                onChange={(date) => setValue("cashedAt", date)}
+                onChange={(date) =>
+                    setValue("cashedAt", dayjs(date).format("YYYY-MM-DD"))
+                }
                 value={watchDate}
                 maxDetail="month"
                 minDetail="month"
