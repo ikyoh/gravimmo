@@ -1,83 +1,117 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { request, requestIRI } from '../utils/axios.utils'
-import { API_PROPERTIES as API, itemsPerPage, API_URL } from '../config/api.config'
-import dayjs from 'dayjs'
-import _ from 'lodash'
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import dayjs from "dayjs";
+import _ from "lodash";
+import { API_PROPERTIES as API, itemsPerPage } from "../config/api.config";
+import { request, requestIRI } from "../utils/axios.utils";
 
 /* CONFIG */
-const queryKey = 'properties'
+const queryKey = "properties";
 
 /* API REQUESTS */
 const fetchAllDatas = () => {
-    return request({ url: API, method: 'get' })
-}
+    return request({ url: API, method: "get" });
+};
 
 const fetchFilteredDatas = (sortValue, sortDirection, searchValue) => {
-    return request({ url: API + "?pagination=false" + "&order[" + sortValue + "]=" + sortDirection + "&" + searchValue, method: 'get' })
-}
+    return request({
+        url:
+            API +
+            "?pagination=false" +
+            "&order[" +
+            sortValue +
+            "]=" +
+            sortDirection +
+            "&" +
+            searchValue,
+        method: "get",
+    });
+};
 
 const fetchPaginatedDatas = (page, sortValue, sortDirection, searchValue) => {
+    let options =
+        "?page=" +
+        page +
+        "&itemsPerPage=" +
+        itemsPerPage +
+        "&order[" +
+        sortValue +
+        "]=" +
+        sortDirection;
 
-    let options = "?page=" + page + "&itemsPerPage=" + itemsPerPage + "&order[" + sortValue + "]=" + sortDirection
+    if (searchValue) options += "&search=" + searchValue;
 
-    if (searchValue)
-        options += "&search=" + searchValue
-
-    return request({ url: API + options, method: 'get' })
-}
+    return request({ url: API + options, method: "get" });
+};
 
 const fetchDatasByTrusteeIRI = (trusteeIRI) => {
-    const trusteeID = trusteeIRI.replace("/api/trustees/", '')
-    return request({ url: API + "?pagination=false&trustee=" + trusteeID + "&order[title]=asc", method: 'get' })
-}
+    const trusteeID = trusteeIRI.replace("/api/trustees/", "");
+    return request({
+        url:
+            API +
+            "?pagination=false&trustee=" +
+            trusteeID +
+            "&order[title]=asc",
+        method: "get",
+    });
+};
 
 const fetchOneData = ({ queryKey }) => {
-    const id = queryKey[1]
-    return request({ url: API + "/" + id, method: 'get' })
-}
+    const id = queryKey[1];
+    return request({ url: API + "/" + id, method: "get" });
+};
 
 const fetchIRI = ({ queryKey }) => {
-    const iri = queryKey[1]
-    return requestIRI({ url: iri, method: 'get' })
-}
+    const iri = queryKey[1];
+    return requestIRI({ url: iri, method: "get" });
+};
 
-const postData = form => {
-    const _form = {...form}
-    _form.deliveredAt = dayjs.utc(form.deliveredAt).local().format()
-    return request({ url: API, method: 'post', data: _form })
-}
+const postData = (form) => {
+    const _form = { ...form };
+    _form.deliveredAt = dayjs.utc(form.deliveredAt).local().format();
+    return request({ url: API, method: "post", data: _form });
+};
 
-const putData = form => {
-    const _form = {...form}
-    _form.deliveredAt = dayjs.utc(form.deliveredAt).local().format()
-    return request({ url: API + "/" + form.id, method: 'put', data: _form })
-}
-
+const putData = (form) => {
+    const _form = { ...form };
+    _form.deliveredAt = dayjs.utc(form.deliveredAt).local().format();
+    return request({ url: API + "/" + form.id, method: "put", data: _form });
+};
 
 /* HOOKS */
-export const useGetAllDatas = (search = '', sortValue, sortDirection) => {
+export const useGetAllDatas = (search = "", sortValue, sortDirection) => {
     return useQuery([queryKey], fetchAllDatas, {
         staleTime: 60000,
         cacheTime: 60000,
-        select: data => {
-            if (search === '') return _.orderBy(data['hydra:member'], sortValue, sortDirection)
-            else return _.orderBy(data['hydra:member'].filter(f =>
-                f.title.toLowerCase().includes(search.toLowerCase())
-            ), sortValue, sortDirection)
-        }
-    })
-}
+        select: (data) => {
+            if (search === "")
+                return _.orderBy(
+                    data["hydra:member"],
+                    sortValue,
+                    sortDirection
+                );
+            else
+                return _.orderBy(
+                    data["hydra:member"].filter((f) =>
+                        f.title.toLowerCase().includes(search.toLowerCase())
+                    ),
+                    sortValue,
+                    sortDirection
+                );
+        },
+    });
+};
 
 export const useGetFilteredDatas = (sortValue, sortDirection, searchValue) => {
     return useQuery({
         queryKey: [queryKey, sortValue, sortDirection, searchValue],
-        queryFn: () => fetchFilteredDatas(sortValue, sortDirection, searchValue),
+        queryFn: () =>
+            fetchFilteredDatas(sortValue, sortDirection, searchValue),
         keepPreviousData: true,
         staleTime: 60000,
         cacheTime: 60000,
         //select: data => {return data['hydra:member']}
-    })
-}
+    });
+};
 
 export const useGetFilteredDatasByTrustee = (trusteeIRI) => {
     return useQuery({
@@ -86,58 +120,66 @@ export const useGetFilteredDatasByTrustee = (trusteeIRI) => {
         keepPreviousData: true,
         staleTime: 60000,
         cacheTime: 60000,
-        select: data => { return data['hydra:member'] }
-    })
-}
+        select: (data) => {
+            return data["hydra:member"];
+        },
+    });
+};
 
-export const useGetPaginatedDatas = (page, sortValue, sortDirection, searchValue) => {
+export const useGetPaginatedDatas = (
+    page,
+    sortValue,
+    sortDirection,
+    searchValue
+) => {
     return useQuery({
         queryKey: [queryKey, page, sortValue, sortDirection, searchValue],
-        queryFn: () => fetchPaginatedDatas(page, sortValue, sortDirection, searchValue),
+        queryFn: () =>
+            fetchPaginatedDatas(page, sortValue, sortDirection, searchValue),
         keepPreviousData: true,
         staleTime: 60000,
         cacheTime: 60000,
         //select: data => {return data['hydra:member']}
-    })
-}
+    });
+};
 
 export const useGetOneData = (id) => {
     return useQuery([queryKey, id], fetchOneData, {
         staleTime: 60000,
         cacheTime: 60000,
-        enabled: id ? true : false
-    })
-}
+        enabled: id ? true : false,
+    });
+};
 
 export const useGetIRI = (iri) => {
     return useQuery([queryKey, iri], fetchIRI, {
         staleTime: 60000,
         cacheTime: 60000,
-        enabled: iri ? true : false
-    })
-}
+        enabled: iri ? true : false,
+    });
+};
 
 export const usePostData = () => {
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
     return useMutation(postData, {
         onError: (error, _, context) => {
-            console.log('error', error)
-        },
-        onSettled: (newProperty) => {
-            queryClient.invalidateQueries([newProperty.trustee["@id"]])
-        }
-    })
-}
-
-export const usePutData = () => {
-    const queryClient = useQueryClient()
-    return useMutation(putData, {
-        onError: (error, _, context) => {
-            console.log('error', error)
-            queryClient.setQueryData([queryKey], context.previousDatas)
+            console.log("error", error);
         },
         onSettled: () => {
-            queryClient.invalidateQueries([queryKey])
-        }
-    })
-}
+            queryClient.invalidateQueries([queryKey]);
+        },
+    });
+};
+
+export const usePutData = () => {
+    const queryClient = useQueryClient();
+    return useMutation(putData, {
+        onError: (error, _, context) => {
+            console.log("error", error);
+            queryClient.setQueryData([queryKey], context.previousDatas);
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries([queryKey]);
+        },
+    });
+};

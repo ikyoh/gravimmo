@@ -159,13 +159,15 @@ class PdfInvoiceController extends AbstractController
         $dompdf = new Dompdf();
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->loadHtml($html);
-        $dompdf->render();
+        //$dompdf->render();
 
-        return new Response(
-            $dompdf->stream('resume', ["Attachment" => true]),
-            Response::HTTP_OK,
-            ['Content-Type' => 'application/pdf']
-        );
+        return $dompdf->stream();
+
+        // return new Response (
+        //     $dompdf->stream('resume', ["Attachment" => false]),
+        //     Response::HTTP_OK,
+        //     ['Content-Type' => 'application/pdf']
+        // );
     }
 
     private function imageToBase64($path)

@@ -83,9 +83,7 @@ const Menu = () => {
                                 <BsPiggyBank />
                             </Button>
                             <Button
-                                isBorder={location.pathname.includes(
-                                    "/invoices"
-                                )}
+                                isBorder={location.pathname.includes("/quotes")}
                                 link="/quotes"
                                 size={ButtonSize.Big}
                                 info="Devis"
