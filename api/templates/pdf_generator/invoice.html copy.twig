@@ -99,10 +99,10 @@
     <table style="width: 100%;">
         <tr>
             <td style="width: auto">
-                {# <img src="{{imageSrc}}" style="width:280px"> #}
+                <img src="{{imageSrc}}" style="width:280px">
             </td>
             <td style="width: 100%; text-align:right">
-                <div>
+                <div class="card-header">
                     <div style="background-color : lightgray;">
                         Facture N°
                     </div>
@@ -110,7 +110,7 @@
                         {{chrono}}
                     </div>
                 </div>
-                <div>
+                <div class="card-header">
                     <div style="background-color : lightgray;">
                         Date
                     </div>
@@ -118,7 +118,7 @@
                         {{date}}
                     </div>
                 </div>
-                <div>
+                <div class="card-header">
                     <div style="background-color : lightgray;">
                         Client
                     </div>
@@ -185,7 +185,7 @@
         </tr>
     </table>
 
-    {#
+
     <div style="margin-top: 40; margin-bottom: 10">
         {% if refundReference is defined %}
         <div class="card" style="background-color : lightgray;">
@@ -279,7 +279,7 @@
                     locale='fr') }}</td>
             </tr>
         </table>
-    </div> #}
+    </div>
 
 </body>
 
