@@ -159,7 +159,7 @@ class PdfInvoiceController extends AbstractController
         $html =  $this->renderView('pdf_generator/invoice.html.twig', $datas);
 
         $options = new Options();
-
+        $options->set('defaultFont', 'Arial');
         $dompdf = new Dompdf($options);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->loadHtml($html);
