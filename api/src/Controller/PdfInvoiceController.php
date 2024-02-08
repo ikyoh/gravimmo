@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Dompdf\Dompdf;
+use Dompdf\Options;
 use App\Entity\Invoice;
 
 #[AsController]
@@ -156,20 +157,27 @@ class PdfInvoiceController extends AbstractController
         }
 
         $html =  $this->renderView('pdf_generator/invoice.html.twig', $datas);
-        $dompdf = new Dompdf();
+
+        $options = new Options();
+
+        $options->set('enable_html5_parser', true);
+        $dompdf = new Dompdf($options);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->loadHtml($html);
         $dompdf->render();
+
+
+
 
         // $dompdf->stream('transport.pdf', [
         //     "Attachment" => true,
         //     'compress' => false,
         // ]);
 
-        // $dompdf->stream("mypdf.pdf", [
-        //     "Attachment" => false,
-        //     'compress' => false,
-        // ]);
+        $dompdf->stream("mypdf.pdf", [
+            "Attachment" => false,
+            'compress' => false,
+        ]);
 
         // $dompdf->stream("mypdf.pdf", [
         //     "Attachment" => true
@@ -189,14 +197,14 @@ class PdfInvoiceController extends AbstractController
         //     ]
         // );
         
-        return new Response(
-            $dompdf->stream("mypdf.pdf", [
-                "Attachment" => false,
-                'compress' => false,
-            ]),
-            Response::HTTP_OK,
-            ['Content-Type' => 'application/pdf']
-        );
+        // return new Response(
+        //     $dompdf->stream("mypdf.pdf", [
+        //         "Attachment" => false,
+        //         'compress' => false,
+        //     ]),
+        //     Response::HTTP_OK,
+        //     ['Content-Type' => 'application/pdf']
+        // );
     }
 
     private function imageToBase64($path)
