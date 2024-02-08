@@ -160,7 +160,6 @@ class PdfInvoiceController extends AbstractController
 
         $options = new Options();
 
-        $options->set('isHtml5ParserEnabled', true);
         $dompdf = new Dompdf($options);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->loadHtml($html);
