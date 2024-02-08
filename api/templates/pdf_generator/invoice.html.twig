@@ -24,7 +24,12 @@
             line-height: 0.6;
         }
 
-        .card-header {}
+        .card-header {
+            /* border: 1pt black solid;
+            border-radius: 5pt;
+            display: inline-block;
+            overflow: hidden; */
+        }
 
         .card-header div {
             text-align: center;
@@ -33,7 +38,12 @@
             white-space: nowrap;
         }
 
-        .card {}
+        .card {
+            /* border: 1pt black solid;
+            border-radius: 5pt;
+            padding: 10 10;
+            display: inline-block; */
+        }
 
         .client {
             display: inline-block;
@@ -175,7 +185,7 @@
         </tr>
     </table>
 
-    {#
+
     <div style="margin-top: 40; margin-bottom: 10">
         {% if refundReference is defined %}
         <div class="card" style="background-color : lightgray;">
@@ -269,7 +279,7 @@
                     locale='fr') }}</td>
             </tr>
         </table>
-    </div> #}
+    </div>
 
 </body>
 
