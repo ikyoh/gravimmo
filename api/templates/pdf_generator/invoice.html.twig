@@ -27,7 +27,6 @@
         .card-header {
             border: 1pt black solid;
             border-radius: 5pt;
-            display: inline-block;
             overflow: hidden;
         }
 
@@ -42,11 +41,9 @@
             border: 1pt black solid;
             border-radius: 5pt;
             padding: 10 10;
-            display: inline-block;
         }
 
         .client {
-            display: inline-block;
             max-width: 200;
             font-weight: bold;
         }
@@ -102,7 +99,7 @@
                 {# <img src="{{imageSrc}}" style="width:280px"> #}
             </td>
             <td style="width: 100%; text-align:right">
-                <div>
+                <div class="card-header">
                     <div style="background-color : lightgray;">
                         Facture N°
                     </div>
@@ -110,7 +107,7 @@
                         {{chrono}}
                     </div>
                 </div>
-                <div>
+                <div class="card-header">
                     <div style="background-color : lightgray;">
                         Date
                     </div>
@@ -118,7 +115,7 @@
                         {{date}}
                     </div>
                 </div>
-                <div>
+                <div class="card-header">
                     <div style="background-color : lightgray;">
                         Client
                     </div>
