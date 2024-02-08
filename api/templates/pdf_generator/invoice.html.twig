@@ -96,16 +96,13 @@
 
 <body>
 
-    <pre>
-        {{ dump(trusteeRef) }}
-    </pre>
-    {# <table style="width: 100%;">
+    <table style="width: 100%;">
         <tr>
             <td style="width: auto">
                 <img src="{{imageSrc}}" style="width:280px">
             </td>
             <td style="width: 100%; text-align:right">
-                <div class="card-header">
+                <div class="">
                     <div style="background-color : lightgray;">
                         Facture N°
                     </div>
@@ -113,7 +110,7 @@
                         {{chrono}}
                     </div>
                 </div>
-                <div class="card-header">
+                <div class="">
                     <div style="background-color : lightgray;">
                         Date
                     </div>
@@ -121,7 +118,7 @@
                         {{date}}
                     </div>
                 </div>
-                <div class="card-header">
+                <div class="">
                     <div style="background-color : lightgray;">
                         Client
                     </div>
@@ -137,7 +134,7 @@
             </td>
         </tr>
 
-    </table> #}
+    </table>
 
 
     <table style="width: 100%; margin-top: 40;">
@@ -190,19 +187,33 @@
 
 
     <div style="margin-top: 40; margin-bottom: 10">
+        {% if refundReference is defined %}
         <div style="background-color : lightgray;">
-            Avoir sur la facture : dqsd
+            Avoir sur la facture : {{refundReference}}
         </div>
+        {% endif %}
+        {% if details.orderTags is defined %}
+        {% for k,v in details.orderTags %}
         <div>
-            Copropriété : qsdqsd
+            {{k}} : {{v}}
         </div>
+        {% endfor %}
+        {% endif %}
+
+        {% if property is defined %}
         <div>
-            Propriétaire : dqsdqs
+            Copropriété : {{property}}
         </div>
+        {% endif %}
+        {% if details.proprietaire is defined %}
+        <div>
+            Propriétaire : {{details.proprietaire}}
+        </div>
+        {% endif %}
     </div>
 
 
-    {# <table class="content-table" style="min-height: 500px;">
+    <table class="content-table" style="min-height: 500px;">
         <thead>
             <tr>
                 <th class="border-right">Réf.</th>
@@ -246,9 +257,9 @@
             </tr>
         </tfoot>
         </tbody>
-    </table> #}
+    </table>
 
-    {# <div style="margin-top: 20;">
+    <div style="margin-top: 20;">
         <table class="content-table" style="width: 200; margin-left: auto;">
             <tr>
                 <td style="background-color: lightgray; width: 50%;">Total HT</td>
@@ -268,7 +279,7 @@
                     locale='fr') }}</td>
             </tr>
         </table>
-    </div> #}
+    </div>
 
 </body>
 
