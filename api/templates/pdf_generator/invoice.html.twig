@@ -190,29 +190,15 @@
 
 
     <div style="margin-top: 40; margin-bottom: 10">
-        {% if refundReference is defined %}
         <div class="card" style="background-color : lightgray;">
-            Avoir sur la facture : {{refundReference}}
+            Avoir sur la facture : dqsd
         </div>
-        {% endif %}
-        {% if details.orderTags is defined %}
-        {% for k,v in details.orderTags %}
         <div class="card">
-            {{k}} : {{v}}
+            Copropriété : qsdqsd
         </div>
-        {% endfor %}
-        {% endif %}
-
-        {% if property is defined %}
         <div class="card">
-            Copropriété : {{property}}
+            Propriétaire : dqsdqs
         </div>
-        {% endif %}
-        {% if details.proprietaire is defined %}
-        <div class="card">
-            Propriétaire : {{details.proprietaire}}
-        </div>
-        {% endif %}
     </div>
 
 
