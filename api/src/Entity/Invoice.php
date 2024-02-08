@@ -39,7 +39,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Delete(),
         new Get(
             name: 'PdfInvoice',
-            uriTemplate: '/pdf/invoice/{id}',
+            uriTemplate: '/invoice/{id}/pdf',
             controller: PdfInvoiceController::class,
         ),
     ]

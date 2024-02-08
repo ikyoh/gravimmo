@@ -121,7 +121,7 @@ export const InvoicesPage = ({ title }) => {
 
     const downloadFile = (id, chrono) => {
         axios({
-            url: "/api/pdf/invoice/" + id,
+            url: "/api/invoice/" + id + "/pdf",
             method: "GET",
             responseType: "blob",
         }).then((response) => {

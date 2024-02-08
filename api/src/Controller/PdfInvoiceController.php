@@ -13,7 +13,7 @@ use App\Entity\Invoice;
 class PdfInvoiceController extends AbstractController
 {
 
-    public function __invoke(Invoice $data): Response
+    public function __invoke(Invoice $data)
     {
 
         function isValueInArray($value, $array)
@@ -161,6 +161,15 @@ class PdfInvoiceController extends AbstractController
         $dompdf->loadHtml($html);
         $dompdf->render();
 
+        $dompdf->stream('transport.pdf', [
+            "Attachment" => true,
+            'compress' => false,
+        ]);
+
+        $dompdf->stream("mypdf.pdf", [
+            "Attachment" => true
+        ]);
+
         // $dompdf->stream("mypdf.pdf", [
         //     "Attachment" => true
         // ]);
@@ -173,14 +182,14 @@ class PdfInvoiceController extends AbstractController
             "Attachment" => true
         ]);
 
-        return new Response(
-            $pdfContent,
-            Response::HTTP_OK,
-            [
-                'Content-Type' => 'application/pdf',
-                'Content-Disposition' => 'inline; filename="example.pdf"',
-            ]
-        );
+        // return new Response(
+        //     $pdfContent,
+        //     Response::HTTP_OK,
+        //     [
+        //         'Content-Type' => 'application/pdf',
+        //         'Content-Disposition' => 'inline; filename="example.pdf"',
+        //     ]
+        // );
         
         // return new Response(
         //     $dompdf->stream('resume', ["Attachment" => true]),
