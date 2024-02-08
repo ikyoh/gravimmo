@@ -119,7 +119,7 @@ class PdfInvoiceController extends AbstractController
         $fmt = numfmt_create( 'fr_FR', NumberFormatter::CURRENCY );
 
         $datas = [
-            'image_src'  => $this->imageToBase64($this->getParameter('kernel.project_dir') . '/public/img/gravimmo-logo.png'),
+            'imageSrc'  => $this->imageToBase64($this->getParameter('kernel.project_dir') . '/public/img/gravimmo-logo.png'),
             'chrono'    => $data->getChrono(),
             'contents'    => $newcontent,
             'tva' => $data->getTva(),
