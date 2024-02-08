@@ -184,6 +184,100 @@
             </td>
         </tr>
     </table>
+    <table style="width: 100%; margin-top: 40;">
+        <tr>
+            <td style="width: 100%;">
+                <p style="font-weight: bold;">
+                    39 rue du Docteur Pierre Richelmi
+                </p>
+                <p style="font-weight: bold;">
+                    Le Michaela
+                </p>
+                <p style="font-weight: bold;">
+                    06300 Nice
+                </p>
+                <p>
+                    Tél : +33 4 93 26 36 67
+                </p>
+                <p>
+                    SIRET : 920 461 357 00013
+                </p>
+                <p>
+                    R.C.S. : 920 461 357
+                </p>
+            </td>
+            <td style="text-align: left; font-weight: bold;">
+                {% if property is defined %}
+                <p style="white-space: nowrap;">
+                    {{property}}
+                </p>
+                <p style="white-space: nowrap;">
+                    c/o {{trustee}}
+                </p>
+                {% endif %}
+                {% if customer is defined %}
+                <p style="white-space: nowrap;">
+                    {{customer}}
+                </p>
+                {% endif %}
+                <p style="white-space: nowrap;">
+                    {{address}}
+                </p>
+                <p style="white-space: nowrap;">
+                    {{postcode}} {{city}}
+                </p>
+            </td>
+            <td style="width: 50;">
+            </td>
+        </tr>
+    </table>
+    <table style="width: 100%; margin-top: 40;">
+        <tr>
+            <td style="width: 100%;">
+                <p style="font-weight: bold;">
+                    39 rue du Docteur Pierre Richelmi
+                </p>
+                <p style="font-weight: bold;">
+                    Le Michaela
+                </p>
+                <p style="font-weight: bold;">
+                    06300 Nice
+                </p>
+                <p>
+                    Tél : +33 4 93 26 36 67
+                </p>
+                <p>
+                    SIRET : 920 461 357 00013
+                </p>
+                <p>
+                    R.C.S. : 920 461 357
+                </p>
+            </td>
+            <td style="text-align: left; font-weight: bold;">
+                {% if property is defined %}
+                <p style="white-space: nowrap;">
+                    {{property}}
+                </p>
+                <p style="white-space: nowrap;">
+                    c/o {{trustee}}
+                </p>
+                {% endif %}
+                {% if customer is defined %}
+                <p style="white-space: nowrap;">
+                    {{customer}}
+                </p>
+                {% endif %}
+                <p style="white-space: nowrap;">
+                    {{address}}
+                </p>
+                <p style="white-space: nowrap;">
+                    {{postcode}} {{city}}
+                </p>
+            </td>
+            <td style="width: 50;">
+            </td>
+        </tr>
+    </table>
 
 
     {# <div style="margin-top: 40; margin-bottom: 10">
@@ -259,7 +353,7 @@
         </tbody>
     </table> #}
 
-    <div style="margin-top: 20;">
+    {# <div style="margin-top: 20;">
         <table class="content-table" style="width: 200; margin-left: auto;">
             <tr>
                 <td style="background-color: lightgray; width: 50%;">Total HT</td>
@@ -279,7 +373,7 @@
                     locale='fr') }}</td>
             </tr>
         </table>
-    </div>
+    </div> #}
 
 </body>
 
