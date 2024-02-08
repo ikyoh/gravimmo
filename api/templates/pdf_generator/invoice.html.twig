@@ -269,12 +269,13 @@
                 <td style="background-color: lightgray; width: 50%;">Total TVA ({{tva}}%)</td>
                 <td style="text-align: right;">{{ (amountTTC - amountHT) |format_currency('EUR', locale='fr') }}</td>
             </tr>
+            {#
             <tr>
                 <td style="background-color: lightgray; width: 50%;">Total TTC</td>
                 <td style="text-align: right;">{{ amountTTC|format_currency('EUR', locale='fr') }}</td>
             </tr>
 
-            {# <tr style="font-weight: bold;">
+            <tr style="font-weight: bold;">
                 <td style="background-color: lightgray; width: 50%; border-top: 1pt solid black;">Net à payer</td>
                 <td style="text-align: right; border-top: 1pt solid black;">{{ amountTTC|format_currency('EUR',
                     locale='fr') }}</td>
