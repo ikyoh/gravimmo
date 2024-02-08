@@ -161,13 +161,14 @@ class PdfInvoiceController extends AbstractController
         $dompdf->loadHtml($html);
         $dompdf->render();
 
-        $dompdf->stream('transport.pdf', [
-            "Attachment" => true,
-            'compress' => false,
-        ]);
+        // $dompdf->stream('transport.pdf', [
+        //     "Attachment" => true,
+        //     'compress' => false,
+        // ]);
 
         $dompdf->stream("mypdf.pdf", [
-            "Attachment" => true
+            "Attachment" => false,
+            'compress' => false,
         ]);
 
         // $dompdf->stream("mypdf.pdf", [
@@ -178,9 +179,6 @@ class PdfInvoiceController extends AbstractController
         //     'Content-Type' => 'application/pdf',
         // ]);
 
-        $pdfContent = $dompdf->stream("mypdf.pdf", [
-            "Attachment" => true
-        ]);
 
         // return new Response(
         //     $pdfContent,

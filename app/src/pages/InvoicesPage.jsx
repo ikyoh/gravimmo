@@ -133,7 +133,7 @@ export const InvoicesPage = ({ title }) => {
         axios({
             url: "/api/invoice/" + id + "/pdf",
             method: "GET",
-            responseType: "blob",
+            responseType: "arraybuffer",
         }).then((response) => {
             const blob = new Blob([response.data], {
                 type: "application/pdf",
