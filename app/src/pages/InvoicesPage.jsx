@@ -133,13 +133,14 @@ export const InvoicesPage = ({ title }) => {
         axios({
             url: "/api/invoice/" + id + "/pdf",
             method: "GET",
-            responseType: "arraybuffer",
+            responseType: "blob",
         }).then((response) => {
-            const blob = new Blob([response.data], {
-                type: "application/pdf",
-            });
+            // const blob = new Blob([response.data], {
+            //     type: "application/pdf",
+            // });
             // FileSaver.saveAs(blob, 'file.pdf');
-            fileDownload(blob, "facture_" + chrono + ".pdf");
+            //fileDownload(blob, "facture_" + chrono + ".pdf");
+            fileDownload(response.data, "facture_" + chrono + ".pdf");
         });
     };
 
