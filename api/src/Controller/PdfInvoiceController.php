@@ -175,7 +175,7 @@ class PdfInvoiceController extends AbstractController
         // ]);
 
         $dompdf->stream("mypdf.pdf", [
-            "Attachment" => false,
+            "Attachment" => true,
             'compress' => false,
         ]);
 
