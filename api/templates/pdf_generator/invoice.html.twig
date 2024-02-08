@@ -120,26 +120,26 @@
             </div>
         </div>
         <div style="display: inline-block;">
-            <<div style="background-color : lightgray; border-top-left-radius: 5px; border-top-right-radius: 5px;">
+            <div style="background-color : lightgray; border-top-left-radius: 5px; border-top-right-radius: 5px;">
                 Date
+            </div>
+            <div>
+                {{date}}
+            </div>
         </div>
-        <div>
-            {{date}}
+        <div style="display: inline-block;">
+            <div style="background-color : lightgray; border-top-left-radius: 5px; border-top-right-radius: 5px;">
+                Client
+            </div>
+            <div>
+                {% if trusteeRef is defined %}
+                {{trusteeRef}}
+                {% endif %}
+                {% if customerRef is defined %}
+                {{customerRef}}
+                {% endif %}
+            </div>
         </div>
-    </div>
-    <div style="display: inline-block;">
-        <div style="background-color : lightgray; border-top-left-radius: 5px; border-top-right-radius: 5px;">
-            Client
-        </div>
-        <div>
-            {% if trusteeRef is defined %}
-            {{trusteeRef}}
-            {% endif %}
-            {% if customerRef is defined %}
-            {{customerRef}}
-            {% endif %}
-        </div>
-    </div>
     </div>
 
     {#
