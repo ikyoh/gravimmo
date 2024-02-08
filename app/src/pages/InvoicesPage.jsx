@@ -119,13 +119,27 @@ export const InvoicesPage = ({ title }) => {
         return price(checkedList.reduce((acc, curr) => acc + curr.amountHT, 0));
     };
 
+    // const downloadFile = (id, chrono) => {
+    //     axios({
+    //         url: "/api/invoice/" + id + "/pdf",
+    //         method: "GET",
+    //         responseType: "blob",
+    //     }).then((response) => {
+    //         fileDownload(response.data, "facture_" + chrono + ".pdf");
+    //     });
+    // };
+
     const downloadFile = (id, chrono) => {
         axios({
             url: "/api/invoice/" + id + "/pdf",
             method: "GET",
-            responseType: "blob",
+            responseType: "arraybuffer",
         }).then((response) => {
-            fileDownload(response.data, "facture_" + chrono + ".pdf");
+            const blob = new Blob([response.data], {
+                type: "application/pdf",
+            });
+            // FileSaver.saveAs(blob, 'file.pdf');
+            fileDownload(blob, "facture_" + chrono + ".pdf");
         });
     };
 
