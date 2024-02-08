@@ -214,27 +214,32 @@
 
 
     <table class="content-table" style="min-height: 500px;">
-        <thead>
-            <tr>
-                <th class="border-right">Réf.</th>
-                <th class="border-right" style="width: 100%;">Désignation</th>
-                <th class="border-right" style="width: 40; text-align: center">Quantité</th>
-                <th class="border-right" style="width : 50; text-align: right;">PU TTC</th>
-                <th style="width : 50; text-align: right;">Total TTC</th>
-            </tr>
-        </thead>
-        <tbody style="height: 100%; position:relative;">
 
-        <tfoot style="border-top: 1px solid black;">
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </tfoot>
-        </tbody>
+        {% for content in contents %}
+        <tr>
+            <td class="border-right">
+                {{content.reference}}
+            </td>
+            <td class="border-right">
+                {{content.title}}
+                {% if content.occupant is defined %}
+                ({{content.occupant}})
+                {% endif %}
+
+            </td>
+            <td class="border-right" style="text-align:center;">
+                {{content.quantity}}</td>
+            <td class="border-right" style="text-align: right;">
+                {{ (content.amount + content.amount * tva / 100)|format_currency('EUR', locale='fr') }}
+            </td>
+            <td style="text-align: right;">
+                {{ ((content.amount + content.amount * tva / 100) * content.quantity)|format_currency('EUR',
+                locale='fr') }}
+            </td>
+        </tr>
+        {% endfor %}
+
+
     </table>
 
     {# <div style="margin-top: 20;">
