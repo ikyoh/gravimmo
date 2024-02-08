@@ -224,29 +224,7 @@
             </tr>
         </thead>
         <tbody style="height: 100%; position:relative;">
-            {% for content in contents %}
-            <tr>
-                <td class="border-right">
-                    {{content.reference}}
-                </td>
-                <td class="border-right">
-                    {{content.title}}
-                    {% if content.occupant is defined %}
-                    ({{content.occupant}})
-                    {% endif %}
 
-                </td>
-                <td class="border-right" style="text-align:center;">
-                    {{content.quantity}}</td>
-                <td class="border-right" style="text-align: right;">
-                    {{ (content.amount + content.amount * tva / 100)|format_currency('EUR', locale='fr') }}
-                </td>
-                <td style="text-align: right;">
-                    {{ ((content.amount + content.amount * tva / 100) * content.quantity)|format_currency('EUR',
-                    locale='fr') }}
-                </td>
-            </tr>
-            {% endfor %}
         <tfoot style="border-top: 1px solid black;">
             <tr>
                 <td></td>
