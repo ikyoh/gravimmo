@@ -45,6 +45,7 @@
             border-radius: 5pt; */
             padding: 10 10;
             display: inline-block;
+            border-radius: 10px 10px 10px 10px;
         }
 
         .client {
@@ -57,6 +58,11 @@
         .content-table td {
             padding: 5 10;
             text-align: left;
+        }
+
+        table {
+            border-top-left-radius: 20px;
+            overflow: hidden;
         }
 
         th {
@@ -98,36 +104,45 @@
 
 <body>
 
+    <table style="width: 100%;">
+        <tr>
+            <td style="width: auto">
+                {# <img src="{{imageSrc}}" style="width:280px"> #}
+            </td>
+            <td style="width: 100%; text-align:right">
+                <div class="card-header">
+                    <div style="background-color : lightgray;">
+                        Facture N°
+                    </div>
+                    <div>
+                        {{chrono}}
+                    </div>
+                </div>
+                <div class="card-header">
+                    <div style="background-color : lightgray;">
+                        Date
+                    </div>
+                    <div>
+                        {{date}}
+                    </div>
+                </div>
+                <div class="card-header">
+                    <div style="background-color : lightgray;">
+                        Client
+                    </div>
+                    <div>
+                        {% if trusteeRef is defined %}
+                        {{trusteeRef}}
+                        {% endif %}
+                        {% if customerRef is defined %}
+                        {{customerRef}}
+                        {% endif %}
+                    </div>
+                </div>
+            </td>
+        </tr>
 
-
-    <div style="display: inline-block;background-color : lightgray;">
-        Facture N°
-    </div>
-    <div>
-        {{chrono}}
-    </div>
-
-
-    <div style="background-color : lightgray;">
-        Date
-    </div>
-    <div>
-        {{date}}
-    </div>
-
-
-    <div style="background-color : lightgray;">
-        Client
-    </div>
-    <div>
-        {% if trusteeRef is defined %}
-        {{trusteeRef}}
-        {% endif %}
-        {% if customerRef is defined %}
-        {{customerRef}}
-        {% endif %}
-    </div>
-
+    </table>
 
 
     <table style="width: 100%; margin-top: 40;">
@@ -255,7 +270,7 @@
     </table>
 
     <div style="margin-top: 20;">
-        <table class="content-table" style="width: 200; margin-left: auto; border-radius: 10px 10px 10px 10px">
+        <table class="content-table" style="width: 200; margin-left: auto;">
             <tr>
                 <td style="background-color: lightgray; width: 50%;">Total HT</td>
                 <td style="text-align: right;">{{ amountHT|format_currency('EUR', locale='fr') }}</td>
