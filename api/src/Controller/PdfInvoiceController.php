@@ -133,7 +133,7 @@ class PdfInvoiceController extends AbstractController
 
         if ($data->getTrustee()) {
             $datas['trustee'] = $data->getTrustee()->getTitle();
-            $datas['trustee_ref'] = $data->getTrustee()->getReference();
+            $datas['trusteeRef'] = $data->getTrustee()->getReference();
             $datas['address'] = $data->getTrustee()->getAddress();
             $datas['postcode'] = $data->getTrustee()->getPostcode();
             $datas['city'] = $data->getTrustee()->getCity();
