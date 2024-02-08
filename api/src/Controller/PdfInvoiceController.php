@@ -166,22 +166,10 @@ class PdfInvoiceController extends AbstractController
         $dompdf->loadHtml($html);
         $dompdf->render();
 
-
-
-
-        // $dompdf->stream('transport.pdf', [
-        //     "Attachment" => true,
-        //     'compress' => false,
-        // ]);
-
         $dompdf->stream("mypdf.pdf", [
             "Attachment" => true,
             'compress' => false,
         ]);
-
-        // $dompdf->stream("mypdf.pdf", [
-        //     "Attachment" => true
-        // ]);
 
         // return new Response('', 200, [
         //     'Content-Type' => 'application/pdf',
@@ -196,15 +184,7 @@ class PdfInvoiceController extends AbstractController
         //         'Content-Disposition' => 'inline; filename="example.pdf"',
         //     ]
         // );
-        
-        // return new Response(
-        //     $dompdf->stream("mypdf.pdf", [
-        //         "Attachment" => false,
-        //         'compress' => false,
-        //     ]),
-        //     Response::HTTP_OK,
-        //     ['Content-Type' => 'application/pdf']
-        // );
+
     }
 
     private function imageToBase64($path)
