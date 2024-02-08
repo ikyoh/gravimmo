@@ -129,7 +129,7 @@ export const InvoicesPage = ({ title }) => {
     //     });
     // };
 
-    const downloadFile = (id, chrono) => {
+    const downloadFile = (id, , data.chronochrono) => {
         axios({
             url: "/api/invoice/" + id + "/pdf",
             method: "GET",
@@ -147,7 +147,7 @@ export const InvoicesPage = ({ title }) => {
     const handleDownloadSelection = async () => {
         await Promise.all(
             checkedList.map(async (checked) => {
-                downloadFile(checked.id, checked.chrono);
+                downloadFile(checked, data.chrono.id, checked.chrono);
             })
         );
     };
@@ -428,7 +428,7 @@ export const InvoicesPage = ({ title }) => {
                                             <Dropdown type="table">
                                                 <button
                                                     onClick={() =>
-                                                        downloadFile(data.id)
+                                                        downloadFile(data.id, data.chrono)
                                                     }
                                                 >
                                                     <MdOutlineFileDownload
