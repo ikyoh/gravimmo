@@ -33,12 +33,14 @@ import {
     IoMdCheckmark,
 } from "react-icons/io";
 import { IoReloadCircleOutline } from "react-icons/io5";
+import { LiaCommentAlt } from "react-icons/lia";
 import { LuSettings2 } from "react-icons/lu";
 import {
     MdArrowBack,
     MdOutlineAssignment,
     MdOutlineFileDownload,
 } from "react-icons/md";
+
 import { CommandPage } from "./CommandPage";
 
 import { Dot } from "components/dot/Dot";
@@ -89,8 +91,6 @@ export const InvoicePage = ({ title }) => {
             .slice(0, index)
             .concat(invoiceData.content.slice(index + 1));
         const { amountHT, amountTTC } = calcAmounts(_content);
-        console.log("amountHT", amountHT);
-        console.log("amountTTC", amountTTC);
         handleCloseModal();
         setInvoiceData({
             ...invoiceData,
@@ -137,7 +137,6 @@ export const InvoicePage = ({ title }) => {
     };
 
     const calcAmounts = (content) => {
-        console.log("content", content);
         const amountHT = content.reduce((acc, curr) => acc + curr.amount, 0);
         const amountTTC = amountHT + (amountHT * data.tva) / 100;
 
@@ -257,6 +256,25 @@ export const InvoicePage = ({ title }) => {
                                 Lettrer
                             </button>
                         )}
+
+                        <button
+                            onClick={() =>
+                                handleOpenModal({
+                                    title: "Commentaire",
+                                    size: "small",
+                                    content: (
+                                        <ObservationForm
+                                            handleCloseModal={handleCloseModal}
+                                            data={data}
+                                        />
+                                    ),
+                                })
+                            }
+                        >
+                            <LiaCommentAlt size={30} />
+                            Commentaire
+                        </button>
+
                         {data.status === "validé" && (
                             <button
                                 onClick={() =>
@@ -386,6 +404,8 @@ export const InvoicePage = ({ title }) => {
                         </div>
                     </div>
                 </div>
+
+                <section className="mx-10 mb-10">{data.comment}</section>
 
                 <Table>
                     <Thead>
@@ -764,5 +784,52 @@ const Validate = ({ data, handleCloseModal }) => {
                 </button>
             </div>
         </div>
+    );
+};
+
+const ObservationForm = ({ data, handleCloseModal }) => {
+    const {
+        mutate: put,
+        isLoading: isPutPending,
+        isSuccess: isPutSuccess,
+    } = usePutData();
+
+    const {
+        register,
+        handleSubmit,
+        setValue,
+        setError,
+        reset,
+        setFocus,
+        control,
+        formState: { errors, isSubmitting, isSubmitted },
+    } = useForm({
+        //resolver: yupResolver(validationSchema),
+        defaultValues: { id: data.id, comment: data.comment },
+    });
+
+    const onSubmit = (form) => {
+        put(form);
+    };
+
+    useEffect(() => {
+        if (isPutSuccess) handleCloseModal();
+    }, [isPutPending]);
+
+    return (
+        <Form
+            onSubmit={handleSubmit(onSubmit)}
+            isLoading={isSubmitting || isPutPending}
+            isDisabled={isSubmitting || isPutPending}
+        >
+            <FormInput
+                type="text"
+                name="comment"
+                label="Commentaire"
+                error={errors["comment"]}
+                register={register}
+                required={true}
+            />
+        </Form>
     );
 };

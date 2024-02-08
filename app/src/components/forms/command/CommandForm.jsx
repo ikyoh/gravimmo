@@ -425,6 +425,11 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                             label="Email de suivi"
                             placeholder="url de l'email"
                         />
+                        <Input
+                            name="contractorEmail"
+                            label="Email du donneur d'ordre"
+                            placeholder="adresse email"
+                        />
                         <Input name="comment" label="Commentaire" />
                     </>
                 )}

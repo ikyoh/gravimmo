@@ -54,7 +54,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     "chrono",
     "trusteeTitle",
     "propertyTitle",
-    "customerTitle"
+    "customerTitle",
+    "trustee.reference"
 ])]
 
 

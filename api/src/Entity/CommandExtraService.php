@@ -42,7 +42,7 @@ class CommandExtraService
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["extraservices:read", "extraservice:read", "extraservice:write", "command:read", "command:write"])]
+    #[Groups(["extraservices:read", "extraservice:read", "extraservice:write", "command:read", "commands:read", "command:write"])]
     private ?Service $service = null;
 
 

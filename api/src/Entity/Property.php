@@ -129,19 +129,17 @@ class Property
     public function getTva()
     {
         $deliveredDate = new DateTime($this->getDeliveredAt());
-
         $today = new DateTime();
 
         // Calcul de l'écart en années
         $yearsInterval = ($deliveredDate)->diff(($today))->y;
-
 
         if ($yearsInterval < 2) {
             return(10);
         } else {
             return(20);
         }
-        
+
     }
 
 

@@ -123,6 +123,10 @@ class Command
     #[Groups(["commands:read", "command:read", "command:write"])]
     private ?Invoice $invoice = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["commands:read", "command:read", "command:write"])]
+    private ?string $contractorEmail = null;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -395,6 +399,18 @@ class Command
         }
 
         $this->invoice = $invoice;
+
+        return $this;
+    }
+
+    public function getContractorEmail(): ?string
+    {
+        return $this->contractorEmail;
+    }
+
+    public function setContractorEmail(?string $contractorEmail): self
+    {
+        $this->contractorEmail = $contractorEmail;
 
         return $this;
     }

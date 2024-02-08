@@ -74,12 +74,12 @@ export default function ServiceForm({ iri, handleCloseModal }) {
     };
 
     useEffect(() => {
-        if (isPutSuccess) handleCloseModal();
-    }, [isPutSuccess]);
+        if (isPutSuccess && !putError) handleCloseModal();
+    }, [isPutLoading]);
 
     useEffect(() => {
-        if (isPostSuccess) handleCloseModal();
-    }, [isPostSuccess]);
+        if (isPostSuccess && !postError) handleCloseModal();
+    }, [isPostLoading]);
 
     useEffect(() => {
         if (putError) {
@@ -102,7 +102,7 @@ export default function ServiceForm({ iri, handleCloseModal }) {
                     });
                 }
             );
-            setFocus(putError.response.data.violations[0].propertyPath);
+            setFocus(postError.response.data.violations[0].propertyPath);
         }
     }, [putError, postError]);
 
@@ -114,6 +114,9 @@ export default function ServiceForm({ iri, handleCloseModal }) {
             return <h2 className="py-3">Error : {error.message}</h2>;
         }
     }
+
+    console.log("postError", postError);
+    console.log("putError", putError);
 
     return (
         <Form
@@ -170,6 +173,14 @@ export default function ServiceForm({ iri, handleCloseModal }) {
                 required={false}
             />
             <FieldArray
+                name="thickness"
+                label="Epaisseurs"
+                placeholder="ex : 2 mm"
+                error={errors["thickness"]}
+                control={control}
+                required={false}
+            />
+            <FieldArray
                 name="color"
                 label="Couleurs"
                 placeholder="ex : Blanc / Noir"
@@ -177,24 +188,22 @@ export default function ServiceForm({ iri, handleCloseModal }) {
                 control={control}
                 required={false}
             />
-            {/* <FieldArray
+            <FieldArray
                 name="font"
                 label="Polices"
                 placeholder="ex : Arial rounded bold - 10 pts - spacing 90%"
-                error={errors['title']}
+                error={errors["font"]}
                 control={control}
                 required={false}
             />
-            <FormInputMargin
-                type="text"
+            <FieldArray
                 name="margin"
                 label="Marges (mm)"
-                placeholder="ex : 2 mm"
-                error={errors['title']}
-                setValue={setValue}
+                placeholder="ex : 2 2 2 2 mm"
+                error={errors["margin"]}
                 control={control}
                 required={false}
-            /> */}
+            />
             <FieldArray
                 name="finishing"
                 label="Finitions"

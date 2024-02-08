@@ -58,15 +58,15 @@ class Customer
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["customers:read", "customer:read"])]
+    #[Groups(["customers:read", "customer:read", "commands:read"])]
     private ?string $address = null;
 
     #[ORM\Column]
-    #[Groups(["customers:read", "customer:read"])]
+    #[Groups(["customers:read", "customer:read", "commands:read"])]
     private ?string $postcode = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["customers:read", "customer:read"])]
+    #[Groups(["customers:read", "customer:read", "commands:read"])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255, nullable: true)]

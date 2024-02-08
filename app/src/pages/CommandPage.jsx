@@ -487,6 +487,13 @@ export const CommandPage = ({
                         <div>{data.comment}</div>
                     </section>
                 )}
+                {data.contractorEmail && (
+                    <section>
+                        <div className="section-title">Donneur d'ordre</div>
+
+                        <div>{data.contractorEmail}</div>
+                    </section>
+                )}
 
                 <section>
                     <div className="section-title">Préparation</div>

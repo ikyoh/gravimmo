@@ -107,6 +107,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     #[Groups(["users:read", "user:read", "user:write"])]
     private ?bool $isActive = true;
+    
+    #[ORM\Column(nullable: true)]
+    #[Groups(["users:read", "user:read", "user:write"])]
+    private array $options = [];
 
     public function __construct()
     {
@@ -331,6 +335,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    public function setOptions(?array $options): self
+    {
+        $this->options = $options;
 
         return $this;
     }

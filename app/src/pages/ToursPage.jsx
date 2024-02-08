@@ -249,29 +249,33 @@ export const ToursPage = ({ title }) => {
                                                         Valider la préparation
                                                     </button>
                                                 )}
-                                                <button
-                                                    onClick={() =>
-                                                        handleOpenModal({
-                                                            title: "Date de la tournée",
-                                                            content: (
-                                                                <TourForm
-                                                                    commands={
-                                                                        data.commands
-                                                                    }
-                                                                    handleCloseModal={
-                                                                        handleCloseModal
-                                                                    }
-                                                                />
-                                                            ),
-                                                        })
-                                                    }
-                                                >
-                                                    <MdPendingActions
-                                                        size={26}
-                                                    />
-                                                    Reporter la tournée
-                                                </button>
-
+                                                {(data.status ===
+                                                    "DEFAULT - préparé" ||
+                                                    data.status ===
+                                                        "DEFAULT - à traiter") && (
+                                                    <button
+                                                        onClick={() =>
+                                                            handleOpenModal({
+                                                                title: "Date de la tournée",
+                                                                content: (
+                                                                    <TourForm
+                                                                        commands={
+                                                                            data.commands
+                                                                        }
+                                                                        handleCloseModal={
+                                                                            handleCloseModal
+                                                                        }
+                                                                    />
+                                                                ),
+                                                            })
+                                                        }
+                                                    >
+                                                        <MdPendingActions
+                                                            size={26}
+                                                        />
+                                                        Reporter la tournée
+                                                    </button>
+                                                )}
                                                 {data.status ===
                                                     "DEFAULT - préparé" && (
                                                     <button
@@ -288,22 +292,21 @@ export const ToursPage = ({ title }) => {
                                                         Valider la pose
                                                     </button>
                                                 )}
-                                                {!data.invoice &&
-                                                    data.status ===
-                                                        "DEFAULT - posé" && (
-                                                        <button
-                                                            onClick={() =>
-                                                                setInvoiceCommands(
-                                                                    data.commands
-                                                                )
-                                                            }
-                                                        >
-                                                            <BsPiggyBank
-                                                                size={26}
-                                                            />
-                                                            Facturer la tournée
-                                                        </button>
-                                                    )}
+                                                {data.status ===
+                                                    "DEFAULT - posé" && (
+                                                    <button
+                                                        onClick={() =>
+                                                            setInvoiceCommands(
+                                                                data.commands
+                                                            )
+                                                        }
+                                                    >
+                                                        <BsPiggyBank
+                                                            size={26}
+                                                        />
+                                                        Facturer la tournée
+                                                    </button>
+                                                )}
                                             </Dropdown>
                                         </Td>
                                     </Tr>

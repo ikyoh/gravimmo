@@ -50,7 +50,7 @@ class Service
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["commands:read", "services:read", "service:read", "service:write", "propertyservice:read", "command:read"])]
+    #[Groups(["commands:read", "services:read", "service:read", "service:write", "propertyservice:read", "command:read", "extraservices:read"])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
@@ -96,6 +96,10 @@ class Service
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["commands:read", "services:read", "service:read", "service:write", "command:read"])]
     private ?string $invoiceTitle = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(["services:read", "service:read", "service:write"])]
+    private array $thickness = [];
 
 
     #[Groups(["services:read", "service:read"])]
@@ -251,6 +255,18 @@ class Service
     public function setInvoiceTitle(?string $invoiceTitle): self
     {
         $this->invoiceTitle = $invoiceTitle;
+
+        return $this;
+    }
+
+    public function getThickness(): array
+    {
+        return $this->thickness;
+    }
+
+    public function setThickness(?array $thickness): self
+    {
+        $this->thickness = $thickness;
 
         return $this;
     }
