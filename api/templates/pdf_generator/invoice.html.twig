@@ -78,6 +78,13 @@
             border: 1pt solid black; */
         }
 
+        .rounded {
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+
         .border-right {
             /* border-right: 1pt solid black; */
         }
@@ -108,7 +115,7 @@
     </div>
     <div style="width: 100%; text-align:right">
         <div class="card-header">
-            <div style="background-color : lightgray; border-top-left-radius: 20px;">
+            <div class="rounded" style="background-color : lightgray;">
                 Facture N°
             </div>
             <div>
@@ -138,8 +145,8 @@
         </div>
     </div>
 
-
     {#
+
     <table style="width: 100%; margin-top: 40;">
         <tr>
             <td style="width: 100%;">
@@ -275,7 +282,7 @@
                 <td style="text-align: right;">{{ (amountTTC - amountHT)|format_currency('EUR', locale='fr') }}</td>
             </tr>
 
-            {# <tr>
+            <tr>
                 <td style="background-color: lightgray; width: 50%;">Total TTC</td>
                 <td style="text-align: right;">ddsqdq}</td>
             </tr>
@@ -283,7 +290,7 @@
             <tr style="font-weight: bold;">
                 <td style="background-color: lightgray; width: 50%;">Net à payer</td>
                 <td style="text-align: right;">dqsdq</td>
-            </tr> #}
+            </tr>
         </table>
     </div> #}
 
