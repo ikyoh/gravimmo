@@ -169,13 +169,7 @@ class PdfInvoiceController extends AbstractController
         $dompdf->loadHtml($html);
         $dompdf->render();
 
-
-        return new Response (
-            $dompdf->stream('', ["Attachment" => false]),
-            Response::HTTP_OK,
-            ['Content-Type' => 'application/pdf']
-        );
-
+        return $dompdf->stream('', ["Attachment" => false]);
 
     }
 
