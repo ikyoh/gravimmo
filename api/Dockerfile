@@ -21,11 +21,23 @@ ENV JWT_PASSPHRASE=$JWT_PASSPHRASE
 ARG CORS_ALLOW_ORIGIN
 ENV CORS_ALLOW_ORIGIN=$CORS_ALLOW_ORIGIN
 
+ARG WKHTMLTOPDF_PATH
+ENV WKHTMLTOPDF_PATH=$WKHTMLTOPDF_PATH
+
+ARG WKHTMLTOIMAGE_PATH
+ENV WKHTMLTOIMAGE_PATH=$WKHTMLTOIMAGE_PATH
+
 
 RUN apt-get update \
     &&  apt-get install -y --no-install-recommends \
         locales apt-utils git libicu-dev g++ libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev unzip libpq-dev wget \
-        apt-transport-https lsb-release ca-certificates
+        apt-transport-https lsb-release ca-certificates \
+		libxrender1 \
+		libfontconfig1 \
+		libx11-dev \
+		libjpeg62 \
+		libxtst6 
+
 
 RUN pecl install apcu && docker-php-ext-enable apcu
 
@@ -48,6 +60,7 @@ RUN apt install symfony-cli
 
 # Copy existing application directory contents
 COPY . /srv/api
+
 
 # Start php server
 CMD ["php-fpm"]

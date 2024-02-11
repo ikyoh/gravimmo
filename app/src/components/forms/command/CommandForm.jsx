@@ -375,7 +375,7 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                         <Input
                             name="details.proprietaire"
                             label="Propriétaire"
-                            placeholder="Nom de l'ancien occupant"
+                            placeholder="Nom du propriétaire"
                         />
                         <RequiredInput
                             name="details.ancienoccupant"

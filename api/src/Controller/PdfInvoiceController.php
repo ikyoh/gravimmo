@@ -119,7 +119,7 @@ class PdfInvoiceController extends AbstractController
         $fmt = numfmt_create( 'fr_FR', NumberFormatter::CURRENCY );
 
         $datas = [
-            'imageSrc'  => $this->imageToBase64($this->getParameter('kernel.project_dir') . '/public/img/gravimmo-logo.png'),
+            'image_src'  => $this->imageToBase64($this->getParameter('kernel.project_dir') . '/public/img/gravimmo-logo.png'),
             'chrono'    => $data->getChrono(),
             'contents'    => $newcontent,
             'tva' => $data->getTva(),
@@ -156,33 +156,26 @@ class PdfInvoiceController extends AbstractController
             $datas['refundReference'] = $data->getRefundReference();
         }
 
-        $html =  $this->renderView('pdf_generator/invoice.html.twig', $datas);
+
+        //var_dump($datas);
+
+        $html =  $this->renderView('pdf/invoice.html.twig', $datas);
 
         $options = new Options();
-        $options->set('defaultFont', 'Arial');
+
+        $options->set('enable_html5_parser', true);
         $dompdf = new Dompdf($options);
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->loadHtml($html);
         $dompdf->render();
 
-        $dompdf->stream("mypdf.pdf", [
-            "Attachment" => true,
-            'compress' => false,
-        ]);
 
-        // return new Response('', 200, [
-        //     'Content-Type' => 'application/pdf',
-        // ]);
+        return new Response (
+            $dompdf->stream('', ["Attachment" => false]),
+            Response::HTTP_OK,
+            ['Content-Type' => 'application/pdf']
+        );
 
-
-        // return new Response(
-        //     $pdfContent,
-        //     Response::HTTP_OK,
-        //     [
-        //         'Content-Type' => 'application/pdf',
-        //         'Content-Disposition' => 'inline; filename="example.pdf"',
-        //     ]
-        // );
 
     }
 
