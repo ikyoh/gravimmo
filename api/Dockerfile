@@ -21,12 +21,6 @@ ENV JWT_PASSPHRASE=$JWT_PASSPHRASE
 ARG CORS_ALLOW_ORIGIN
 ENV CORS_ALLOW_ORIGIN=$CORS_ALLOW_ORIGIN
 
-ARG WKHTMLTOPDF_PATH
-ENV WKHTMLTOPDF_PATH=$WKHTMLTOPDF_PATH
-
-ARG WKHTMLTOIMAGE_PATH
-ENV WKHTMLTOIMAGE_PATH=$WKHTMLTOIMAGE_PATH
-
 
 RUN apt-get update \
     &&  apt-get install -y --no-install-recommends \
@@ -36,7 +30,7 @@ RUN apt-get update \
 		libfontconfig1 \
 		libx11-dev \
 		libjpeg62 \
-		libxtst6 
+		libxtst6
 
 
 RUN pecl install apcu && docker-php-ext-enable apcu
