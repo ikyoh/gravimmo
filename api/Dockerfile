@@ -30,16 +30,21 @@ RUN apt-get update \
 		libfontconfig1 \
 		libx11-dev \
 		libjpeg62 \
-		libxtst6
+		libxtst6 \
+		imagemagick \
+		libmagickwand-dev
 
 
 RUN pecl install apcu && docker-php-ext-enable apcu
+
+RUN pecl install imagick && docker-php-ext-enable imagick;
 
 RUN docker-php-ext-configure \
 	intl \
 	&&  docker-php-ext-install \
 	pdo pdo_mysql mysqli pdo_pgsql opcache intl zip calendar dom mbstring gd xsl \
-	&& docker-php-ext-enable mysqli
+	&& docker-php-ext-enable mysqli \
+	&& docker-php-ext-enable gd 
 	
 
 ENV COMPOSER_ALLOW_SUPERUSER=1

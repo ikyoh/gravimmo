@@ -17,6 +17,7 @@ use App\Repository\InvoiceRepository;
 use ApiPlatform\Metadata\GetCollection;
 use App\EntityListener\InvoiceListener;
 use App\Controller\PdfInvoiceController;
+use App\Controller\PdfInvoiceMailerController;
 use App\Filter\MultipleFieldsSearchFilter;
 
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
@@ -41,6 +42,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
             name: 'PdfInvoice',
             uriTemplate: '/invoice/{id}/pdf',
             controller: PdfInvoiceController::class,
+        ),
+        new Get(
+            name: 'MailInvoice',
+            uriTemplate: '/invoice/{id}/mail',
+            controller: PdfInvoiceMailerController::class,
         ),
     ]
 )]

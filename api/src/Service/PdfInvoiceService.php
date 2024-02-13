@@ -1,23 +1,38 @@
 <?php
 
-namespace App\Controller;
+namespace App\Service;
 
-use NumberFormatter;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\AsController;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use App\Entity\Invoice;
-use App\Service\PdfInvoiceService;
 
 
-#[AsController]
-class PdfInvoiceController extends AbstractController
+class PdfInvoiceService
 {
+    private $domPdf;
 
-    public function __invoke(Invoice $data, PdfInvoiceService $pdf)
-    {
+    public function __construct() {
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Helvetica');
+        $pdfOptions->set('isRemoteEnabled', true);
+        $pdfOptions->set('no-pdf-compression', true);  
+        $this->domPdf = new DomPdf($pdfOptions);
+        $this->domPdf->setPaper('A4', 'portrait');
+    }
+
+    public function downloadPDF($html) {
+
+        $this->domPdf->loadHtml($html);
+        $this->domPdf->render();
+        $this->domPdf->stream("facture.pdf", [
+            'Attachement' => true
+        ]);
+    }
+
+    public function generatePDF($html) {
+
+    }
+
+    public function formatTwigContent($invoice) {
 
         function isValueInArray($value, $array)
         {
@@ -114,75 +129,50 @@ class PdfInvoiceController extends AbstractController
         }
 
         // Utilisation de la fonction avec votre tableau
-        $content = $data->getContent();
+        $content = $invoice->getContent();
         $newcontent = formatContent($content);
-
-        // Formatage des prix
-        $fmt = numfmt_create( 'fr_FR', NumberFormatter::CURRENCY );
-
 
 
         $datas = [
-            'imageSrc'  => $this->imageToBase64($this->getParameter('kernel.project_dir') . '/public/img/logo.jpg'),
-            'chrono'    => $data->getChrono(),
+            'chrono'    => $invoice->getChrono(),
             'contents'    => $newcontent,
-            'tva' => $data->getTva(),
-            'amountHT' => $data->getAmountHT(),
-            'amountTTC' => $data->getAmountTTC(),
-            'date' => $data->getCreatedAt()->format('d/m/Y'),
+            'tva' => $invoice->getTva(),
+            'amountHT' => $invoice->getAmountHT(),
+            'amountTTC' => $invoice->getAmountTTC(),
+            'date' => $invoice->getCreatedAt()->format('d/m/Y'),
         ];
 
-        if ($data->getCommand()) {
-            $datas['details'] = $data->getCommand()->getDetails();
+        if ($invoice->getCommand()) {
+            $datas['details'] = $invoice->getCommand()->getDetails();
         }
 
-        if ($data->getTrustee()) {
-            $datas['trustee'] = $data->getTrustee()->getTitle();
-            $datas['trusteeRef'] = $data->getTrustee()->getReference();
-            $datas['address'] = $data->getTrustee()->getAddress();
-            $datas['postcode'] = $data->getTrustee()->getPostcode();
-            $datas['city'] = $data->getTrustee()->getCity();
+        if ($invoice->getTrustee()) {
+            $datas['trustee'] = $invoice->getTrustee()->getTitle();
+            $datas['trusteeRef'] = $invoice->getTrustee()->getReference();
+            $datas['address'] = $invoice->getTrustee()->getAddress();
+            $datas['postcode'] = $invoice->getTrustee()->getPostcode();
+            $datas['city'] = $invoice->getTrustee()->getCity();
         }
 
-        if ($data->getCustomer()) {
-            $datas['customer'] = $data->getCustomer()->getTitle();
-            $datas['customerRef'] = $data->getCustomer()->getReference();
-            $datas['address'] = $data->getCustomer()->getAddress();
-            $datas['postcode'] = $data->getCustomer()->getPostcode();
-            $datas['city'] = $data->getCustomer()->getCity();
+        if ($invoice->getCustomer()) {
+            $datas['customer'] = $invoice->getCustomer()->getTitle();
+            $datas['customerRef'] = $invoice->getCustomer()->getReference();
+            $datas['address'] = $invoice->getCustomer()->getAddress();
+            $datas['postcode'] = $invoice->getCustomer()->getPostcode();
+            $datas['city'] = $invoice->getCustomer()->getCity();
         }
 
-        if ($data->getProperty()) {
-            $datas['property'] = $data->getProperty()->getTitle()  ;
+        if ($invoice->getProperty()) {
+            $datas['property'] = $invoice->getProperty()->getTitle()  ;
         }
 
-        if ($data->getRefundReference()) {
-            $datas['refundReference'] = $data->getRefundReference();
+        if ($invoice->getRefundReference()) {
+            $datas['refundReference'] = $invoice->getRefundReference();
         }
 
-
-        $html =  $this->renderView('pdf/invoice.html.twig', $datas);
-
-        $options = new Options();
-
-        $options->set('defaultFont', 'Helvetica');
-        $options->set('isRemoteEnabled', true);
-        $options->set('no-pdf-compression', true);
-        $dompdf = new Dompdf($options);
-        $dompdf->setPaper('A4', 'portrait');
-        $dompdf->loadHtml($html);
-        $dompdf->render();
-
-        return $dompdf->stream('', ["Attachment" => false]);
+        return $datas;
 
     }
 
-    private function imageToBase64($path) {
-        $path = $path;
-        $type = pathinfo($path, PATHINFO_EXTENSION);
-        $data = file_get_contents($path);
-        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
-        return $base64;
-    }
-    
+
 }
