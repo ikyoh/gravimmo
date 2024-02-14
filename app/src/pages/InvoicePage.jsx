@@ -862,13 +862,13 @@ const EmailForm = ({ data, handleCloseModal }) => {
         isSuccess: isPutSuccess,
     } = usePutData();
 
-    const handleValidate = (form) => {
+    const handleValidate = () => {
         axios({
             url: "/api/invoice/" + data.id + "/mail",
             method: "GET",
             responseType: "blob",
         }).then(() => {
-            put(form);
+            put({ id: data.id, isSend: true });
         });
     };
 
