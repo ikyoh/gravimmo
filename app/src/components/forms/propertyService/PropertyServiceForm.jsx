@@ -114,6 +114,8 @@ export default function PropertyServiceForm({
             isLoading={isSubmitting}
             isDisabled={isSubmitting}
         >
+            {JSON.stringify(dataService)}
+
             <FormSelect
                 type="text"
                 name="service"
