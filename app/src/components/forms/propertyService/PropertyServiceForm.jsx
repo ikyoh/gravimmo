@@ -114,8 +114,6 @@ export default function PropertyServiceForm({
             isLoading={isSubmitting}
             isDisabled={isSubmitting}
         >
-            {JSON.stringify(dataService)}
-
             <FormSelect
                 type="text"
                 name="service"
@@ -166,6 +164,38 @@ export default function PropertyServiceForm({
                     required={true}
                 >
                     {dataService.color.map((data) => (
+                        <option key={data} value={data}>
+                            {data}
+                        </option>
+                    ))}
+                </FormSelect>
+            )}
+            {dataService && dataService.size.length !== 0 && (
+                <FormSelect
+                    type="text"
+                    name="size"
+                    label="Dimensions"
+                    error={errors["size"]}
+                    register={register}
+                    required={true}
+                >
+                    {dataService.size.map((data) => (
+                        <option key={data} value={data}>
+                            {data}
+                        </option>
+                    ))}
+                </FormSelect>
+            )}
+            {dataService && dataService.thickness.length !== 0 && (
+                <FormSelect
+                    type="text"
+                    name="thickness"
+                    label="Epaisseur"
+                    error={errors["thickness"]}
+                    register={register}
+                    required={true}
+                >
+                    {dataService.thickness.map((data) => (
                         <option key={data} value={data}>
                             {data}
                         </option>
