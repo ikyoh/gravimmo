@@ -85,11 +85,11 @@ export default function PropertyServiceForm({
         setFirstLoad(false);
     }, []);
 
-    // useEffect(() => {
-    //     if (dataService && dataService.configuration) {
-    //         setValue('configuration', dataService.configuration)
-    //     }
-    // }, [dataService])
+    useEffect(() => {
+        if (dataService && dataService.configuration) {
+            setValue("configuration", dataService.configuration);
+        }
+    }, [dataService]);
 
     const onSubmit = (form) => {
         if (!iri) postData(form);
