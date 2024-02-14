@@ -119,16 +119,6 @@ export const InvoicesPage = ({ title }) => {
         return price(checkedList.reduce((acc, curr) => acc + curr.amountHT, 0));
     };
 
-    // const downloadFile = (id, chrono) => {
-    //     axios({
-    //         url: "/api/invoice/" + id + "/pdf",
-    //         method: "GET",
-    //         responseType: "blob",
-    //     }).then((response) => {
-    //         fileDownload(response.data, "facture_" + chrono + ".pdf");
-    //     });
-    // };
-
     const downloadFile = (id, chrono) => {
         axios({
             url: "/api/invoice/" + id + "/pdf",
@@ -151,21 +141,6 @@ export const InvoicesPage = ({ title }) => {
             })
         );
     };
-
-    const csvheaders = [
-        { label: "#", key: "id" },
-        { label: "Syndic", key: "trustee.title" },
-        { label: "Copro", key: "property.title" },
-        { label: "Secteur", key: "property.zone" },
-        { label: "Nouvel Occupant", key: "details.nouveloccupant" },
-        { label: "N° Entrée", key: "details.entree" },
-        { label: "N° Appartement", key: "details.numeroappartement" },
-        { label: "N° Boite aux lettre", key: "details.numeroboiteauxlettres" },
-        { label: "N° Etage", key: "details.numeroetage" },
-        { label: "N° Lot", key: "details.numerodelot" },
-        { label: "N° Porte", key: "details.numerodeporte" },
-        { label: "N° Villa", key: "details.numerodevilla" },
-    ];
 
     if (isLoading) return <Loader />;
     else

@@ -26,10 +26,13 @@ class PdfInvoiceService
         $this->domPdf->stream("facture.pdf", [
             'Attachement' => true
         ]);
+        return $this->domPdf->stream('', ["Attachment" => false]);
     }
 
     public function generatePDF($html) {
-
+        $this->domPdf->loadHtml($html);
+        $this->domPdf->render();
+        return $this->domPdf->output();
     }
 
     public function formatTwigContent($invoice) {

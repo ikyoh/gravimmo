@@ -30,7 +30,6 @@ export const PropertyPage = () => {
         <>
             <Modal />
             <Header
-                title={data.title}
                 isLoading={isLoading}
                 error={error}
                 subtitle={data.reference}

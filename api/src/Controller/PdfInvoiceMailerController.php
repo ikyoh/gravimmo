@@ -13,49 +13,38 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Mime\Part\File;
+use App\Service\PdfInvoiceService;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+
 
 #[AsController]
 class PdfInvoiceMailerController extends AbstractController
 {
 
-    public function __invoke(Invoice $data, MailerInterface $mailer)
+    public function __invoke(Invoice $data, MailerInterface $mailer,PdfInvoiceService $pdf)
     {
 
 
-
-
-
-
-
-
-        $pdfcontent = [
-            'name'         => 'John Doe',
-            'address'      => 'USA',
-            'mobileNumber' => '000000000',
-            'email'        => 'john.doe@email.com'
-        ];
-        $html =  $this->renderView('pdf/invoice.html.twig', $pdfcontent);
-        $dompdf = new Dompdf();
-        $dompdf->loadHtml($html);
-        $dompdf->render();
-
-
+        $html =  $this->renderView('pdf/invoice.html.twig', $pdf->formatTwigContent($data));
 
         $to = $data->getTrustee()->getBillingEmail();
-        $content = '<p>Veuillez trouvez ci-joint votre facture</p>';
         $subject = 'Facture Gravimmo'. $data->getChrono();
 
+        if ($data->getTrustee())
+        {$customerReference = $data->getTrustee()->getReference();}
 
-        $email = (new Email())
+        if ($data->getCustomer()){
+        $customerReference = $data->getCustomer()->getReference();}
+
+        $email = (new TemplatedEmail())
         ->from('gravimmo@gmail.com')
         ->to($to)
         ->subject($subject)
-        ->attach($dompdf->output(), 'facture.pdf')
-        ->html($content);
+        ->attach($pdf->generatePDF($html), 'Facture_'.$data->getChrono().'_'.$customerReference.'.pdf')
+        ->htmlTemplate('mail/email.html.twig');
 
         $mailer->send($email);
     }
 
 
-    
 }

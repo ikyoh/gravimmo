@@ -1,5 +1,8 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, ButtonSize } from "components/button/Button";
 import Dropdown from "components/dropdown/Dropdown";
+import Form from "components/form/form/Form";
+import { FormInput } from "components/form/input/FormInput";
 import InvoiceCashedForm from "components/forms/invoice/InvoiceCashedForm";
 import Loader from "components/loader/Loader";
 import Header from "components/templates/header/Header";
@@ -7,12 +10,8 @@ import { useModal } from "hooks/useModal";
 import { useGetID, usePostData, usePutData } from "queryHooks/useInvoice";
 import { useGetAllDatas as useGetServices } from "queryHooks/useService";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-
-import { yupResolver } from "@hookform/resolvers/yup";
-import Form from "components/form/form/Form";
-import { FormInput } from "components/form/input/FormInput";
 import { useForm } from "react-hook-form";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import * as yup from "yup";
 
 import Table from "components/templates/table/Table";
@@ -30,6 +29,7 @@ import {
     IoIosAddCircleOutline,
     IoIosCheckmarkCircleOutline,
     IoIosCloseCircle,
+    IoIosSend,
     IoMdCheckmark,
 } from "react-icons/io";
 import { IoReloadCircleOutline } from "react-icons/io5";
@@ -78,7 +78,7 @@ export const InvoicePage = ({ title }) => {
 
     const downloadFile = (id, chrono) => {
         axios({
-            url: "/api/pdf/invoice/" + id,
+            url: "/api/invoice/" + id + "/pdf",
             method: "GET",
             responseType: "blob",
         }).then((response) => {
@@ -274,7 +274,27 @@ export const InvoicePage = ({ title }) => {
                             <LiaCommentAlt size={30} />
                             Commentaire
                         </button>
-
+                        {data.status === "validé" && (
+                            <button
+                                onClick={() =>
+                                    handleOpenModal({
+                                        title: "Email",
+                                        size: "small",
+                                        content: (
+                                            <EmailForm
+                                                handleCloseModal={
+                                                    handleCloseModal
+                                                }
+                                                data={data}
+                                            />
+                                        ),
+                                    })
+                                }
+                            >
+                                <IoIosSend size={30} />
+                                Envoyer par email
+                            </button>
+                        )}
                         {data.status === "validé" && (
                             <button
                                 onClick={() =>
@@ -404,8 +424,9 @@ export const InvoicePage = ({ title }) => {
                         </div>
                     </div>
                 </div>
-
-                <section className="mx-10 mb-10">{data.comment}</section>
+                {data.comment && (
+                    <section className="mx-10 mb-10">{data.comment}</section>
+                )}
 
                 <Table>
                     <Thead>
@@ -831,5 +852,51 @@ const ObservationForm = ({ data, handleCloseModal }) => {
                 required={true}
             />
         </Form>
+    );
+};
+
+const EmailForm = ({ data, handleCloseModal }) => {
+    const {
+        mutate: put,
+        isLoading: isPutPending,
+        isSuccess: isPutSuccess,
+    } = usePutData();
+
+    const handleValidate = (form) => {
+        axios({
+            url: "/api/invoice/" + data.id + "/mail",
+            method: "GET",
+            responseType: "blob",
+        }).then(() => {
+            put(form);
+        });
+    };
+
+    useEffect(() => {
+        if (isPutSuccess) handleCloseModal();
+    }, [isPutPending]);
+
+    return (
+        <div>
+            <p>
+                Attention cette opération est irréversible, voulez-vous
+                confirmer cette action ?
+            </p>
+            <div className="flex items-center gap-5 justify-start py-5">
+                <button
+                    className="btn btn-outline"
+                    onClick={() => handleCloseModal()}
+                >
+                    Annuler
+                </button>
+                <button
+                    className="btn btn-error text-white"
+                    onClick={() => handleValidate()}
+                    disabled={isPutPending}
+                >
+                    Confirmer
+                </button>
+            </div>
+        </div>
     );
 };
