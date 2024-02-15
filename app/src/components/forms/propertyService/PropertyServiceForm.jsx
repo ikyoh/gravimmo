@@ -254,7 +254,7 @@ export default function PropertyServiceForm({
                     </div>
                 </>
             )}
-            {dataService && dataService.configuration && (
+            {dataService && (
                 <FormInput
                     type="text"
                     name="configuration"

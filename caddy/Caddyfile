@@ -18,7 +18,7 @@ log
     # APP
     @app expression `(
             !path(
-                '/api*', '/media*', '/graphql*', '/bundles*', '/contexts*', '/_profiler*', '/_wdt*',
+                '/api*', '/media*', '/img*', '/graphql*', '/bundles*', '/contexts*', '/_profiler*', '/_wdt*',
                 '*.json*', '*.html', '*.csv', '*.yml', '*.yaml', '*.xml', '*.pdf'
             )
         )

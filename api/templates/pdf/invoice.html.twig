@@ -20,24 +20,12 @@
 </head>
 
 <body>
-
     <table style="width: 100%;">
         <tr>
             <td>
-                <img src="https://placehold.co/600x400" />
-                {# <img src="{{logo}}" /> #}
+                <img src="data:image/svg+xml;base64, {{ logo }}" style="width: 400px;">
             </td>
             <td style="width: 100%; text-align:right">
-                {# <div style="background-color : black; border-radius: 6pt; display: inline-block; overflow: hidden;">
-                    <div
-                        style="background-color : lightgray; padding: 5px; border-top-left-radius: 5pt; border-top-right-radius: 5pt; margin-top:1pt; margin-left:1pt; margin-right:1pt; text-align: center;">
-                        Facture N°
-                    </div>
-                    <div
-                        style="background-color : white; padding: 5px; border-bottom-left-radius: 5pt; border-bottom-right-radius: 5pt; margin-bottom:1pt; margin-left:1pt; margin-right:1pt; text-align: center;">
-                        {{chrono}}
-                    </div>
-                </div> #}
                 <div style="background-color : black; display: inline-block; overflow: hidden; min-width:80px;">
                     <div
                         style="background-color : lightgray; padding: 5px; margin-top:1pt; margin-left:1pt; margin-right:1pt; text-align: center;">
@@ -166,7 +154,8 @@
             <tr>
                 <th style="padding: 5 10; border-right: 1pt solid black">Réf.</th>
                 <th style="padding: 5 10; border-right: 1pt solid black; width: 100%;">Désignation</th>
-                <th style="padding: 5 10; border-right: 1pt solid black; width: 40; text-align: center">Quantité</th>
+                <th style="padding: 5 10; border-right: 1pt solid black; width: 40; text-align: center">Quantité
+                </th>
                 <th style="padding: 5 10; border-right: 1pt solid black; width : 50; text-align: right;">PU TTC</th>
                 <th style="padding: 5 10; width : 50; text-align: right;">Total TTC</th>
             </tr>
@@ -213,7 +202,8 @@
         border: 1pt solid black;">
             <tr>
                 <td style="padding: 5 10; background-color: lightgray; width: 50%;">Total HT</td>
-                <td style="padding: 5 10; text-align: right;">{{ amountHT|format_currency('EUR', locale='fr') }}</td>
+                <td style="padding: 5 10; text-align: right;">{{ amountHT|format_currency('EUR', locale='fr') }}
+                </td>
             </tr>
             <tr>
                 <td style="padding: 5 10; background-color: lightgray; width: 50%;">Total TVA ({{tva}}%)</td>
@@ -222,10 +212,12 @@
             </tr>
             <tr>
                 <td style="padding: 5 10; background-color: lightgray; width: 50%;">Total TTC</td>
-                <td style="padding: 5 10; text-align: right;">{{ amountTTC|format_currency('EUR', locale='fr') }}</td>
+                <td style="padding: 5 10; text-align: right;">{{ amountTTC|format_currency('EUR', locale='fr') }}
+                </td>
             </tr>
             <tr style="font-weight: bold;">
-                <td style="padding: 5 10; background-color: lightgray; width: 50%; border-top: 1pt solid black;">Net à
+                <td style="padding: 5 10; background-color: lightgray; width: 50%; border-top: 1pt solid black;">Net
+                    à
                     payer</td>
                 <td style="padding: 5 10; text-align: right; border-top: 1pt solid black;">{{
                     amountTTC|format_currency('EUR',
