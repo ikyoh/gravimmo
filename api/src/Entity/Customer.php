@@ -97,6 +97,7 @@ class Customer
     private Collection $invoices;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["customers:read", "customer:read", "commands:read", "command:read", "invoices:read", "invoice:read"])]
     private ?string $reference = null;
 
     public function __construct()

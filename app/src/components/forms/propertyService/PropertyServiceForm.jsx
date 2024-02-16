@@ -92,6 +92,7 @@ export default function PropertyServiceForm({
     }, [dataService]);
 
     const onSubmit = (form) => {
+        console.log("form", form);
         if (!iri) postData(form);
         else {
             putData(form);
@@ -132,7 +133,7 @@ export default function PropertyServiceForm({
                     <option value="">Aucune prestation trouvée</option>
                 )}
                 {!isLoadingServices &&
-                    dataServices.map((data) => (
+                    dataServices.sort().map((data) => (
                         <option key={data["@id"]} value={data["@id"]}>
                             {data.title} - {data.price} € H.T.
                         </option>
@@ -147,7 +148,7 @@ export default function PropertyServiceForm({
                     register={register}
                     required={true}
                 >
-                    {dataService.material.map((data) => (
+                    {dataService.material.sort().map((data) => (
                         <option key={data} value={data}>
                             {data}
                         </option>
@@ -163,7 +164,7 @@ export default function PropertyServiceForm({
                     register={register}
                     required={true}
                 >
-                    {dataService.color.map((data) => (
+                    {dataService.color.sort().map((data) => (
                         <option key={data} value={data}>
                             {data}
                         </option>
@@ -179,7 +180,7 @@ export default function PropertyServiceForm({
                     register={register}
                     required={true}
                 >
-                    {dataService.size.map((data) => (
+                    {dataService.size.sort().map((data) => (
                         <option key={data} value={data}>
                             {data}
                         </option>
@@ -195,7 +196,7 @@ export default function PropertyServiceForm({
                     register={register}
                     required={true}
                 >
-                    {dataService.thickness.map((data) => (
+                    {dataService.thickness.sort().map((data) => (
                         <option key={data} value={data}>
                             {data}
                         </option>
@@ -212,7 +213,7 @@ export default function PropertyServiceForm({
                     register={register}
                     required={true}
                 >
-                    {dataService.font.map((data) => (
+                    {dataService.font.sort().map((data) => (
                         <option key={data} value={data}>
                             {data}
                         </option>
@@ -229,7 +230,7 @@ export default function PropertyServiceForm({
                     register={register}
                     required={true}
                 >
-                    {dataService.margin.map((data) => (
+                    {dataService.margin.sort().map((data) => (
                         <option key={data} value={data}>
                             {data}
                         </option>
@@ -241,7 +242,7 @@ export default function PropertyServiceForm({
                 <>
                     <FormLabel name="finishing" label="Façonnages" />
                     <div className="grid grid-cols-2">
-                        {dataService.finishing.map((data) => (
+                        {dataService.finishing.sort().map((data) => (
                             <FormCheckbox
                                 key={data}
                                 name="finishing"

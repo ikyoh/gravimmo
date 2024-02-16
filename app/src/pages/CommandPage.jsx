@@ -15,7 +15,7 @@ import { commandDetails } from "config/translations.config";
 import dayjs from "dayjs";
 import { useModal } from "hooks/useModal";
 import _ from "lodash";
-import { useGetOneData, usePutData } from "queryHooks/useCommand";
+import { useGetIRI, useGetOneData, usePutData } from "queryHooks/useCommand";
 import { useGetIRI as getCustomer } from "queryHooks/useCustomer";
 import { useGetIRI as getProperty } from "queryHooks/useProperty";
 import { useGetIRI as getTrustee } from "queryHooks/useTrustee";
@@ -35,18 +35,23 @@ import useMakeInvoices from "hooks/useMakeInvoices";
 export const CommandPage = ({
     title,
     isModalContent = false,
-    commandIRI = false,
+    commandIRI = null,
 }) => {
     const navigate = useNavigate();
     const { state: previousPageState } = useLocation();
     const { Modal, handleOpenModal, handleCloseModal } = useModal();
-    //const { id } = commandIRI ? commandIRI : useParams();
     const { id } = useParams();
-    const { data, isLoading, error, isSuccess } = useGetOneData(id);
-    // const { data, isLoading, error, isSuccess } = commandIRI
-    //     ? useGetIRI(commandIRI)
-    //     : useGetOneData(id);
+    //const { data, isLoading, error, isSuccess } = useGetOneData(id);
+    const { data: dataIRI, isLoading: isLoadingIRI } = useGetIRI(
+        commandIRI ? commandIRI : null
+    );
+    const { data: dataID, isLoading: isLoadingID } = useGetOneData(
+        commandIRI ? null : id
+    );
     const { mutate: putData } = usePutData();
+
+    const data = dataID || dataIRI;
+
     const { data: property, isLoading: isLoadingProperty } = getProperty(
         data && data.property ? data.property["@id"] || data.property : null
     );
@@ -107,8 +112,10 @@ export const CommandPage = ({
         );
     };
 
+    if (!commandIRI && isLoadingID) return <Loader />;
+    if (commandIRI && isLoadingIRI) return <Loader />;
+
     if (
-        isLoading ||
         (data.property && isLoadingProperty) ||
         (data.trustee && isLoadingTrustee) ||
         (data.customer && isLoadingCustomer)
@@ -122,8 +129,6 @@ export const CommandPage = ({
             {!isModalContent && (
                 <Header
                     title={title + data.id}
-                    isLoading={isLoading}
-                    error={error}
                     subtitle={
                         data.details.orderTags &&
                         Object.keys(data.details.orderTags).map(

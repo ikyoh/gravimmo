@@ -43,7 +43,7 @@ class PropertyService
     private ?string $material = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
     private ?string $size = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -51,11 +51,11 @@ class PropertyService
     private ?string $color = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
     private ?string $font = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
     private ?string $margin = null;
 
     #[ORM\Column(nullable: true)]
@@ -70,6 +70,10 @@ class PropertyService
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
     private ?string $configuration = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
+    private ?string $thickness = null;
 
     public function getId(): ?int
     {
@@ -180,6 +184,18 @@ class PropertyService
     public function setConfiguration(?string $configuration): self
     {
         $this->configuration = $configuration;
+
+        return $this;
+    }
+
+    public function getThickness(): ?string
+    {
+        return $this->thickness;
+    }
+
+    public function setThickness(?string $thickness): self
+    {
+        $this->thickness = $thickness;
 
         return $this;
     }

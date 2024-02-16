@@ -79,14 +79,12 @@ export const ToursPage = ({ title }) => {
         }
     }, [searchValue, sortValue]);
 
-    const handleChangeCommandsStatus = async (commands, status) => {
-        await Promise.all(
-            commands.map(async (command) => {
-                const _command = { id: command.id, status: status };
-                if (status === "DEFAULT - posé") _command.deliveredAt = dayjs();
-                updateCommand(_command);
-            })
-        );
+    const handleChangeCommandsStatus = (commands, status) => {
+        commands.map((command) => {
+            const _command = { id: command.id, status: status };
+            if (status === "DEFAULT - posé") _command.deliveredAt = dayjs();
+            updateCommand(_command);
+        });
     };
 
     useEffect(() => {

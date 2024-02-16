@@ -96,7 +96,7 @@ export const InvoicesPage = ({ title }) => {
     const calcTotalHTTVA10 = () => {
         return price(
             checkedList.reduce((acc, curr) => {
-                if (curr.tva === 10) {
+                if (curr.tva === 10 && curr.status !== "irrécouvrable") {
                     return acc + curr.amountHT;
                 }
                 return acc;
@@ -107,7 +107,7 @@ export const InvoicesPage = ({ title }) => {
     const calcTotalHTTVA20 = () => {
         return price(
             checkedList.reduce((acc, curr) => {
-                if (curr.tva === 20) {
+                if (curr.tva === 20 && curr.status !== "irrécouvrable") {
                     return acc + curr.amountHT;
                 }
                 return acc;
@@ -116,30 +116,37 @@ export const InvoicesPage = ({ title }) => {
     };
 
     const calcTotalHT = () => {
-        return price(checkedList.reduce((acc, curr) => acc + curr.amountHT, 0));
+        return price(
+            checkedList.reduce((acc, curr) => {
+                if (curr.status !== "irrécouvrable") {
+                    return acc + curr.amountHT;
+                }
+                return acc;
+            }, 0)
+        );
     };
 
-    const downloadFile = (id, chrono) => {
+    const downloadFile = (id, chrono, customerRef) => {
         axios({
             url: "/api/invoice/" + id + "/pdf",
             method: "GET",
             responseType: "blob",
         }).then((response) => {
-            // const blob = new Blob([response.data], {
-            //     type: "application/pdf",
-            // });
-            // FileSaver.saveAs(blob, 'file.pdf');
-            //fileDownload(blob, "facture_" + chrono + ".pdf");
-            fileDownload(response.data, "facture_" + chrono + ".pdf");
+            fileDownload(
+                response.data,
+                "facture_" + chrono + "_" + customerRef + ".pdf"
+            );
         });
     };
 
-    const handleDownloadSelection = async () => {
-        await Promise.all(
-            checkedList.map(async (checked) => {
-                downloadFile(checked, data.chrono.id, checked.chrono);
-            })
-        );
+    const handleDownloadSelection = () => {
+        checkedList.forEach((invoice) => {
+            downloadFile(
+                invoice.id,
+                invoice.chrono,
+                invoice.trustee.reference || invoice.customer.reference
+            );
+        });
     };
 
     if (isLoading) return <Loader />;
@@ -405,7 +412,11 @@ export const InvoicesPage = ({ title }) => {
                                                     onClick={() =>
                                                         downloadFile(
                                                             data.id,
-                                                            data.chrono
+                                                            data.chrono,
+                                                            data.trustee
+                                                                .reference ||
+                                                                data.customer
+                                                                    .reference
                                                         )
                                                     }
                                                 >

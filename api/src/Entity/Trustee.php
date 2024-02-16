@@ -103,7 +103,7 @@ class Trustee
     private Collection $commands;
 
     #[ORM\Column(name: 'reference', type: 'string', length: 5, unique: true)]
-    #[Groups(["trustees:read", "trustee:read", "users:read", "properties:read", "property:read", "commands:read", "invoices:read"])]
+    #[Groups(["trustees:read", "trustee:read", "users:read", "properties:read", "property:read", "commands:read", "command:read", "invoices:read", "invoice:read"])]
     private ?string $reference = null;
 
     #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: Invoice::class)]

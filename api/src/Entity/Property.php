@@ -135,9 +135,9 @@ class Property
         $yearsInterval = ($deliveredDate)->diff(($today))->y;
 
         if ($yearsInterval < 2) {
-            return(10);
-        } else {
             return(20);
+        } else {
+            return(10);
         }
 
     }

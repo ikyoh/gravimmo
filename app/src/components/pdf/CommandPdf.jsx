@@ -74,6 +74,20 @@ const CommandPdf = ({ commands = [] }) => {
                                     {service.color && (
                                         <Text>Couleur : {service.color}</Text>
                                     )}
+                                    {service.size && (
+                                        <Text>Dimensions : {service.size}</Text>
+                                    )}
+                                    {service.thickness && (
+                                        <Text>
+                                            Epaisseur : {service.thickness}
+                                        </Text>
+                                    )}
+                                    {service.margin && (
+                                        <Text>Marges : {service.margin}</Text>
+                                    )}
+                                    {service.font && (
+                                        <Text>Police : {service.font}</Text>
+                                    )}
                                     {service.configuration && (
                                         <Text>
                                             Configuration :{" "}

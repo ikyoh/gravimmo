@@ -76,13 +76,16 @@ export const InvoicePage = ({ title }) => {
         put(invoiceData);
     };
 
-    const downloadFile = (id, chrono) => {
+    const downloadFile = (id, chrono, customerRef) => {
         axios({
             url: "/api/invoice/" + id + "/pdf",
             method: "GET",
             responseType: "blob",
         }).then((response) => {
-            fileDownload(response.data, "facture_" + chrono + ".pdf");
+            fileDownload(
+                response.data,
+                "facture_" + chrono + "_" + customerRef + ".pdf"
+            );
         });
     };
 
@@ -169,7 +172,14 @@ export const InvoicePage = ({ title }) => {
                     )}
                     <Dropdown type="button">
                         <button
-                            onClick={() => downloadFile(data.id, data.chrono)}
+                            onClick={() =>
+                                downloadFile(
+                                    data.id,
+                                    data.chrono,
+                                    data.trustee.reference ||
+                                        data.customer.reference
+                                )
+                            }
                         >
                             <MdOutlineFileDownload size={30} />
                             Télécharger
@@ -655,10 +665,14 @@ const Refund = ({ data, handleCloseModal }) => {
         delete _postData.id;
         delete _postData.chrono;
         delete _postData.command;
+        if (data.trustee) _postData["trustee"] = data.trustee.id;
+        if (data.property) _postData["property"] = data.property.id;
+        if (data.customer) _postData["customer"] = data.customer.id;
+
         post(_postData);
 
         const _putData = {
-            ...data,
+            id: data.id,
             isRefund: true,
         };
         put(_putData);
@@ -738,7 +752,7 @@ const Irrecoverable = ({ data, handleCloseModal }) => {
 
     const handleIrrecoverable = () => {
         const _data = {
-            ...data,
+            id: data.id,
             status: "irrécouvrable",
         };
         mutate(_data);

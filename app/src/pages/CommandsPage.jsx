@@ -98,6 +98,19 @@ export const CommandsPage = ({ title }) => {
         }
     };
 
+    const handleValidateSelection = async () => {
+        await Promise.all(
+            checkedList.map(async (command) => {
+                const _command = { id: command.id };
+                if (command.status === "DEFAULT - à traiter") {
+                    _command.madeAt = dayjs();
+                    _command.status = "DEFAULT - préparé";
+                }
+                putData(_command);
+            })
+        );
+    };
+
     const csvDatas = () => {
         const getRegularServicesReferences = (services) => {
             return services.reduce(
@@ -167,6 +180,15 @@ export const CommandsPage = ({ title }) => {
                 {filter}
                 <Dropdown type="button" isDisabled={checkedList.length === 0}>
                     <div>Sélection</div>
+                    {checkedList.length !== 0 &&
+                        checkedList.filter(
+                            (command) => command.status === "DEFAULT - préparé"
+                        ).length !== 0 && (
+                            <button onClick={() => handleValidateSelection()}>
+                                <IoIosCheckmarkCircleOutline size={26} />
+                                Valider la pose
+                            </button>
+                        )}
                     {checkedList.length === 0 ? (
                         <button disabled={checkedList.length === 0}>
                             <LuTable size={26} /> Données CSV
