@@ -3,6 +3,7 @@ import Header from "components/templates/header/Header";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { MdClose } from "react-icons/md";
+import KeyboardEventHandler from "react-keyboard-event-handler";
 
 export const useModal = () => {
     const [modal, setModal] = useState({
@@ -39,6 +40,12 @@ export const useModal = () => {
     const Modal = () => {
         return createPortal(
             <div className={className}>
+                <KeyboardEventHandler
+                    handleKeys={["esc"]}
+                    handleFocusableElements={true}
+                    onKeyEvent={(key, e) => handleCloseModal()}
+                />
+
                 <div className={modalClassName}>
                     <Header title={modal.title} isModal={true}>
                         <button
