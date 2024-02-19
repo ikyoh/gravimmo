@@ -34,7 +34,7 @@ export const CardTour = ({ iri }) => {
     return (
         <>
             <Modal />
-            <div className="_card dark:bg-gradient-page flex flex-row gap-3 items-center justify-between w-full h-16 flex-wrap">
+            <div className="_card dark:bg-gradient-page flex flex-row gap-3 items-center justify-between w-full flex-wrap">
                 <div className="flex-row items-center gap-5 flex">
                     <div className="">#{data.id}</div>
                     <div className="text-accent font-semibold">
@@ -130,6 +130,30 @@ export const CardTour = ({ iri }) => {
                             )}
                         </Dropdown>
                     </div>
+                </div>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+                <button
+                    className="btn btn-primary btn-circle"
+                    onClick={() =>
+                        handleOpenModal({
+                            title: "Commande",
+                            content: (
+                                <CommandPage
+                                    isModalContent={true}
+                                    commandIRI={data["@id"]}
+                                />
+                            ),
+                        })
+                    }
+                >
+                    <MdOutlineAssignment size={30} />
+                </button>
+                <button className="btn btn-primary btn-circle">
+                    <MdOutlineAssignment size={30} />
+                </button>
+                <div className="btn btn-primary btn-circle">
+                    <CommandImageForm commandID={data.id} />
                 </div>
             </div>
         </>

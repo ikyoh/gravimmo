@@ -11,17 +11,18 @@ const Dropdown = ({ type = "card", isDisabled, children, icon }) => {
     });
 
     const classNameContent = classNames(
-        "dropdown-content z-[1] bg-slate-400 dark:bg-primary rounded w-auto pr-2",
+        "dropdown-content z-[1] bg-slate-400 dark:bg-primary rounded w-64 pr-2",
         {
             "translate-x-1 -translate-y-[10px]": type === "card",
             "translate-x-1 -translate-y-2": type === "table",
-            "-translate-x-2 translate-y-1": type === "button",
+            "!fixed md:!absolute left-1/2 -translate-x-1/2 md:left-auto md:-translate-x-2 top-36 md:translate-y-1":
+                type === "button",
         }
     );
 
     if (type === "button")
         return (
-            <div className="dropdown dropdown-left">
+            <div className="dropdown md:dropdown-left">
                 <label tabIndex={0}>
                     <Button disabled={isDisabled} size={ButtonSize.Big}>
                         {icon ? icon : <BsThreeDots />}

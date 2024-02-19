@@ -41,7 +41,6 @@ export const CommandPage = ({
     const { state: previousPageState } = useLocation();
     const { Modal, handleOpenModal, handleCloseModal } = useModal();
     const { id } = useParams();
-    //const { data, isLoading, error, isSuccess } = useGetOneData(id);
     const { data: dataIRI, isLoading: isLoadingIRI } = useGetIRI(
         commandIRI ? commandIRI : null
     );
@@ -280,7 +279,7 @@ export const CommandPage = ({
             )}
 
             <Content>
-                <div className="flex flex-col md:grid md:grid-cols-12 gap-8">
+                <div className="flex flex-col md:grid md:grid-cols-12 gap-8 bg-dark">
                     {data.customer && (
                         <>
                             {!customer ? (

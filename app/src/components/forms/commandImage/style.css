@@ -1,3 +1,11 @@
 .filepond--credits {
     display: none;
 }
+
+.filepond--drop-label {
+    @apply bg-action;
+}
+
+.filepond--label-action {
+    @apply w-12;
+}

@@ -12,6 +12,7 @@ import uuid from "react-uuid";
 import Content from "../components/templates/content/Content";
 import Header from "../components/templates/header/Header";
 import Tour from "../components/tour/Tour";
+import { useGetCurrentAccount } from "../queryHooks/useAccount";
 
 export const DashboardPage = ({ title }) => {
     const card = "bg-dark/60 rounded p-5 md:p-10 flex gap-20 items-center";
@@ -21,108 +22,113 @@ export const DashboardPage = ({ title }) => {
 
     const { data: toInvoiceNumber } = useGetOrdersToInvoiceNumber();
     const { data: toDeliverNumber } = useGetOrdersToDeliverNumber();
-    const {
-        data: tours,
-        isLoading: isLoadingTours,
-        error: errorTours,
-    } = useGetPaginatedDatas(1, "id", "ASC", "", {
-        scheduledAt: dayjs().format("YYYY-MM-DD"),
-    });
-
-    console.log("tours", tours);
+    const { data: account } = useGetCurrentAccount();
+    const { data: tours, isLoading: isLoadingTours } = useGetPaginatedDatas(
+        1,
+        "id",
+        "ASC",
+        "",
+        {
+            scheduledAt: dayjs().format("YYYY-MM-DD"),
+        }
+    );
 
     return (
         <>
             <Header title={title}></Header>
             <Content>
-                <section>
-                    <div className="px-4 py-6">
-                        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                            <div className={card}>
-                                <AiOutlineSlack
-                                    size={70}
-                                    className="bg-accent rounded-full p-3 text-dark"
-                                />
-                                <div>
-                                    <div className={text}>
-                                        Commandes traitées
-                                    </div>
-                                    <div className={cardtitle}>12365656</div>
-                                </div>
-                            </div>
-                            <div className={card}>
-                                <AiOutlineSlack
-                                    size={70}
-                                    className="bg-green-500 rounded-full p-3 text-dark"
-                                />
-                                <div>
-                                    <div className={text}>
-                                        Commandes prêtes à poser
-                                    </div>
-                                    <div className={cardtitle}>
-                                        {toDeliverNumber}
+                {account.roles.includes("ROLE_WORKSHOP") && (
+                    <section>
+                        <div className="px-4 py-6">
+                            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                                <div className={card}>
+                                    <AiOutlineSlack
+                                        size={70}
+                                        className="bg-accent rounded-full p-3 text-dark"
+                                    />
+                                    <div>
+                                        <div className={text}>
+                                            Commandes traitées
+                                        </div>
+                                        <div className={cardtitle}>
+                                            12365656
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className={card}>
-                                <MdPendingActions
-                                    size={70}
-                                    className="bg-red-500 rounded-full p-3 text-dark"
-                                />
-                                <div>
-                                    <div className={text}>
-                                        Commandes à facturer
+                                <div className={card}>
+                                    <AiOutlineSlack
+                                        size={70}
+                                        className="bg-green-500 rounded-full p-3 text-dark"
+                                    />
+                                    <div>
+                                        <div className={text}>
+                                            Commandes prêtes à poser
+                                        </div>
+                                        <div className={cardtitle}>
+                                            {toDeliverNumber}
+                                        </div>
                                     </div>
-                                    <div className={cardtitle}>
-                                        {toInvoiceNumber}
+                                </div>
+                                <div className={card}>
+                                    <MdPendingActions
+                                        size={70}
+                                        className="bg-red-500 rounded-full p-3 text-dark"
+                                    />
+                                    <div>
+                                        <div className={text}>
+                                            Commandes à facturer
+                                        </div>
+                                        <div className={cardtitle}>
+                                            {toInvoiceNumber}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-8 mt-10">
+                                <div className={card2}>
+                                    <AiOutlineSlack
+                                        size={70}
+                                        className="text-violet-800 rounded-full"
+                                    />
+                                    <div>
+                                        <div className={cardtitle}>123</div>
+                                        <div className={text}>Lorem Ipsum</div>
+                                    </div>
+                                </div>
+                                <div className={card2}>
+                                    <AiOutlineSlack
+                                        size={70}
+                                        className="text-violet-800 rounded-full"
+                                    />
+                                    <div>
+                                        <div className={cardtitle}>456</div>
+                                        <div className={text}>Lorem Ipsum</div>
+                                    </div>
+                                </div>
+                                <div className={card2}>
+                                    <AiOutlineSlack
+                                        size={70}
+                                        className="text-violet-800 rounded-full"
+                                    />
+                                    <div>
+                                        <div className={cardtitle}>789</div>
+                                        <div className={text}>Lorem Ipsum</div>
+                                    </div>
+                                </div>
+                                <div className={card2}>
+                                    <AiOutlineSlack
+                                        size={70}
+                                        className="text-violet-800 rounded-full"
+                                    />
+                                    <div>
+                                        <div className={cardtitle}>333</div>
+                                        <div className={text}>Lorem Ipsum</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-8 mt-10">
-                            <div className={card2}>
-                                <AiOutlineSlack
-                                    size={70}
-                                    className="text-violet-800 rounded-full"
-                                />
-                                <div>
-                                    <div className={cardtitle}>123</div>
-                                    <div className={text}>Lorem Ipsum</div>
-                                </div>
-                            </div>
-                            <div className={card2}>
-                                <AiOutlineSlack
-                                    size={70}
-                                    className="text-violet-800 rounded-full"
-                                />
-                                <div>
-                                    <div className={cardtitle}>456</div>
-                                    <div className={text}>Lorem Ipsum</div>
-                                </div>
-                            </div>
-                            <div className={card2}>
-                                <AiOutlineSlack
-                                    size={70}
-                                    className="text-violet-800 rounded-full"
-                                />
-                                <div>
-                                    <div className={cardtitle}>789</div>
-                                    <div className={text}>Lorem Ipsum</div>
-                                </div>
-                            </div>
-                            <div className={card2}>
-                                <AiOutlineSlack
-                                    size={70}
-                                    className="text-violet-800 rounded-full"
-                                />
-                                <div>
-                                    <div className={cardtitle}>333</div>
-                                    <div className={text}>Lorem Ipsum</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                    </section>
+                )}
                 <section>
                     {isLoadingTours ? (
                         <Loader />

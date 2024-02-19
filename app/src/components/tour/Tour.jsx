@@ -10,7 +10,7 @@ import { arrayOfIris } from "utils/functions.utils";
 
 import { Reorder } from "framer-motion";
 
-const Tour = ({ id }) => {
+const Tour = ({ id, reorder }) => {
     const { data = [], isLoading, error, isSuccess } = useGetOneData(id);
     const [commands, setCommands] = useState([]);
 
@@ -82,22 +82,26 @@ const Tour = ({ id }) => {
                     ))}
                 </ul>
                 <div className="grow">
-                    <Reorder.Group
-                        axis="y"
-                        values={commands}
-                        onReorder={setCommands}
-                        onMouseUp={() => handleSaveOrder()}
-                    >
-                        {commands.map((iri) => (
-                            <Reorder.Item
-                                key={iri}
-                                value={iri}
-                                className="mb-3"
-                            >
-                                <CardTour iri={iri} />
-                            </Reorder.Item>
-                        ))}
-                    </Reorder.Group>
+                    {reorder ? (
+                        <Reorder.Group
+                            axis="y"
+                            values={commands}
+                            onReorder={setCommands}
+                            onMouseUp={() => handleSaveOrder()}
+                        >
+                            {commands.map((iri) => (
+                                <Reorder.Item
+                                    key={iri}
+                                    value={iri}
+                                    className="mb-3"
+                                >
+                                    <CardTour iri={iri} />
+                                </Reorder.Item>
+                            ))}
+                        </Reorder.Group>
+                    ) : (
+                        commands.map((iri) => <CardTour iri={iri} />)
+                    )}
                 </div>
             </div>
         </div>

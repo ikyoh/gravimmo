@@ -439,16 +439,6 @@ export const CommandsPage = ({ title }) => {
                                                 isHanging={data.isHanging}
                                                 date={data.createdAt}
                                             />
-                                            {data.tour && (
-                                                <div
-                                                    className="tooltip flex items-center"
-                                                    data-tip={data.tour.id}
-                                                >
-                                                    <MdPendingActions
-                                                        size={23}
-                                                    />
-                                                </div>
-                                            )}
                                             {data.images.length !== 0 && (
                                                 <div
                                                     className="tooltip flex items-center"
@@ -459,6 +449,16 @@ export const CommandsPage = ({ title }) => {
                                                     <button className="">
                                                         <SlPicture size={20} />
                                                     </button>
+                                                </div>
+                                            )}
+                                            {data.tour && (
+                                                <div
+                                                    className="tooltip flex items-center"
+                                                    data-tip={data.tour.id}
+                                                >
+                                                    <MdPendingActions
+                                                        size={23}
+                                                    />
                                                 </div>
                                             )}
                                         </div>

@@ -66,7 +66,7 @@ export const useModal = () => {
                     <Header title={modal.title} isModal={true}>
                         <button
                             onClick={handleCloseModal}
-                            className="absolute right-0 top-3 text-dark dark:text-white p-2 text-4xl font-thin transition ease-in-out active:scale-[0.9] duration-100"
+                            className="absolute right-0 top-5 md:top-3 text-dark dark:text-white p-0 md:p-2 text-4xl font-thin transition ease-in-out active:scale-[0.9] duration-100"
                         >
                             <MdClose />
                         </button>
