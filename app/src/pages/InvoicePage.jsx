@@ -6,25 +6,19 @@ import { FormInput } from "components/form/input/FormInput";
 import InvoiceCashedForm from "components/forms/invoice/InvoiceCashedForm";
 import Loader from "components/loader/Loader";
 import Header from "components/templates/header/Header";
-import { useModal } from "hooks/useModal";
-import { useGetID, usePostData, usePutData } from "queryHooks/useInvoice";
-import { useGetAllDatas as useGetServices } from "queryHooks/useService";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import * as yup from "yup";
-
 import Table from "components/templates/table/Table";
 import Tbody from "components/templates/table/Tbody";
 import Td from "components/templates/table/Td";
 import Th from "components/templates/table/Th";
 import Thead from "components/templates/table/Thead";
 import Tr from "components/templates/table/Tr";
-
 import dayjs from "dayjs";
-import uuid from "react-uuid";
-import { price, roundPrice } from "utils/functions.utils";
-
+import { useModal } from "hooks/useModal";
+import _ from "lodash";
+import { useGetID, usePostData, usePutData } from "queryHooks/useInvoice";
+import { useGetAllDatas as useGetServices } from "queryHooks/useService";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import {
     IoIosAddCircleOutline,
     IoIosCheckmarkCircleOutline,
@@ -40,6 +34,10 @@ import {
     MdOutlineAssignment,
     MdOutlineFileDownload,
 } from "react-icons/md";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import uuid from "react-uuid";
+import { price, roundPrice } from "utils/functions.utils";
+import * as yup from "yup";
 
 import { CommandPage } from "./CommandPage";
 
@@ -49,8 +47,6 @@ import { statusColor } from "config/translations.config";
 import axios from "axios";
 import fileDownload from "js-file-download";
 
-import _ from "lodash";
-
 export const InvoicePage = ({ title }) => {
     const navigate = useNavigate();
     const { state: previousPageState } = useLocation();
@@ -59,6 +55,7 @@ export const InvoicePage = ({ title }) => {
     const { id } = useParams();
 
     const { data, isLoading, error, isSuccess } = useGetID(id);
+    console.log("isLoading", isLoading);
 
     const {
         mutate: put,
@@ -66,14 +63,20 @@ export const InvoicePage = ({ title }) => {
         isSuccess: isPutSuccess,
     } = usePutData();
 
-    const [invoiceData, setInvoiceData] = useState([]);
+    const [invoiceData, setInvoiceData] = useState({ content: [] });
 
     useEffect(() => {
-        if (isSuccess) setInvoiceData(data);
+        if (isSuccess) {
+            setInvoiceData(data);
+        }
     }, [isSuccess]);
 
     const handleUpdateInvoice = () => {
-        put(invoiceData);
+        const _invoiceData = {
+            ...invoiceData,
+            trustee: invoiceData.trustee["@id"],
+        };
+        put(_invoiceData);
     };
 
     const downloadFile = (id, chrono, customerRef) => {
@@ -145,6 +148,9 @@ export const InvoicePage = ({ title }) => {
 
         return { amountHT: amountHT, amountTTC: amountTTC };
     };
+
+    console.log("data", data);
+    console.log("invoiceData", invoiceData);
 
     if (isLoading) return <Loader />;
     else
@@ -665,6 +671,7 @@ const Refund = ({ data, handleCloseModal }) => {
         delete _postData.id;
         delete _postData.chrono;
         delete _postData.command;
+        delete _postData.isSend;
         if (data.trustee) _postData["trustee"] = data.trustee.id;
         if (data.property) _postData["property"] = data.property.id;
         if (data.customer) _postData["customer"] = data.customer.id;
@@ -690,11 +697,13 @@ const Refund = ({ data, handleCloseModal }) => {
             </p>
             <div className="flex items-center gap-5 justify-center p-5">
                 <button
+                    disabled={isPostPending || isPutPending}
                     className="btn btn-outline"
                     onClick={() => handleCloseModal()}
                 >
                     Annuler
                 </button>
+                disabled={isPostPending || isPutPending}
                 <button
                     className="btn btn-error text-white"
                     onClick={() => handleRefund()}
@@ -711,11 +720,17 @@ const Duplicate = ({ data, handleCloseModal }) => {
 
     const handleDuplicate = () => {
         const _data = { ...data, status: "édité" };
+        if (data.trustee) _data["trustee"] = data.trustee.id;
+        if (data.property) _data["property"] = data.property.id;
+        if (data.customer) _data["customer"] = data.customer.id;
         delete _data["@id"];
         delete _data.id;
         delete _data.chrono;
         delete _data.command;
         delete _data.createdAt;
+        delete _data.isSend;
+        delete _data.isRefund;
+        delete _data.isRefund;
         mutate(_data);
     };
 
@@ -731,12 +746,14 @@ const Duplicate = ({ data, handleCloseModal }) => {
             </p>
             <div className="flex items-center gap-5 justify-start py-5">
                 <button
+                    disabled={isLoading}
                     className="btn btn-outline"
                     onClick={() => handleCloseModal()}
                 >
                     Annuler
                 </button>
                 <button
+                    disabled={isLoading}
                     className="btn btn-error text-white"
                     onClick={() => handleDuplicate()}
                 >
@@ -770,12 +787,14 @@ const Irrecoverable = ({ data, handleCloseModal }) => {
             </p>
             <div className="flex items-center gap-5 justify-start py-5">
                 <button
+                    disabled={isLoading}
                     className="btn btn-outline"
                     onClick={() => handleCloseModal()}
                 >
                     Annuler
                 </button>
                 <button
+                    disabled={isLoading}
                     className="btn btn-error text-white"
                     onClick={() => handleIrrecoverable()}
                 >
@@ -806,12 +825,14 @@ const Validate = ({ data, handleCloseModal }) => {
             </p>
             <div className="flex items-center gap-5 justify-start py-5">
                 <button
+                    disabled={isLoading}
                     className="btn btn-outline"
                     onClick={() => handleCloseModal()}
                 >
                     Annuler
                 </button>
                 <button
+                    disabled={isLoading}
                     className="btn btn-error text-white"
                     onClick={() => handleValidate()}
                 >
@@ -898,15 +919,16 @@ const EmailForm = ({ data, handleCloseModal }) => {
             </p>
             <div className="flex items-center gap-5 justify-start py-5">
                 <button
+                    disabled={isPutPending}
                     className="btn btn-outline"
                     onClick={() => handleCloseModal()}
                 >
                     Annuler
                 </button>
                 <button
+                    disabled={isPutPending}
                     className="btn btn-error text-white"
                     onClick={() => handleValidate()}
-                    disabled={isPutPending}
                 >
                     Confirmer
                 </button>

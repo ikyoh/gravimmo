@@ -39,14 +39,30 @@ export const useModal = () => {
 
     const Modal = () => {
         return createPortal(
-            <div className={className}>
+            <div
+                className={className}
+                onClick={(e) => {
+                    e.stopPropagation();
+                }}
+                onMouseUp={(e) => {
+                    e.stopPropagation();
+                }}
+            >
                 <KeyboardEventHandler
                     handleKeys={["esc"]}
                     handleFocusableElements={true}
                     onKeyEvent={(key, e) => handleCloseModal()}
                 />
 
-                <div className={modalClassName}>
+                <div
+                    className={modalClassName}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                    }}
+                    onMouseUp={(e) => {
+                        e.stopPropagation();
+                    }}
+                >
                     <Header title={modal.title} isModal={true}>
                         <button
                             onClick={handleCloseModal}
