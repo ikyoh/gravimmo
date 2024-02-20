@@ -19,7 +19,7 @@ import {
 import { Button, ButtonSize } from "../../button/Button";
 import ToggleMode from "../../togglemode/ToggleMode";
 
-const Menu = () => {
+const Menu = ({ handleCloseModal }) => {
     const location = useLocation();
     const { mutate: logout } = useLogoutAccount();
     const {
@@ -29,11 +29,11 @@ const Menu = () => {
     } = useGetCurrentAccount();
 
     return (
-        <div className="hidden md:block bg-light dark:bg-dark h-full md:w-[110px]">
+        <div className="bg-light dark:bg-dark h-full md:w-[110px]">
             <div className="lg:flex lg:flex-col items-center justify-between bg-gradient-menu-light dark:bg-gradient-menu h-full py-7">
-                <div className="">
+                <div className="hidden md:block">
                     <svg
-                        className="fill-dark dark:fill-white"
+                        className="fill-dark dark:fill-white mx-auto"
                         width="66"
                         height="66"
                         viewBox="0 0 89 89"
@@ -44,12 +44,13 @@ const Menu = () => {
                     </svg>
                 </div>
 
-                <div className="flex flex-col gap-3">
+                <div className="grid grid-cols-3 md:grid-cols-1 gap-3">
                     <Button
                         isBorder={location.pathname.includes("/dashboard")}
                         link="/dashboard"
                         size={ButtonSize.Big}
                         info="Tableau de bord"
+                        onClick={() => handleCloseModal()}
                     >
                         <MdDashboard />
                     </Button>
@@ -58,6 +59,7 @@ const Menu = () => {
                         link="/tours"
                         size={ButtonSize.Big}
                         info="Tournées"
+                        onClick={() => handleCloseModal()}
                     >
                         <MdPendingActions />
                     </Button>
@@ -67,6 +69,7 @@ const Menu = () => {
                         link="/commands"
                         size={ButtonSize.Big}
                         info="Commandes"
+                        onClick={() => handleCloseModal()}
                     >
                         <MdOutlineAssignment />
                     </Button>
@@ -79,6 +82,7 @@ const Menu = () => {
                                 link="/invoices"
                                 size={ButtonSize.Big}
                                 info="Factures"
+                                onClick={() => handleCloseModal()}
                             >
                                 <BsPiggyBank />
                             </Button>
@@ -87,6 +91,7 @@ const Menu = () => {
                                 link="/quotes"
                                 size={ButtonSize.Big}
                                 info="Devis"
+                                onClick={() => handleCloseModal()}
                             >
                                 <MdOutlineCalculate />
                             </Button>
@@ -97,6 +102,7 @@ const Menu = () => {
                                 link="/customers"
                                 size={ButtonSize.Big}
                                 info="Clients"
+                                onClick={() => handleCloseModal()}
                             >
                                 <MdAccountCircle />
                             </Button>
@@ -107,6 +113,7 @@ const Menu = () => {
                                 link="/trustees"
                                 size={ButtonSize.Big}
                                 info="Syndics"
+                                onClick={() => handleCloseModal()}
                             >
                                 <MdSupervisedUserCircle />
                             </Button>
@@ -117,6 +124,7 @@ const Menu = () => {
                                 )}
                                 link="/properties"
                                 info="Copropriétés"
+                                onClick={() => handleCloseModal()}
                             >
                                 <MdOutlineHomeWork />
                             </Button>
@@ -127,6 +135,7 @@ const Menu = () => {
                                 link="/contacts"
                                 size={ButtonSize.Big}
                                 info="Contacts"
+                                onClick={() => handleCloseModal()}
                             >
                                 <MdGroups />
                             </Button>
@@ -135,13 +144,14 @@ const Menu = () => {
                                 isBorder={location.pathname === "/services"}
                                 link="/services"
                                 info="Prestations"
+                                onClick={() => handleCloseModal()}
                             >
                                 <MdOutlineDriveFileRenameOutline />
                             </Button>
                         </>
                     )}
                 </div>
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3 items-center">
                     <ToggleMode />
                     <Button isBorder={false} onClick={() => logout()}>
                         <MdLogout />

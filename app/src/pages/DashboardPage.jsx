@@ -35,7 +35,10 @@ export const DashboardPage = ({ title }) => {
 
     return (
         <>
-            <Header title={title}></Header>
+            <Header
+                title={title}
+                subtitle={dayjs().format("dddd D MMMM YYYY")}
+            />
             <Content>
                 {account.roles.includes("ROLE_WORKSHOP") && (
                     <section>

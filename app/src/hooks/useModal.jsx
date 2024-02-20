@@ -11,6 +11,7 @@ export const useModal = () => {
         show: false,
         content: false,
         size: "full",
+        isMenu: false,
     });
 
     const handleOpenModal = (props) => {
@@ -20,6 +21,7 @@ export const useModal = () => {
             title: props.title,
             content: props.content,
             size: props.size || "full",
+            isMenu: props.isMenu || false,
         });
     };
 
@@ -30,11 +32,13 @@ export const useModal = () => {
     const className = classNames({
         "modal !bg-black/60 m-0 p-0 md:p-6": true,
         "modal-open": modal.show,
+        "backdrop-blur-md ": modal.isMenu,
     });
 
     const modalClassName = classNames({
         "modal-box max-h-full md:shadow-md shadow-black rounded-none md:rounded-md p-0 bg-white dark:bg-dark dark:bg-gradient-modal scrollbar": true,
         "w-full md:w-11/12 max-w-5xl h-full": modal.size === "full",
+        "w-[80vw] h-auto rounded-md p-0": modal.isMenu === true,
     });
 
     const Modal = () => {
@@ -43,6 +47,7 @@ export const useModal = () => {
                 className={className}
                 onClick={(e) => {
                     e.stopPropagation();
+                    handleCloseModal();
                 }}
                 onMouseUp={(e) => {
                     e.stopPropagation();
@@ -63,15 +68,21 @@ export const useModal = () => {
                         e.stopPropagation();
                     }}
                 >
-                    <Header title={modal.title} isModal={true}>
-                        <button
-                            onClick={handleCloseModal}
-                            className="absolute right-0 top-5 md:top-3 text-dark dark:text-white p-0 md:p-2 text-4xl font-thin transition ease-in-out active:scale-[0.9] duration-100"
-                        >
-                            <MdClose />
-                        </button>
-                    </Header>
-                    <div className="relative px-5 pt-5 h-full">
+                    {modal.title && (
+                        <Header title={modal.title} isModal={true}>
+                            <button
+                                onClick={handleCloseModal}
+                                className="absolute right-0 top-5 md:top-3 text-dark dark:text-white p-0 md:p-2 text-4xl font-thin transition ease-in-out active:scale-[0.9] duration-100"
+                            >
+                                <MdClose />
+                            </button>
+                        </Header>
+                    )}
+                    <div
+                        className={`relative h-full ${
+                            !modal.isMenu && "px-5 pt-5}"
+                        }`}
+                    >
                         {modal.content}
                     </div>
                 </div>

@@ -30,7 +30,7 @@ const Header = ({
     );
 
     return (
-        <div id="dropdown-portal" className={headerClassName}>
+        <div className={headerClassName}>
             <div className="flex items-center gap-6 md:justify-start justify-between">
                 <Title title={title} isLoading={isLoading} />
                 {error ? "Error : " + error.message : null}

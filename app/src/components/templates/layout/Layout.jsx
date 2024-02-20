@@ -21,15 +21,15 @@ export const Layout = ({ children, roles = [] }) => {
     if (!isLoadingAccount && !account) return <NotAuthorized />;
     return (
         <>
-            <div className="flex flex-col-reverse md:flex-row min-h-screen">
+            <div className="flex flex-col md:flex-row min-h-screen">
                 <ProtectedContent account={account} roles={roles}>
-                    <div className="fixed bottom-0 w-full md:w-[110px] md:h-screen md:sticky md:top-0 z-10">
-                        <MenuMobile />
+                    <div className="fixed bottom-0 w-full md:w-[110px] md:h-screen md:sticky md:top-0 z-10 hidden md:block">
                         <Menu />
                     </div>
                     <div className="grow flex flex-col mb-[70px]">
                         {children}
                     </div>
+                    <MenuMobile />
                 </ProtectedContent>
             </div>
         </>
