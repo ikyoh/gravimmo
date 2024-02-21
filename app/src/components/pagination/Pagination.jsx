@@ -9,7 +9,7 @@ const Pagination = ({ totalItems = 20, page, setPage }) => {
         setPage(event.selected + 1);
     };
 
-    if (pageCount === 1) return null;
+    if (!pageCount || pageCount === 1) return null;
     else
         return (
             <div className="bg-light dark:bg-dark w-full pr-5">

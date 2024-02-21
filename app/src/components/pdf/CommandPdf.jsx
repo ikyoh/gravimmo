@@ -27,103 +27,91 @@ const CommandPdf = ({ commands = [] }) => {
                 >
                     <View style={{ marginLeft: 20, marginRight: 20 }}>
                         <Text style={styles.title}>
-                            COMMANDE # {order.id} -{" "}
-                            {order.trustee && order.trustee.title}{" "}
+                            COMMANDE # {order.id + " - "}
+                            {order.trustee && order.trustee.title}
                             {order.customer && order.customer.title}
                         </Text>
 
-                        <Text style={styles.subtitle}>Préparation</Text>
+                        <Text style={styles.subtitle}>Infos préparation</Text>
 
-                        {order.customServices?.map((customService) => (
-                            <View key={uuid()} style={styles.service}>
-                                <Text key={uuid()}>
-                                    {customService.propertyServices?.map(
-                                        (propertyService) =>
-                                            propertyService.service.title + " "
-                                    )}
-                                </Text>
-                                <Text>
-                                    {customService.details["nouveloccupant"]}
-                                </Text>
-                            </View>
-                        ))}
+                        <View style={styles.row}>
+                            {order.property &&
+                                order.property.services?.map(
+                                    (service) =>
+                                        service.service.category !== "Pose" && (
+                                            <View
+                                                key={service["@id"]}
+                                                style={styles.column}
+                                            >
+                                                <Text style={styles.bold}>
+                                                    {service.service.title}
+                                                </Text>
+                                                {service.material && (
+                                                    <Text>
+                                                        Matière :{" "}
+                                                        {service.material}
+                                                    </Text>
+                                                )}
+                                                {service.color && (
+                                                    <Text>
+                                                        Couleur :{" "}
+                                                        {service.color}
+                                                    </Text>
+                                                )}
+                                                {service.size && (
+                                                    <Text>
+                                                        Dimensions :{" "}
+                                                        {service.size}
+                                                    </Text>
+                                                )}
+                                                {service.thickness && (
+                                                    <Text>
+                                                        Epaisseur :{" "}
+                                                        {service.thickness}
+                                                    </Text>
+                                                )}
+                                                {service.margin && (
+                                                    <Text>
+                                                        Marges :{" "}
+                                                        {service.margin}
+                                                    </Text>
+                                                )}
+                                                {service.font && (
+                                                    <Text>
+                                                        Police : {service.font}
+                                                    </Text>
+                                                )}
+                                                {service.configuration && (
+                                                    <Text>
+                                                        Configuration :{" "}
+                                                        {service.configuration}
+                                                    </Text>
+                                                )}
+                                                {service.finishing.length >
+                                                    0 && (
+                                                    <Text>
+                                                        Façonnage :{" "}
+                                                        {service.finishing.map(
+                                                            (finishing) =>
+                                                                finishing + ". "
+                                                        )}
+                                                    </Text>
+                                                )}
+                                            </View>
+                                        )
+                                )}
+                        </View>
 
-                        {order.extraServices?.map((extraService) => (
-                            <View key={uuid()} style={styles.service}>
-                                <Text key={uuid()}>
-                                    {extraService.service.title}
-                                </Text>
-                            </View>
-                        ))}
+                        <Text style={styles.subtitle}>Infos gravure</Text>
 
-                        {!order.isCustom &&
-                            order.property &&
-                            order.property.services?.map((service) => (
-                                <View
-                                    key={service["@id"]}
-                                    style={styles.service}
-                                >
-                                    <Text style={styles.bold}>
-                                        {service.service.title}
-                                    </Text>
-                                    {service.material && (
-                                        <Text>
-                                            Matière : {service.material}
-                                        </Text>
-                                    )}
-                                    {service.color && (
-                                        <Text>Couleur : {service.color}</Text>
-                                    )}
-                                    {service.size && (
-                                        <Text>Dimensions : {service.size}</Text>
-                                    )}
-                                    {service.thickness && (
-                                        <Text>
-                                            Epaisseur : {service.thickness}
-                                        </Text>
-                                    )}
-                                    {service.margin && (
-                                        <Text>Marges : {service.margin}</Text>
-                                    )}
-                                    {service.font && (
-                                        <Text>Police : {service.font}</Text>
-                                    )}
-                                    {service.configuration && (
-                                        <Text>
-                                            Configuration :{" "}
-                                            {service.configuration}
-                                        </Text>
-                                    )}
-                                    {service.finishing.length > 0 && (
-                                        <Text>
-                                            Façonnage :{" "}
-                                            {service.finishing.map(
-                                                (finishing) => finishing + ". "
-                                            )}
-                                        </Text>
-                                    )}
-                                </View>
-                            ))}
                         {order.details.nouveloccupant && (
-                            <Text
-                                style={{ ...styles.bold, ...styles.separator }}
-                            >
+                            <Text>
                                 Nouvel occupant : {order.details.nouveloccupant}
                             </Text>
                         )}
-                        {Object.keys(order.details)
-                            .filter(
-                                (f) =>
-                                    f !== "nouveloccupant" &&
-                                    f !== "ancienoccupant" &&
-                                    f !== "proprietaire" &&
-                                    f !== "orderTags"
-                            )
-                            .map((key) => (
-                                <Text key={uuid()}>
-                                    {commandDetails[key]} : {order.details[key]}
-                                </Text>
-                            ))}
+
+                        <OrderDetails orderdetails={order.details} />
+
                         {order.property &&
                             order.property.params.includes(
                                 "platineadefilement"
@@ -136,70 +124,116 @@ const CommandPdf = ({ commands = [] }) => {
                             order.property.params.includes("tableauptt") && (
                                 <Text>Tableau PTT</Text>
                             )}
-                    </View>
-                    {order.property && (
-                        <View style={{ marginLeft: 20, marginRight: 20 }}>
-                            <Text style={{ ...styles.subtitle, marginTop: 70 }}>
-                                Pose
-                            </Text>
-                            <Text style={styles.bold}>
-                                Copropriété : {order.property.title}
-                            </Text>
-                            <Text style={styles.separator}>
-                                Secteur : {order.property.zone}
-                            </Text>
-                            <Text style={styles.separator}>
-                                {order.property.address}
-                            </Text>
-                            <Text>
-                                {order.property.postcode} {order.property.city}
-                            </Text>
-                            {order.property.contactName && (
-                                <Text style={styles.separator}>
-                                    Contact : {order.property.contactName}{" "}
-                                    {order.property.contactPhone}
+
+                        <View style={styles.row}>
+                            {order.customServices?.map((customService) => (
+                                <View key={uuid} style={styles.column}>
+                                    {customService.propertyServices.map(
+                                        (propertyService) =>
+                                            propertyService.service.category !==
+                                                "Pose" && (
+                                                <Text
+                                                    key={uuid}
+                                                    style={{
+                                                        marginBottom: 3,
+                                                        fontWeight: 700,
+                                                    }}
+                                                >
+                                                    {
+                                                        propertyService.service
+                                                            .title
+                                                    }
+                                                </Text>
+                                            )
+                                    )}
+                                    <OrderDetails
+                                        orderdetails={customService.details}
+                                    />
+                                </View>
+                            ))}
+                        </View>
+                        {order.property && (
+                            <View>
+                                <Text style={styles.subtitle}>Pose</Text>
+                                <Text style={styles.bold}>
+                                    Copropriété : {order.property.title}
                                 </Text>
-                            )}
-                            {order.property.accessType && (
-                                <>
+                                <Text style={styles.separator}>
+                                    Secteur : {order.property.zone}
+                                </Text>
+                                <Text style={styles.separator}>
+                                    {order.property.address}
+                                </Text>
+                                <Text>
+                                    {order.property.postcode}{" "}
+                                    {order.property.city}
+                                </Text>
+                                {order.property.entrance && (
                                     <Text style={styles.separator}>
-                                        Type d'accès :{" "}
-                                        {order.property.accessType}
+                                        Entrée: {order.property.entrance}
                                     </Text>
-                                    <Text>
-                                        Code d'accès :{" "}
-                                        {order.property.accessCode}
+                                )}
+                                {order.property.contactName && (
+                                    <Text style={styles.separator}>
+                                        Contact : {order.property.contactName}{" "}
+                                        {order.property.contactPhone}
                                     </Text>
-                                </>
-                            )}
-                            <Text
-                                style={{ ...styles.separator, ...styles.bold }}
-                            >
-                                {order.details.ancienoccupant &&
-                                    "Ancien occupant : " +
-                                        order.details.ancienoccupant}
-                            </Text>
-                        </View>
-                    )}
-                    {order.customer && (
-                        <View style={{ marginLeft: 20, marginRight: 20 }}>
-                            <Text style={{ ...styles.subtitle, marginTop: 70 }}>
-                                Pose
-                            </Text>
-                            <Text style={styles.bold}>
-                                Client : {order.customer.title}
-                            </Text>
-                            <Text style={styles.separator}>
-                                Secteur : {order.customer.zone}
-                            </Text>
-                            <Text style={styles.separator}>
-                                {order.customer.address}
-                            </Text>
-                            <Text>
-                                {order.customer.postcode} {order.customer.city}
-                            </Text>
-                        </View>
-                    )}
+                                )}
+                                {order.property.digicode && (
+                                    <Text style={styles.separator}>
+                                        Digicode: {order.property.digicode}
+                                    </Text>
+                                )}
+                                {order.property.accessType && (
+                                    <>
+                                        <Text style={styles.separator}>
+                                            Type d'accès :{" "}
+                                            {order.property.accessType}
+                                        </Text>
+                                        <Text>
+                                            Code d'accès :{" "}
+                                            {order.property.accessCode}
+                                        </Text>
+                                    </>
+                                )}
+                                <Text
+                                    style={{
+                                        ...styles.separator,
+                                        ...styles.bold,
+                                    }}
+                                >
+                                    {order.details.ancienoccupant &&
+                                        "Ancien occupant : " +
+                                            order.details.ancienoccupant}
+                                </Text>
+                            </View>
+                        )}
+                        {order.customer && (
+                            <View>
+                                <Text
+                                    style={{
+                                        ...styles.subtitle,
+                                        marginTop: 70,
+                                    }}
+                                >
+                                    Pose
+                                </Text>
+                                <Text style={styles.bold}>
+                                    Client : {order.customer.title}
+                                </Text>
+                                <Text style={styles.separator}>
+                                    Secteur : {order.customer.zone}
+                                </Text>
+                                <Text style={styles.separator}>
+                                    {order.customer.address}
+                                </Text>
+                                <Text>
+                                    {order.customer.postcode}{" "}
+                                    {order.customer.city}
+                                </Text>
+                            </View>
+                        )}
+                    </View>
                 </Page>
             ))}
         </Document>
@@ -231,3 +265,22 @@ const CommandPdf = ({ commands = [] }) => {
 };
 
 export default CommandPdf;
+
+export const OrderDetails = ({ orderdetails }) => {
+    return (
+        <>
+            {Object.keys(orderdetails)
+                .filter(
+                    (f) =>
+                        f !== "ancienoccupant" &&
+                        f !== "proprietaire" &&
+                        f !== "orderTags"
+                )
+                .map((key) => (
+                    <Text key={uuid()}>
+                        {commandDetails[key]} : {orderdetails[key]}
+                    </Text>
+                ))}
+        </>
+    );
+};

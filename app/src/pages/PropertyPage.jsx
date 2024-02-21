@@ -133,6 +133,12 @@ export const PropertyPage = () => {
                             <div className="subtitle">TVA</div>
                             {data.tva} %
                         </div>
+                        {data.digicode && (
+                            <div className="_card">
+                                <div className="subtitle">Digicode</div>
+                                {data.digicode}
+                            </div>
+                        )}
                         {data.accesses.length !== 0 && (
                             <div className="_card">
                                 <div className="subtitle">Accès</div>
@@ -148,13 +154,28 @@ export const PropertyPage = () => {
                                 </div>
                             </div>
                         )}
+                        {data.entrances.length !== 0 && (
+                            <div className="_card">
+                                <div className="subtitle">Entrées</div>
+                                <div className="flex gap-3">
+                                    {data.entrances?.map((entrance) => (
+                                        <div
+                                            key={uuid()}
+                                            className="border border-white/20 rounded p-2"
+                                        >
+                                            {entrance}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                         <div className="_card">
                             <div className="subtitle">Configuration</div>
                             <div className="flex flex-wrap gap-3">
                                 {data.params.map((p) => (
                                     <div
-                                        className="bg-black/20 rounded p-3"
-                                        key={p}
+                                        key={uuid()}
+                                        className="border border-white/20 rounded p-2"
                                     >
                                         {commandDetails[p]}
                                     </div>

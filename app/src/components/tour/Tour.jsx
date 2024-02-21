@@ -6,6 +6,7 @@ import { useGetOneData, usePutData } from "queryHooks/useTour";
 import { useEffect, useState } from "react";
 import { BsPiggyBank } from "react-icons/bs";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
+
 import { arrayOfIris } from "utils/functions.utils";
 
 import { Reorder } from "framer-motion";

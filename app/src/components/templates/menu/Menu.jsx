@@ -50,7 +50,13 @@ const Menu = ({ handleCloseModal }) => {
                         link="/dashboard"
                         size={ButtonSize.Big}
                         info="Tableau de bord"
-                        onClick={() => handleCloseModal()}
+                        {...(handleCloseModal
+                            ? {
+                                  onClick: () => {
+                                      handleCloseModal();
+                                  },
+                              }
+                            : {})}
                     >
                         <MdDashboard />
                     </Button>
@@ -59,7 +65,13 @@ const Menu = ({ handleCloseModal }) => {
                         link="/tours"
                         size={ButtonSize.Big}
                         info="Tournées"
-                        onClick={() => handleCloseModal()}
+                        {...(handleCloseModal
+                            ? {
+                                  onClick: () => {
+                                      handleCloseModal();
+                                  },
+                              }
+                            : {})}
                     >
                         <MdPendingActions />
                     </Button>
@@ -69,7 +81,13 @@ const Menu = ({ handleCloseModal }) => {
                         link="/commands"
                         size={ButtonSize.Big}
                         info="Commandes"
-                        onClick={() => handleCloseModal()}
+                        {...(handleCloseModal
+                            ? {
+                                  onClick: () => {
+                                      handleCloseModal();
+                                  },
+                              }
+                            : {})}
                     >
                         <MdOutlineAssignment />
                     </Button>
@@ -82,7 +100,13 @@ const Menu = ({ handleCloseModal }) => {
                                 link="/invoices"
                                 size={ButtonSize.Big}
                                 info="Factures"
-                                onClick={() => handleCloseModal()}
+                                {...(handleCloseModal
+                                    ? {
+                                          onClick: () => {
+                                              handleCloseModal();
+                                          },
+                                      }
+                                    : {})}
                             >
                                 <BsPiggyBank />
                             </Button>
@@ -91,7 +115,13 @@ const Menu = ({ handleCloseModal }) => {
                                 link="/quotes"
                                 size={ButtonSize.Big}
                                 info="Devis"
-                                onClick={() => handleCloseModal()}
+                                {...(handleCloseModal
+                                    ? {
+                                          onClick: () => {
+                                              handleCloseModal();
+                                          },
+                                      }
+                                    : {})}
                             >
                                 <MdOutlineCalculate />
                             </Button>
@@ -102,7 +132,13 @@ const Menu = ({ handleCloseModal }) => {
                                 link="/customers"
                                 size={ButtonSize.Big}
                                 info="Clients"
-                                onClick={() => handleCloseModal()}
+                                {...(handleCloseModal
+                                    ? {
+                                          onClick: () => {
+                                              handleCloseModal();
+                                          },
+                                      }
+                                    : {})}
                             >
                                 <MdAccountCircle />
                             </Button>
@@ -113,7 +149,13 @@ const Menu = ({ handleCloseModal }) => {
                                 link="/trustees"
                                 size={ButtonSize.Big}
                                 info="Syndics"
-                                onClick={() => handleCloseModal()}
+                                {...(handleCloseModal
+                                    ? {
+                                          onClick: () => {
+                                              handleCloseModal();
+                                          },
+                                      }
+                                    : {})}
                             >
                                 <MdSupervisedUserCircle />
                             </Button>
@@ -124,7 +166,13 @@ const Menu = ({ handleCloseModal }) => {
                                 )}
                                 link="/properties"
                                 info="Copropriétés"
-                                onClick={() => handleCloseModal()}
+                                {...(handleCloseModal
+                                    ? {
+                                          onClick: () => {
+                                              handleCloseModal();
+                                          },
+                                      }
+                                    : {})}
                             >
                                 <MdOutlineHomeWork />
                             </Button>
@@ -135,7 +183,13 @@ const Menu = ({ handleCloseModal }) => {
                                 link="/contacts"
                                 size={ButtonSize.Big}
                                 info="Contacts"
-                                onClick={() => handleCloseModal()}
+                                {...(handleCloseModal
+                                    ? {
+                                          onClick: () => {
+                                              handleCloseModal();
+                                          },
+                                      }
+                                    : {})}
                             >
                                 <MdGroups />
                             </Button>
@@ -144,7 +198,13 @@ const Menu = ({ handleCloseModal }) => {
                                 isBorder={location.pathname === "/services"}
                                 link="/services"
                                 info="Prestations"
-                                onClick={() => handleCloseModal()}
+                                {...(handleCloseModal
+                                    ? {
+                                          onClick: () => {
+                                              handleCloseModal();
+                                          },
+                                      }
+                                    : {})}
                             >
                                 <MdOutlineDriveFileRenameOutline />
                             </Button>

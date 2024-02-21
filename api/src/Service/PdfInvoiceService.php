@@ -180,7 +180,8 @@ class PdfInvoiceService
         }
 
         if ($invoice->getProperty()) {
-            $datas['property'] = $invoice->getProperty()->getTitle()  ;
+            $datas['property'] = $invoice->getProperty()->getTitle();
+            $datas['propertydetails'] = $invoice->getProperty()->getTitle()." - ".$invoice->getProperty()->getAddress()." ".$invoice->getProperty()->getPostcode()." ".$invoice->getProperty()->getCity()  ;
         }
 
         if ($invoice->getRefundReference()) {

@@ -7,5 +7,5 @@
 }
 
 .filepond--label-action {
-    @apply w-12;
+    @apply w-12 object-contain;
 }

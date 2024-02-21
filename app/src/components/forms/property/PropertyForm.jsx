@@ -56,6 +56,7 @@ export default function PropertyForm({
         deliveredAt: "2000-01-01",
         params: [],
         accesses: [],
+        entrances: [],
     };
 
     const {
@@ -187,6 +188,14 @@ export default function PropertyForm({
                 register={register}
                 required={true}
             />
+            <FieldArray
+                name="entrances"
+                label="Entrées"
+                placeholder="ex : A"
+                error={errors["entrances"]}
+                control={control}
+                required={false}
+            />
             <FormInput
                 type="text"
                 name="contactName"
@@ -200,6 +209,14 @@ export default function PropertyForm({
                 name="contactPhone"
                 label="Téléphone du contact ou gardien"
                 error={errors["contactPhone"]}
+                register={register}
+                required={false}
+            />
+            <FormInput
+                type="text"
+                name="digicode"
+                label="Digicode"
+                error={errors["digicode"]}
                 register={register}
                 required={false}
             />

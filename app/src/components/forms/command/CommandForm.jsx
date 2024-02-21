@@ -6,6 +6,7 @@ import Dropdown from "components/dropdown/Dropdown";
 import FormCheckbox from "components/form/checkbox/FormCheckbox";
 import Form from "components/form/form/Form";
 import Label from "components/form/label/FormLabel";
+import { FormSelect } from "components/form/select/FormSelect";
 import Loader from "components/loader/Loader";
 import { NoDataFound } from "components/noDataFound/NoDataFound";
 import { commandDetails } from "config/translations.config";
@@ -134,6 +135,7 @@ export const CommandForm = ({ id, handleCloseModal }) => {
             delete _form.extraServices;
             delete _form.tour;
             delete _form.images;
+            delete _form.trustee;
             putData(_form);
         }
         handleCloseModal();
@@ -371,7 +373,22 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                                     placeholder=""
                                 />
                             ))}
-
+                        {property.entrances.length !== 0 && (
+                            <FormSelect
+                                type="text"
+                                name="entrance"
+                                label="N° Entrée"
+                                error={errors["entrance"]}
+                                register={register}
+                                required={true}
+                            >
+                                {property.entrances.map((entrance) => (
+                                    <option key={uuid()} value={entrance}>
+                                        {entrance}
+                                    </option>
+                                ))}
+                            </FormSelect>
+                        )}
                         <Input
                             name="details.proprietaire"
                             label="Propriétaire"

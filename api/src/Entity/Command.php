@@ -84,7 +84,7 @@ class Command
     private ?string $trackingEmail = null;
 
     #[ORM\Column(length: 500, nullable: true)]
-    #[Groups(["command:read", "command:write"])]
+    #[Groups(["commands:read", "command:read", "command:write"])]
     private ?string $comment = null;
 
     #[ORM\Column(length: 255)]

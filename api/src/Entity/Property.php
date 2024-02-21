@@ -109,14 +109,21 @@ class Property
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["properties:read", "property:read", "property:write"])]
     private ?string $reference = null;
-
+    
     #[ORM\OneToMany(mappedBy: 'property', targetEntity: Invoice::class)]
     private Collection $invoices;
+    
+    #[ORM\Column(nullable: true)]
+    #[Groups(["properties:read", "property:read", "property:write"])]
+    private array $entrances = [];
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["properties:read", "property:read", "property:write"])]
+    private ?string $digicode = null;
 
 
     public function __construct()
     {
-        $this->services = new ArrayCollection();
         $this->services = new ArrayCollection();
         $this->commands = new ArrayCollection();
         $this->contacts = new ArrayCollection();
@@ -409,6 +416,30 @@ class Property
                 $invoice->setProperty(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getEntrances(): array
+    {
+        return $this->entrances;
+    }
+
+    public function setEntrances(?array $entrances): self
+    {
+        $this->entrances = $entrances;
+
+        return $this;
+    }
+
+    public function getDigicode(): ?string
+    {
+        return $this->digicode;
+    }
+
+    public function setDigicode(?string $digicode): self
+    {
+        $this->digicode = $digicode;
 
         return $this;
     }

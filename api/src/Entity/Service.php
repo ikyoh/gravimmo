@@ -54,7 +54,7 @@ class Service
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["services:read", "service:read", "service:write", "propertyservice:read"])]
+    #[Groups(["services:read", "service:read", "service:write", "propertyservice:read", "commands:read"])]
     private ?string $category = null;
 
     #[ORM\Column(nullable: true)]

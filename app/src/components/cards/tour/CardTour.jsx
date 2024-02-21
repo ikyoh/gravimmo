@@ -12,9 +12,11 @@ import { CommandPage } from "pages/CommandPage";
 import { useGetIRI } from "queryHooks/useCommand";
 import { useGetIRI as useGetCustomerIRI } from "queryHooks/useCustomer";
 import { useGetIRI as useGetPropertyIRI } from "queryHooks/useProperty";
+import { useState } from "react";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { MdOutlineAssignment } from "react-icons/md";
 import { SlPicture } from "react-icons/sl";
+import { useSwipeable } from "react-swipeable";
 import uuid from "react-uuid";
 
 export const CardTour = ({ iri }) => {
@@ -35,7 +37,7 @@ export const CardTour = ({ iri }) => {
         <>
             <Modal />
             <div className="_card dark:bg-gradient-page flex flex-col md:flex-row gap-3 items-center justify-between w-full flex-wrap">
-                <div className="flex-row items-center gap-5 flex">
+                <div className="flex flex-col md:flex-row items-center gap-3 md:gap-5">
                     <div className="">#{data.id}</div>
                     <div className="text-accent font-semibold">
                         {property && property.title}
@@ -131,7 +133,7 @@ export const CardTour = ({ iri }) => {
                         </Dropdown>
                     </div>
                 </div>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-3 gap-3 md:hidden">
                     <button
                         className="btn btn-primary btn-circle"
                         onClick={() =>
@@ -164,6 +166,24 @@ const Loading = () => {
     return (
         <div className="_card dark:bg-gradient-page w-full">
             <Loader />
+        </div>
+    );
+};
+
+const MySwipeableComponent = (props) => {
+    const [stopScroll, setStopScroll] = useState(false);
+
+    const handlers = useSwipeable({
+        onSwipeStart: () => setStopScroll(true),
+        onSwiped: () => setStopScroll(false),
+    });
+
+    return (
+        <div
+            {...handlers}
+            style={{ touchAction: stopScroll ? "none" : "auto" }}
+        >
+            Swipe here
         </div>
     );
 };
