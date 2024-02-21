@@ -12,11 +12,10 @@ import { CommandPage } from "pages/CommandPage";
 import { useGetIRI } from "queryHooks/useCommand";
 import { useGetIRI as useGetCustomerIRI } from "queryHooks/useCustomer";
 import { useGetIRI as useGetPropertyIRI } from "queryHooks/useProperty";
-import { useState } from "react";
+
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { MdOutlineAssignment } from "react-icons/md";
 import { SlPicture } from "react-icons/sl";
-import { useSwipeable } from "react-swipeable";
 import uuid from "react-uuid";
 
 export const CardTour = ({ iri }) => {
@@ -166,24 +165,6 @@ const Loading = () => {
     return (
         <div className="_card dark:bg-gradient-page w-full">
             <Loader />
-        </div>
-    );
-};
-
-const MySwipeableComponent = (props) => {
-    const [stopScroll, setStopScroll] = useState(false);
-
-    const handlers = useSwipeable({
-        onSwipeStart: () => setStopScroll(true),
-        onSwiped: () => setStopScroll(false),
-    });
-
-    return (
-        <div
-            {...handlers}
-            style={{ touchAction: stopScroll ? "none" : "auto" }}
-        >
-            Swipe here
         </div>
     );
 };
