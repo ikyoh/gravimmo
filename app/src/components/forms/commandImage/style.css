@@ -3,9 +3,13 @@
 }
 
 .filepond--drop-label {
-    @apply bg-action;
+    @apply bg-action md:!min-h-screen;
+}
+
+.filepond--wrapper {
+    @apply absolute md:relative -top-[15px];
 }
 
 .filepond--label-action {
-    @apply w-12 object-contain;
+    @apply p-3 w-12 h-12 md:w-32 md:h-32;
 }

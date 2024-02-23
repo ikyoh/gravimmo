@@ -98,13 +98,23 @@ export const CommandsPage = ({ title }) => {
         }
     };
 
-    const handleValidateSelection = async () => {
+    const handleValidateSelection = async (status) => {
         await Promise.all(
             checkedList.map(async (command) => {
                 const _command = { id: command.id };
-                if (command.status === "DEFAULT - à traiter") {
+                if (
+                    status === "DEFAULT - à traiter" &&
+                    command.status === "DEFAULT - à traiter"
+                ) {
                     _command.madeAt = dayjs();
                     _command.status = "DEFAULT - préparé";
+                }
+                if (
+                    status === "DEFAULT - préparé" &&
+                    command.status === "DEFAULT - préparé"
+                ) {
+                    _command.deliveredAt = dayjs();
+                    _command.status = "DEFAULT - posé";
                 }
                 putData(_command);
             })
@@ -182,9 +192,29 @@ export const CommandsPage = ({ title }) => {
                     <div>Sélection</div>
                     {checkedList.length !== 0 &&
                         checkedList.filter(
+                            (command) =>
+                                command.status === "DEFAULT - à traiter"
+                        ).length !== 0 && (
+                            <button
+                                onClick={() =>
+                                    handleValidateSelection(
+                                        "DEFAULT - à traiter"
+                                    )
+                                }
+                            >
+                                <IoIosCheckmarkCircleOutline size={26} />
+                                Valider la préparation
+                            </button>
+                        )}
+                    {checkedList.length !== 0 &&
+                        checkedList.filter(
                             (command) => command.status === "DEFAULT - préparé"
                         ).length !== 0 && (
-                            <button onClick={() => handleValidateSelection()}>
+                            <button
+                                onClick={() =>
+                                    handleValidateSelection("DEFAULT - préparé")
+                                }
+                            >
                                 <IoIosCheckmarkCircleOutline size={26} />
                                 Valider la pose
                             </button>

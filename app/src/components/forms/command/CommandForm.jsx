@@ -67,7 +67,6 @@ export const CommandForm = ({ id, handleCloseModal }) => {
         register,
         handleSubmit,
         setValue,
-        getValues,
         reset,
         resetField,
         watch,
@@ -447,7 +446,11 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                             label="Email du donneur d'ordre"
                             placeholder="adresse email"
                         />
-                        <Input name="comment" label="Commentaire" />
+                        <Input
+                            name="commentMake"
+                            label="Commentaire fabrication"
+                        />
+                        <Input name="commentDeliver" label="Commentaire pose" />
                     </>
                 )}
                 {isCustom && (
@@ -469,7 +472,14 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                                 label="Email de suivi"
                                 placeholder="url de l'email"
                             />
-                            <Input name="comment" label="Commentaire" />
+                            <Input
+                                name="commentMake"
+                                label="Commentaire fabrication"
+                            />
+                            <Input
+                                name="commentDeliver"
+                                label="Commentaire pose"
+                            />
 
                             {fields.map((item, index) => {
                                 return (

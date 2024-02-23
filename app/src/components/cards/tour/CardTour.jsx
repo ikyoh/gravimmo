@@ -12,9 +12,12 @@ import { CommandPage } from "pages/CommandPage";
 import { useGetIRI } from "queryHooks/useCommand";
 import { useGetIRI as useGetCustomerIRI } from "queryHooks/useCustomer";
 import { useGetIRI as useGetPropertyIRI } from "queryHooks/useProperty";
+import {
+    MdOutlineAssignment,
+    MdOutlineDriveFileRenameOutline,
+} from "react-icons/md";
 
 import { IoIosAddCircleOutline } from "react-icons/io";
-import { MdOutlineAssignment } from "react-icons/md";
 import { SlPicture } from "react-icons/sl";
 import uuid from "react-uuid";
 
@@ -46,15 +49,23 @@ export const CardTour = ({ iri }) => {
                         {property && property.zone}
                         {customer && customer.zone}
                     </div>
-                    {property &&
-                        property.accesses?.map((access) => (
-                            <div
-                                key={uuid()}
-                                className="rounded border border-slate-500 p-2"
-                            >
-                                {access}
-                            </div>
-                        ))}
+                    {property && (
+                        <>
+                            {property.digicode && (
+                                <div className="rounded border border-slate-500 p-2">
+                                    Digicode : {property.digicode}
+                                </div>
+                            )}
+                            {property.accesses?.map((access) => (
+                                <div
+                                    key={uuid()}
+                                    className="rounded border border-slate-500 p-2"
+                                >
+                                    {access}
+                                </div>
+                            ))}
+                        </>
+                    )}
                 </div>
 
                 <div className="flex gap-5 items-center">
@@ -149,10 +160,23 @@ export const CardTour = ({ iri }) => {
                     >
                         <MdOutlineAssignment size={30} />
                     </button>
-                    <button className="btn btn-primary btn-circle">
-                        <MdOutlineAssignment size={30} />
+                    <button
+                        className="btn btn-primary btn-circle"
+                        onClick={() =>
+                            handleOpenModal({
+                                title: "Prestations",
+                                content: (
+                                    <ExtraServiceForm
+                                        commandIRI={data["@id"]}
+                                        handleCloseModal={handleCloseModal}
+                                    />
+                                ),
+                            })
+                        }
+                    >
+                        <MdOutlineDriveFileRenameOutline size={30} />
                     </button>
-                    <div className="btn btn-primary btn-circle">
+                    <div className="btn btn-primary btn-circle overflow-hidden !p-0 flex items-center justify-center relative">
                         <CommandImageForm commandID={data.id} />
                     </div>
                 </div>

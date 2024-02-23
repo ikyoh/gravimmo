@@ -101,7 +101,11 @@ const Tour = ({ id, reorder }) => {
                             ))}
                         </Reorder.Group>
                     ) : (
-                        commands.map((iri) => <CardTour iri={iri} />)
+                        commands.map((iri) => (
+                            <div className="mb-3" key={iri}>
+                                <CardTour iri={iri} />
+                            </div>
+                        ))
                     )}
                 </div>
             </div>

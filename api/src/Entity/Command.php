@@ -83,9 +83,6 @@ class Command
     #[Groups(["command:read", "command:write"])]
     private ?string $trackingEmail = null;
 
-    #[ORM\Column(length: 500, nullable: true)]
-    #[Groups(["commands:read", "command:read", "command:write"])]
-    private ?string $comment = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(["commands:read", "command:read", "command:write", "tour:read"])]
@@ -126,6 +123,14 @@ class Command
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["commands:read", "command:read", "command:write"])]
     private ?string $contractorEmail = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["commands:read", "command:read", "command:write"])]
+    private ?string $commentMake = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["commands:read", "command:read", "command:write"])]
+    private ?string $commentDeliver = null;
 
     public function __construct()
     {
@@ -211,17 +216,6 @@ class Command
         return $this;
     }
 
-    public function getComment(): ?string
-    {
-        return $this->comment;
-    }
-
-    public function setComment(?string $comment): self
-    {
-        $this->comment = $comment;
-
-        return $this;
-    }
 
     public function getStatus(): ?string
     {
@@ -411,6 +405,30 @@ class Command
     public function setContractorEmail(?string $contractorEmail): self
     {
         $this->contractorEmail = $contractorEmail;
+
+        return $this;
+    }
+
+    public function getCommentMake(): ?string
+    {
+        return $this->commentMake;
+    }
+
+    public function setCommentMake(?string $commentMake): self
+    {
+        $this->commentMake = $commentMake;
+
+        return $this;
+    }
+
+    public function getCommentDeliver(): ?string
+    {
+        return $this->commentDeliver;
+    }
+
+    public function setCommentDeliver(?string $commentDeliver): self
+    {
+        $this->commentDeliver = $commentDeliver;
 
         return $this;
     }

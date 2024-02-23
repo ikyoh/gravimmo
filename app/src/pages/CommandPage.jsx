@@ -484,13 +484,24 @@ export const CommandPage = ({
                     </section>
                 )}
 
-                {data.comment && (
+                {data.commentMake && (
                     <section>
-                        <div className="section-title">Commentaire</div>
+                        <div className="section-title">
+                            Commentaire fabrication
+                        </div>
 
-                        <div>{data.comment}</div>
+                        <div>{data.commentMake}</div>
                     </section>
                 )}
+
+                {data.commentDeliver && (
+                    <section>
+                        <div className="section-title">Commentaire pose</div>
+
+                        <div>{data.commentDeliver}</div>
+                    </section>
+                )}
+
                 {data.contractorEmail && (
                     <section>
                         <div className="section-title">Donneur d'ordre</div>

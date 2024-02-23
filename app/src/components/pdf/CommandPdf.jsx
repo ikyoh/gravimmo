@@ -28,12 +28,108 @@ const CommandPdf = ({ commands = [] }) => {
                     <View style={{ marginLeft: 20, marginRight: 20 }}>
                         <Text style={styles.title}>
                             COMMANDE # {order.id + " - "}
-                            {order.trustee && order.trustee.title}
-                            {order.customer && order.customer.title}
+                            Secteur :{" "}
+                            {order.property
+                                ? order.property.zone
+                                : order.customer.zone}
                         </Text>
 
-                        <Text style={styles.subtitle}>Infos préparation</Text>
+                        {order.property && (
+                            <View>
+                                <Text style={styles.subtitle}>Pose</Text>
+                                {order.commentDeliver && (
+                                    <Text
+                                        style={{
+                                            marginBottom: 5,
+                                            ...styles.bold,
+                                        }}
+                                    >
+                                        Commentaire : {order.commentDeliver}
+                                    </Text>
+                                )}
+                                <Text style={styles.bold}>
+                                    Copropriété : {order.property.title}
+                                </Text>
 
+                                <Text style={styles.separator}>
+                                    {order.property.address}
+                                </Text>
+                                <Text>
+                                    {order.property.postcode}{" "}
+                                    {order.property.city}
+                                </Text>
+                                {order.property.entrance && (
+                                    <Text style={styles.separator}>
+                                        Entrée: {order.property.entrance}
+                                    </Text>
+                                )}
+                                {order.property.contactName && (
+                                    <Text style={styles.separator}>
+                                        Contact : {order.property.contactName}{" "}
+                                        {order.property.contactPhone}
+                                    </Text>
+                                )}
+                                {order.property.digicode && (
+                                    <Text style={styles.separator}>
+                                        Digicode: {order.property.digicode}
+                                    </Text>
+                                )}
+                                {order.property.accessType && (
+                                    <>
+                                        <Text style={styles.separator}>
+                                            Type d'accès :{" "}
+                                            {order.property.accessType}
+                                        </Text>
+                                        <Text>
+                                            Code d'accès :{" "}
+                                            {order.property.accessCode}
+                                        </Text>
+                                    </>
+                                )}
+                                {order.details.ancienoccupant && (
+                                    <Text style={styles.separator}>
+                                        Ancien occupant :
+                                        <Text style={styles.bold}>
+                                            {" " + order.details.ancienoccupant}
+                                        </Text>
+                                    </Text>
+                                )}
+                            </View>
+                        )}
+                        {order.customer && (
+                            <View>
+                                <Text
+                                    style={{
+                                        ...styles.subtitle,
+                                        marginTop: 70,
+                                    }}
+                                >
+                                    Pose
+                                </Text>
+                                <Text style={styles.bold}>
+                                    Client : {order.customer.title}
+                                </Text>
+                                <Text style={styles.separator}>
+                                    {order.customer.address}
+                                </Text>
+                                <Text>
+                                    {order.customer.postcode}{" "}
+                                    {order.customer.city}
+                                </Text>
+                            </View>
+                        )}
+
+                        <Text style={styles.subtitle}>Infos préparation</Text>
+                        {order.commentMake && (
+                            <Text
+                                style={{
+                                    marginBottom: 5,
+                                    ...styles.bold,
+                                }}
+                            >
+                                Commentaire : {order.commentDeliver}
+                            </Text>
+                        )}
                         <View style={styles.row}>
                             {order.property &&
                                 order.property.services?.map(
@@ -152,87 +248,6 @@ const CommandPdf = ({ commands = [] }) => {
                                 </View>
                             ))}
                         </View>
-                        {order.property && (
-                            <View>
-                                <Text style={styles.subtitle}>Pose</Text>
-                                <Text style={styles.bold}>
-                                    Copropriété : {order.property.title}
-                                </Text>
-                                <Text style={styles.separator}>
-                                    Secteur : {order.property.zone}
-                                </Text>
-                                <Text style={styles.separator}>
-                                    {order.property.address}
-                                </Text>
-                                <Text>
-                                    {order.property.postcode}{" "}
-                                    {order.property.city}
-                                </Text>
-                                {order.property.entrance && (
-                                    <Text style={styles.separator}>
-                                        Entrée: {order.property.entrance}
-                                    </Text>
-                                )}
-                                {order.property.contactName && (
-                                    <Text style={styles.separator}>
-                                        Contact : {order.property.contactName}{" "}
-                                        {order.property.contactPhone}
-                                    </Text>
-                                )}
-                                {order.property.digicode && (
-                                    <Text style={styles.separator}>
-                                        Digicode: {order.property.digicode}
-                                    </Text>
-                                )}
-                                {order.property.accessType && (
-                                    <>
-                                        <Text style={styles.separator}>
-                                            Type d'accès :{" "}
-                                            {order.property.accessType}
-                                        </Text>
-                                        <Text>
-                                            Code d'accès :{" "}
-                                            {order.property.accessCode}
-                                        </Text>
-                                    </>
-                                )}
-                                <Text
-                                    style={{
-                                        ...styles.separator,
-                                        ...styles.bold,
-                                    }}
-                                >
-                                    {order.details.ancienoccupant &&
-                                        "Ancien occupant : " +
-                                            order.details.ancienoccupant}
-                                </Text>
-                            </View>
-                        )}
-                        {order.customer && (
-                            <View>
-                                <Text
-                                    style={{
-                                        ...styles.subtitle,
-                                        marginTop: 70,
-                                    }}
-                                >
-                                    Pose
-                                </Text>
-                                <Text style={styles.bold}>
-                                    Client : {order.customer.title}
-                                </Text>
-                                <Text style={styles.separator}>
-                                    Secteur : {order.customer.zone}
-                                </Text>
-                                <Text style={styles.separator}>
-                                    {order.customer.address}
-                                </Text>
-                                <Text>
-                                    {order.customer.postcode}{" "}
-                                    {order.customer.city}
-                                </Text>
-                            </View>
-                        )}
                     </View>
                 </Page>
             ))}
@@ -274,7 +289,8 @@ export const OrderDetails = ({ orderdetails }) => {
                     (f) =>
                         f !== "ancienoccupant" &&
                         f !== "proprietaire" &&
-                        f !== "orderTags"
+                        f !== "orderTags" &&
+                        f !== "nouveloccupant"
                 )
                 .map((key) => (
                     <Text key={uuid()}>
