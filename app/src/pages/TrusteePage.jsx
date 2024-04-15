@@ -10,6 +10,8 @@ import Content from "components/templates/content/Content";
 import Header from "components/templates/header/Header";
 import { useModal } from "hooks/useModal";
 import { useGetID } from "queryHooks/useTrustee";
+import { IoIosAddCircleOutline } from "react-icons/io";
+import { LuSettings2 } from "react-icons/lu";
 import { MdArrowBack } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import TrusteeForm from "../components/forms/trustee/TrusteeForm";
@@ -47,6 +49,7 @@ export const TrusteePage = () => {
                                 })
                             }
                         >
+                            <LuSettings2 size={30} />
                             Modifier le syndic
                         </button>
                         <button
@@ -62,6 +65,7 @@ export const TrusteePage = () => {
                                 })
                             }
                         >
+                            <IoIosAddCircleOutline size={30} />
                             Ajouter un contact
                         </button>
                         <button
@@ -77,6 +81,7 @@ export const TrusteePage = () => {
                                 })
                             }
                         >
+                            <IoIosAddCircleOutline size={30} />
                             Ajouter une copropriété
                         </button>
                     </Dropdown>

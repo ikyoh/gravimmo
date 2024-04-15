@@ -16,6 +16,9 @@ import { useSearch } from "hooks/useSearch";
 import { useSortBy } from "hooks/useSortBy";
 import { useGetPaginatedDatas } from "queryHooks/useProperty";
 import { useEffect, useState } from "react";
+import { CgDuplicate } from "react-icons/cg";
+import { IoIosArrowDropright } from "react-icons/io";
+import { LuSettings2 } from "react-icons/lu";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export const PropertiesPage = ({ title }) => {
@@ -186,6 +189,9 @@ export const PropertiesPage = ({ title }) => {
                                                         )
                                                     }
                                                 >
+                                                    <IoIosArrowDropright
+                                                        size={26}
+                                                    />
                                                     Consulter la fiche
                                                 </button>
                                                 <button
@@ -203,6 +209,7 @@ export const PropertiesPage = ({ title }) => {
                                                         })
                                                     }
                                                 >
+                                                    <LuSettings2 size={26} />
                                                     Modifier la copropriété
                                                 </button>
                                                 <button
@@ -223,6 +230,7 @@ export const PropertiesPage = ({ title }) => {
                                                         })
                                                     }
                                                 >
+                                                    <CgDuplicate size={26} />
                                                     Dupliquer la copropriété
                                                 </button>
                                             </Dropdown>

@@ -79,6 +79,14 @@ export const CardTour = ({ iri }) => {
                             <SlPicture size={30} />
                         </div>
                     )}
+                    {data.reports.length !== 0 && (
+                        <div className="relative mr-14">
+                            <span className="text-sm absolute -top-3 -right-4 rounded-full bg-error px-2">
+                                {data.reports.length}
+                            </span>
+                            <MdWarning size={30} />
+                        </div>
+                    )}
 
                     <div className="mr-5">
                         <div className="flex items-center gap-1">
@@ -122,6 +130,24 @@ export const CardTour = ({ iri }) => {
                             >
                                 <IoIosAddCircleOutline size={30} />
                                 Ajout de visuels
+                            </button>
+                            <button
+                                onClick={() =>
+                                    handleOpenModal({
+                                        title: "Incident",
+                                        content: (
+                                            <CommandReportForm
+                                                commandIRI={data["@id"]}
+                                                handleCloseModal={
+                                                    handleCloseModal
+                                                }
+                                            />
+                                        ),
+                                    })
+                                }
+                            >
+                                <MdWarning size={30} />
+                                Signaler un incident
                             </button>
                             {data.status !== "facturé" && (
                                 <button

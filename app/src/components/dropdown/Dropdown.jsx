@@ -11,11 +11,11 @@ const Dropdown = ({ type = "card", isDisabled, children, icon }) => {
     });
 
     const classNameContent = classNames(
-        "dropdown-content z-[1] bg-slate-400 dark:bg-primary rounded w-64 pr-2",
+        "dropdown-content z-[1] bg-slate-400 dark:bg-primary rounded pr-2",
         {
-            "translate-x-1 -translate-y-[10px]": type === "card",
-            "translate-x-1 -translate-y-2": type === "table",
-            "!fixed md:!absolute left-1/2 -translate-x-1/2 md:left-auto md:-translate-x-2 top-36 md:translate-y-1":
+            "translate-x-1 -translate-y-[10px] w-64": type === "card",
+            "translate-x-1 -translate-y-2 w-auto": type === "table",
+            "!fixed md:!absolute left-1/2 -translate-x-1/2 md:left-auto md:-translate-x-2 top-36 md:translate-y-1 w-auto":
                 type === "button",
         }
     );
