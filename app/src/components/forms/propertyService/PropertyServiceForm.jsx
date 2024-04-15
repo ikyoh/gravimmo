@@ -2,7 +2,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import FormCheckbox from "components/form/checkbox/FormCheckbox";
 import Form from "components/form/form/Form";
 import { FormInput } from "components/form/input/FormInput";
-import FormLabel from "components/form/label/FormLabel";
 import { FormSelect } from "components/form/select/FormSelect";
 import Loader from "components/loader/Loader";
 import { commandDetails } from "config/translations.config";
@@ -282,9 +281,20 @@ export default function PropertyServiceForm({
                 </FormSelect>
             )}
 
+            {dataService && (
+                <FormInput
+                    type="text"
+                    name="configuration"
+                    label="Configuration machine"
+                    error={errors["configuration"]}
+                    register={register}
+                    required={false}
+                />
+            )}
+
             {dataService && dataService.finishing.length !== 0 && (
                 <>
-                    <FormLabel name="finishing" label="Façonnages" />
+                    <div className="divider uppercase">Façonnage</div>
                     <div className="grid grid-cols-2">
                         {dataService.finishing.sort().map((data) => (
                             <FormCheckbox
@@ -299,17 +309,10 @@ export default function PropertyServiceForm({
                     </div>
                 </>
             )}
-            {dataService && (
-                <FormInput
-                    type="text"
-                    name="configuration"
-                    label="Configuration machine"
-                    error={errors["configuration"]}
-                    register={register}
-                    required={false}
-                />
-            )}
 
+            {Object.keys(commandDetails).length > 3 && (
+                <div className="divider uppercase">A graver</div>
+            )}
             <div className="grid grid-cols-2">
                 {Object.keys(commandDetails)
                     .filter(
