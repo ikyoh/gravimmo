@@ -2,10 +2,12 @@ import { Button, ButtonSize } from "components/button/Button";
 import CardsContainer from "components/cards/cardsContainer/CardsContainer";
 import { CardExtraService } from "components/cards/extraService/CardExtraService";
 import { CardImage } from "components/cards/image/CardImage";
-import { CardProduction } from "components/cards/production/CardProduction";
+import { CardReport } from "components/cards/report/CardReport";
+import { CardService } from "components/cards/service/CardService";
 import Dropdown from "components/dropdown/Dropdown";
 import { CommandForm } from "components/forms/command/CommandForm";
 import { CommandImageForm } from "components/forms/commandImage/CommandImageForm";
+import CommandReportForm from "components/forms/commandReport/CommandReportForm";
 import { ExtraServiceForm } from "components/forms/extraService/ExtraServiceForm";
 import Loader from "components/loader/Loader";
 import CommandStatus from "components/status/CommandStatus";
@@ -13,24 +15,31 @@ import Content from "components/templates/content/Content";
 import Header from "components/templates/header/Header";
 import { commandDetails } from "config/translations.config";
 import dayjs from "dayjs";
+import useMakeInvoices from "hooks/useMakeInvoices";
 import { useModal } from "hooks/useModal";
 import _ from "lodash";
-import { useGetIRI, useGetOneData, usePutData } from "queryHooks/useCommand";
+
+import {
+    useDeleteIRI,
+    useGetIRI,
+    useGetOneData,
+    usePutData,
+} from "queryHooks/useCommand";
 import { useGetIRI as getCustomer } from "queryHooks/useCustomer";
 import { useGetIRI as getProperty } from "queryHooks/useProperty";
 import { useGetIRI as getTrustee } from "queryHooks/useTrustee";
+import { useEffect } from "react";
 import { BsPiggyBank } from "react-icons/bs";
 import { GoDotFill } from "react-icons/go";
 import {
     IoIosAddCircleOutline,
     IoIosCheckmarkCircleOutline,
+    IoIosCloseCircle,
 } from "react-icons/io";
 import { LuLink2, LuSettings2 } from "react-icons/lu";
 import { MdArrowBack, MdWarning } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import uuid from "react-uuid";
-
-import useMakeInvoices from "hooks/useMakeInvoices";
 
 export const CommandPage = ({
     title,
@@ -50,6 +59,8 @@ export const CommandPage = ({
     const { mutate: putData } = usePutData();
 
     const data = dataID || dataIRI;
+
+    console.log(data);
 
     const { data: property, isLoading: isLoadingProperty } = getProperty(
         data && data.property ? data.property["@id"] || data.property : null
@@ -102,7 +113,15 @@ export const CommandPage = ({
                                     <span className="text-accent">
                                         {commandDetails[key]} :
                                     </span>
-                                    <span>{" " + infos[key]}</span>
+                                    <span
+                                        className={`${
+                                            !infos[key] && "text-warning"
+                                        }`}
+                                    >
+                                        {infos[key]
+                                            ? " " + infos[key]
+                                            : " info manquante"}
+                                    </span>
                                 </div>
                             </div>
                         ))}
@@ -135,8 +154,9 @@ export const CommandPage = ({
                                 " " +
                                 orderTag +
                                 " : " +
-                                data.details.orderTags[orderTag] +
-                                " "
+                                (data.details.orderTags[orderTag]
+                                    ? data.details.orderTags[orderTag]
+                                    : "non renseigné")
                         )
                     }
                 >
@@ -254,6 +274,43 @@ export const CommandPage = ({
                                 Facturer la commande
                             </button>
                         )}
+                        <button
+                            onClick={() =>
+                                handleOpenModal({
+                                    title: "Incident",
+                                    content: (
+                                        <CommandReportForm
+                                            commandIRI={data["@id"]}
+                                            handleCloseModal={handleCloseModal}
+                                        />
+                                    ),
+                                })
+                            }
+                        >
+                            <MdWarning size={30} />
+                            Signaler un incident
+                        </button>
+                        {!data.invoice && (
+                            <button
+                                onClick={() =>
+                                    handleOpenModal({
+                                        title: "Suppression",
+                                        size: "small",
+                                        content: (
+                                            <DeleteForm
+                                                handleCloseModal={
+                                                    handleCloseModal
+                                                }
+                                                iri={data["@id"]}
+                                            />
+                                        ),
+                                    })
+                                }
+                            >
+                                <IoIosCloseCircle size={30} />
+                                Supprimer
+                            </button>
+                        )}
                     </Dropdown>
 
                     {_.isEmpty(previousPageState && !isModalContent) ? (
@@ -278,8 +335,8 @@ export const CommandPage = ({
                 </Header>
             )}
 
-            <Content>
-                <div className="flex flex-col md:grid md:grid-cols-12 gap-8 bg-dark">
+            <Content isModalContent={isModalContent}>
+                <div className="flex flex-col md:grid md:grid-cols-12 gap-8">
                     {data.customer && (
                         <>
                             {!customer ? (
@@ -291,7 +348,7 @@ export const CommandPage = ({
                                 >
                                     <div
                                         tabIndex={1}
-                                        className="collapse collapse-arrow rounded dark:bg-gradient-page min-h-[156px]"
+                                        className="collapse collapse-arrow rounded bg-dark/10 dark:bg-gradient-page min-h-[156px]"
                                     >
                                         <div className="title !mt-0">
                                             Client
@@ -331,7 +388,7 @@ export const CommandPage = ({
                                 >
                                     <div
                                         tabIndex={1}
-                                        className="collapse collapse-arrow rounded dark:bg-gradient-page min-h-[156px]"
+                                        className="collapse collapse-arrow rounded bg-dark/10 dark:bg-gradient-page min-h-[156px]"
                                     >
                                         <div className="collapse-title">
                                             <div className="title !mb-5">
@@ -350,7 +407,7 @@ export const CommandPage = ({
                                             </div>
                                         </div>
 
-                                        <div className="collapse-content leading-8">
+                                        <div className="collapse-content leading-8 text-dark dark:text-white">
                                             <p>{trustee.address}</p>
                                             <p>
                                                 {trustee.postcode}{" "}
@@ -378,11 +435,11 @@ export const CommandPage = ({
                             ) : (
                                 <div
                                     tabIndex={1}
-                                    className="md:col-start-5 md:col-end-9"
+                                    className="md:col-start-5 md:col-end-9 "
                                 >
                                     <div
                                         tabIndex={1}
-                                        className="collapse collapse-arrow rounded dark:bg-gradient-page min-h-[156px]"
+                                        className="collapse collapse-arrow rounded bg-dark/10 dark:bg-gradient-page min-h-[156px]"
                                     >
                                         <div className="collapse-title">
                                             <div className="title !mb-5">
@@ -392,7 +449,7 @@ export const CommandPage = ({
                                                 {property.title}
                                             </div>
                                         </div>
-                                        <div className="collapse-content leading-8">
+                                        <div className="collapse-content leading-8 text-dark dark:text-white">
                                             <p>{property.address}</p>
                                             <p>
                                                 {property.postcode}{" "}
@@ -436,9 +493,9 @@ export const CommandPage = ({
                         </>
                     )}
                     <div className="col-start-10 col-end-13 flex flex-col gap-3">
-                        <div className="rounded flex flex-col dark:bg-gradient-page p-3">
-                            <div className="flex justify-between">
-                                <div>Status</div>
+                        <div className="rounded flex flex-col bg-dark/10 dark:bg-gradient-page p-3">
+                            <div className="flex justify-between text-dark dark:text-white">
+                                <div className="">Status</div>
                                 <CommandStatus
                                     status={data.status}
                                     isHanging={data.isHanging}
@@ -446,7 +503,7 @@ export const CommandPage = ({
                                 />
                             </div>
                         </div>
-                        <div className="rounded flex flex-col dark:bg-gradient-page p-3">
+                        <div className="rounded flex flex-col bg-dark/10 dark:bg-gradient-page p-3 text-dark dark:text-white">
                             <div className="flex justify-between">
                                 <div>Création :</div>
                                 <div>
@@ -484,6 +541,67 @@ export const CommandPage = ({
                     </section>
                 )}
 
+                {data.isHanging && (
+                    <section className="">
+                        <div className="section-title decoration-warning">
+                            Infos manquantes
+                        </div>
+                        <div className="cards-container">
+                            {data.entrance === "" && (
+                                <div className="_card">Entrée (pose)</div>
+                            )}
+                            {Object.entries(data.details).map(
+                                ([key, value]) => {
+                                    if (
+                                        key !== "ancienoccupant" &&
+                                        key !== "nouveloccupant" &&
+                                        key !== "proprietaire" &&
+                                        key !== "orderTags" &&
+                                        value === ""
+                                    ) {
+                                        return (
+                                            <div className="_card" key={uuid()}>
+                                                {commandDetails[key]}
+                                            </div>
+                                        );
+                                    }
+                                    return null;
+                                }
+                            )}
+                            {data.details &&
+                                data.details.orderTags &&
+                                Object.entries(data.details.orderTags).map(
+                                    ([key, value]) => {
+                                        if (value === "") {
+                                            return (
+                                                <div
+                                                    className="_card"
+                                                    key={uuid()}
+                                                >
+                                                    {key}
+                                                </div>
+                                            );
+                                        }
+                                        return null;
+                                    }
+                                )}
+                        </div>
+                    </section>
+                )}
+
+                {data.reports.length !== 0 && (
+                    <section className="">
+                        <div className="section-title decoration-error">
+                            Incidents
+                        </div>
+                        <div className="cards-container">
+                            {data.reports?.map((report) => (
+                                <CardReport iri={report} key={uuid()} />
+                            ))}
+                        </div>
+                    </section>
+                )}
+
                 {data.commentMake && (
                     <section>
                         <div className="section-title">
@@ -516,7 +634,11 @@ export const CommandPage = ({
                     {!data.isCustom && (
                         <CardsContainer aside={<CommandInfos />}>
                             {property.services?.map((service) => (
-                                <CardProduction key={uuid()} iri={service} />
+                                <CardService
+                                    key={uuid()}
+                                    iri={service}
+                                    editable={false}
+                                />
                             ))}
                         </CardsContainer>
                     )}
@@ -535,9 +657,10 @@ export const CommandPage = ({
                             >
                                 {customService.propertyServices.map(
                                     (service) => (
-                                        <CardProduction
+                                        <CardService
                                             key={uuid()}
                                             iri={service}
+                                            size="mini"
                                         />
                                     )
                                 )}
@@ -636,5 +759,48 @@ export const CommandPage = ({
                 )}
             </Content>
         </>
+    );
+};
+
+const DeleteForm = ({ iri, handleCloseModal }) => {
+    const {
+        mutate: remove,
+        isLoading: isRemovePending,
+        isSuccess: isRemoveSuccess,
+    } = useDeleteIRI();
+
+    const navigate = useNavigate();
+
+    const handleValidate = () => {
+        remove(iri);
+    };
+
+    useEffect(() => {
+        if (isRemoveSuccess) navigate(-1);
+    }, [isRemovePending]);
+
+    return (
+        <div className="py-5">
+            <p>
+                Attention cette opération est irréversible, voulez-vous
+                confirmer cette action ?
+            </p>
+            <div className="flex items-center gap-5 justify-start py-5">
+                <button
+                    disabled={isRemovePending}
+                    className="btn btn-outline"
+                    onClick={() => handleCloseModal()}
+                >
+                    Annuler
+                </button>
+                <button
+                    disabled={isRemovePending}
+                    className="btn btn-error text-white"
+                    onClick={() => handleValidate()}
+                >
+                    Confirmer
+                </button>
+            </div>
+        </div>
     );
 };

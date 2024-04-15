@@ -115,9 +115,6 @@ export default function ServiceForm({ iri, handleCloseModal }) {
         }
     }
 
-    console.log("postError", postError);
-    console.log("putError", putError);
-
     return (
         <Form
             onSubmit={handleSubmit(onSubmit)}
@@ -159,7 +156,7 @@ export default function ServiceForm({ iri, handleCloseModal }) {
             <FieldArray
                 name="material"
                 label="Matières"
-                placeholder="ex : Gravoply 2 mm"
+                placeholder="ex: Gravoply 2 mm"
                 error={errors["material"]}
                 control={control}
                 required={false}
@@ -167,7 +164,7 @@ export default function ServiceForm({ iri, handleCloseModal }) {
             <FieldArray
                 name="size"
                 label="Dimensions"
-                placeholder="ex : 45 x 30 mm"
+                placeholder="ex: 45 x 30 mm"
                 error={errors["title"]}
                 control={control}
                 required={false}
@@ -175,7 +172,7 @@ export default function ServiceForm({ iri, handleCloseModal }) {
             <FieldArray
                 name="thickness"
                 label="Epaisseurs"
-                placeholder="ex : 2 mm"
+                placeholder="ex: 2 mm"
                 error={errors["thickness"]}
                 control={control}
                 required={false}
@@ -183,7 +180,7 @@ export default function ServiceForm({ iri, handleCloseModal }) {
             <FieldArray
                 name="color"
                 label="Couleurs"
-                placeholder="ex : Blanc / Noir"
+                placeholder="ex: Blanc / Noir"
                 error={errors["color"]}
                 control={control}
                 required={false}
@@ -191,7 +188,23 @@ export default function ServiceForm({ iri, handleCloseModal }) {
             <FieldArray
                 name="font"
                 label="Polices"
-                placeholder="ex : Arial rounded bold - 10 pts - spacing 90%"
+                placeholder="ex: Arial rounded bold"
+                error={errors["font"]}
+                control={control}
+                required={false}
+            />
+            <FieldArray
+                name="height"
+                label="Hauteur de texte"
+                placeholder="ex: 6"
+                error={errors["font"]}
+                control={control}
+                required={false}
+            />
+            <FieldArray
+                name="ratio"
+                label="Ratio police"
+                placeholder="ex: 100%"
                 error={errors["font"]}
                 control={control}
                 required={false}
@@ -199,7 +212,7 @@ export default function ServiceForm({ iri, handleCloseModal }) {
             <FieldArray
                 name="margin"
                 label="Marges (mm)"
-                placeholder="ex : 2 2 2 2 mm"
+                placeholder="ex: 2 2 2 2 mm"
                 error={errors["margin"]}
                 control={control}
                 required={false}
@@ -207,7 +220,7 @@ export default function ServiceForm({ iri, handleCloseModal }) {
             <FieldArray
                 name="finishing"
                 label="Finitions"
-                placeholder="ex : Chanfrein"
+                placeholder="ex: Chanfrein"
                 error={errors["finishing"]}
                 control={control}
                 required={false}

@@ -17,10 +17,17 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 use DateTime;
 
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
+#[UniqueEntity(
+    fields: ['vigik', 'transmitter'],
+    message: "Donnée déjà enregistrée dans la base",
+    ignoreNull: true
+)]
 #[ApiResource(
     normalizationContext: ['groups' => ['properties:read']],
     denormalizationContext: ['groups' => ["property:write"]],
@@ -42,16 +49,18 @@ use DateTime;
     "postcode",
     "trustee.title",
 ])]
+
+
 class Property
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["properties:read", "property:read"])]
+    #[Groups(["properties:read", "property:read", "letterbox:read"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["properties:read", "property:read", "property:write", "commands:read", "invoices:read", "tour:read"])]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read", "invoices:read", "tour:read", "letterbox:read"])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
@@ -118,8 +127,21 @@ class Property
     private array $entrances = [];
     
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["properties:read", "property:read", "property:write"])]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read"])]
     private ?string $digicode = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read"])]
+    private ?string $vigik = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read"])]
+    private ?string $transmitter = null;
+
+    #[ORM\OneToMany(mappedBy: 'property', targetEntity: Letterbox::class)]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read"])]
+    private Collection $letterboxes;
+    
 
 
     public function __construct()
@@ -128,6 +150,7 @@ class Property
         $this->commands = new ArrayCollection();
         $this->contacts = new ArrayCollection();
         $this->invoices = new ArrayCollection();
+        $this->letterboxes = new ArrayCollection();
     }
 
 
@@ -440,7 +463,68 @@ class Property
     public function setDigicode(?string $digicode): self
     {
         $this->digicode = $digicode;
+        return $this;
+    }
+
+    public function getVigik(): ?string
+    {
+        return $this->vigik;
+    }
+
+    public function setVigik(?string $vigik): self
+    {
+        if ($vigik === "") {
+            $this->vigik = null;
+            return $this;
+        }
+        $this->vigik = $vigik;
+        return $this;
+    }
+
+    public function getTransmitter(): ?string
+    {
+        return $this->transmitter;
+    }
+
+    public function setTransmitter(?string $transmitter): self
+    {
+        if ($transmitter === "") {
+            $this->transmitter = null;
+            return $this;
+        }
+        $this->transmitter = $transmitter;
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Letterbox>
+     */
+    public function getLetterboxes(): Collection
+    {
+        return $this->letterboxes;
+    }
+
+    public function addLetterbox(Letterbox $letterbox): self
+    {
+        if (!$this->letterboxes->contains($letterbox)) {
+            $this->letterboxes->add($letterbox);
+            $letterbox->setProperty($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLetterbox(Letterbox $letterbox): self
+    {
+        if ($this->letterboxes->removeElement($letterbox)) {
+            // set the owning side to null (unless already changed)
+            if ($letterbox->getProperty() === $this) {
+                $letterbox->setProperty(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

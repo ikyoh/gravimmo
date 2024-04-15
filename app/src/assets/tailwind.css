@@ -58,7 +58,7 @@
 }
 
 .scrollbar {
-    @apply overflow-y-scroll;
+    @apply overflow-auto;
 }
 
 /* total width */
@@ -140,4 +140,32 @@ section {
 
 .card-button {
     @apply py-5 flex gap-5 items-center font-bold uppercase text-white xl:col-span-5;
+}
+
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="url"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="time"],
+input[type="color"],
+input[type="tel"],
+select,
+select[multiple],
+textarea {
+    @apply bg-light dark:bg-dark border border-neutral text-dark dark:text-white h-[50px] !rounded !p-3 !mt-2 w-full leading-tight focus:outline focus:outline-accent;
+}
+
+select {
+    background: url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='gray' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>") no-repeat;
+    background-position: calc(100% - 0.75rem) center !important;
+    -moz-appearance: none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
+    padding-right: 2rem !important;
 }

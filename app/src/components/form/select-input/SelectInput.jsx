@@ -1,49 +1,63 @@
-import React from 'react';
-import uuid from "react-uuid"
-import './style.css'
-import { useGetAllDatas } from 'queryHooks/useService';
-import Label from '../label/FormLabel';
-import Error from '../error/FormError'
+import uuid from "react-uuid";
 
-export const SelectInput = ({ name, label, register, error, required, type, placeholder, validationSchema, setValue }) => {
+import { useGetAllDatas } from "queryHooks/useService";
+import Error from "../error/FormError";
+import Label from "../label/FormLabel";
 
-	const { data = [], isLoading } = useGetAllDatas()
+export const SelectInput = ({
+    name,
+    label,
+    register,
+    error,
+    required,
+    type,
+    placeholder,
+    validationSchema,
+    setValue,
+}) => {
+    const { data = [], isLoading } = useGetAllDatas();
 
-	const uniqCategories = () => {
-		return (data.reduce(
-			(unique, item) => (unique.includes(item.category) ? unique : [...unique, item.category]),
-			[],
-		).sort())
-	}
+    const uniqCategories = () => {
+        return data
+            .reduce(
+                (unique, item) =>
+                    unique.includes(item.category)
+                        ? unique
+                        : [...unique, item.category],
+                []
+            )
+            .sort();
+    };
 
-	return (
-		<div className="w-full mb-2">
-			<Label name={name} label={label} required={required} />
-			<div className='flex gap-3'>
-				<input
-					id={name}
-					name={name}
-					type={type}
-					placeholder={placeholder}
-					{...register(name, validationSchema)}
-					className="appearance-none bg-light dark:bg-dark text-dark dark:text-white h-[50px] rounded px-2 mt-2 w-full leading-tight focus:outline focus:outline-accent"
-				/>
+    return (
+        <div className="w-full mb-2">
+            <Label name={name} label={label} required={required} />
+            <div className="flex gap-3 items-center">
+                <input
+                    id={name}
+                    name={name}
+                    type="text"
+                    placeholder={placeholder}
+                    {...register(name, validationSchema)}
+                />
 
-				{!isLoading && data.length >= 1 ?
-					<select
-						name="cat"
-						id="cat"
-						className="appearance-none bg-light dark:bg-dark text-dark dark:text-white h-[50px] rounded px-2 mt-2 w-full leading-tight focus:outline focus:outline-accent arrow"
-						onChange={(e) => setValue(name, e.target.value)}
-					>
-						<option value=''>Catégories</option>
-						{uniqCategories().map((item) =>
-							<option key={uuid()} value={item}>{item}</option>)}
-					</select>
-					: null
-				}
-			</div>
-			<Error error={error} />
-		</div>
-	)
-}
+                {!isLoading && data.length >= 1 ? (
+                    <select
+                        className="mt-2"
+                        name="cat"
+                        id="cat"
+                        onChange={(e) => setValue(name, e.target.value)}
+                    >
+                        <option value="">Catégories</option>
+                        {uniqCategories().map((item) => (
+                            <option key={uuid()} value={item}>
+                                {item}
+                            </option>
+                        ))}
+                    </select>
+                ) : null}
+            </div>
+            <Error error={error} />
+        </div>
+    );
+};

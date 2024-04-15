@@ -10,6 +10,7 @@ import * as yup from "yup";
 
 import FormError from "components/form/error/FormError";
 import Calendar from "react-calendar";
+import uuid from "react-uuid";
 import "./style.css";
 
 const TourForm = ({ id, commands = [], handleCloseModal }) => {
@@ -70,9 +71,11 @@ const TourForm = ({ id, commands = [], handleCloseModal }) => {
             isDisabled={isSubmitting || isPutLoading || isPostLoading}
         >
             <div className="mb-3">
+                <div className="divider uppercase">Poseur</div>
                 <div className="grid grid-cols-2 gap-3">
                     {installers["hydra:member"]?.map((installer) => (
                         <button
+                            key={uuid()}
                             type="button"
                             className={`btn ${
                                 watchUser === installer["@id"] && "btn-primary"
@@ -88,6 +91,7 @@ const TourForm = ({ id, commands = [], handleCloseModal }) => {
                 </div>
             </div>
 
+            <div className="divider mt-10 uppercase">Date</div>
             <Calendar
                 onChange={(date) => setValue("scheduledAt", date)}
                 value={watchDate}

@@ -14,7 +14,7 @@ const useMakeInvoices = () => {
         queries:
             commands.length !== 0
                 ? commands.map((command) => {
-                      if (command.invoice) return null;
+                      if (command.invoice || command.isHanging) return null;
                       else
                           return {
                               queryKey: ["makeInvoice", command["@id"]],

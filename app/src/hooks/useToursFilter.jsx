@@ -93,12 +93,12 @@ export const useToursFilter = () => {
 
                 <div className="form-control">
                     <label className="label cursor-pointer m-0 p-0">
-                        <span className="label-text">Date</span>
+                        <span className="label-text pt-2">Date</span>
                         <input
                             type="date"
                             name="scheduledAt"
                             value={filters.scheduledAt}
-                            className="input input-bordered input-xs max-w-xs"
+                            className="!input !input-bordered !input-sm !max-w-sm !w-auto"
                             onChange={handleChangeInput}
                         />
                     </label>

@@ -1,6 +1,7 @@
 import { Dot } from "components/dot/Dot";
 import Dropdown from "components/dropdown/Dropdown";
 import { CommandImageForm } from "components/forms/commandImage/CommandImageForm";
+import CommandReportForm from "components/forms/commandReport/CommandReportForm";
 import { ExtraServiceForm } from "components/forms/extraService/ExtraServiceForm";
 import Loader from "components/loader/Loader";
 import {
@@ -18,6 +19,7 @@ import {
 } from "react-icons/md";
 
 import { IoIosAddCircleOutline } from "react-icons/io";
+import { MdWarning } from "react-icons/md";
 import { SlPicture } from "react-icons/sl";
 import uuid from "react-uuid";
 
@@ -90,6 +92,7 @@ export const CardTour = ({ iri }) => {
                                 onClick={() =>
                                     handleOpenModal({
                                         title: "Commande",
+                                        isPageContent: true,
                                         content: (
                                             <CommandPage
                                                 isModalContent={true}
@@ -143,7 +146,7 @@ export const CardTour = ({ iri }) => {
                         </Dropdown>
                     </div>
                 </div>
-                <div className="grid grid-cols-3 gap-3 md:hidden">
+                <div className="grid grid-cols-4 gap-3 md:hidden">
                     <button
                         className="btn btn-primary btn-circle"
                         onClick={() =>
@@ -175,6 +178,22 @@ export const CardTour = ({ iri }) => {
                         }
                     >
                         <MdOutlineDriveFileRenameOutline size={30} />
+                    </button>
+                    <button
+                        className="btn btn-error btn-circle"
+                        onClick={() =>
+                            handleOpenModal({
+                                title: "Rapport",
+                                content: (
+                                    <CommandReportForm
+                                        commandIRI={data["@id"]}
+                                        handleCloseModal={handleCloseModal}
+                                    />
+                                ),
+                            })
+                        }
+                    >
+                        <MdWarning size={26} />
                     </button>
                     <div className="btn btn-primary btn-circle overflow-hidden !p-0 flex items-center justify-center relative">
                         <CommandImageForm commandID={data.id} />

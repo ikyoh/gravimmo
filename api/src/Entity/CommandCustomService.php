@@ -45,6 +45,10 @@ class CommandCustomService
     #[ORM\ManyToMany(targetEntity: PropertyService::class)]
     #[Groups(["commands:read", "customservices:read", "customservice:read", "customservice:write", "command:read", "command:write"])]
     private Collection $propertyServices;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["commands:read", "customservices:read", "customservice:read", "customservice:write", "commands:read", "command:read", "command:write"])]
+    private ?string $entrance = null;
 
 
     public function __construct()
@@ -102,6 +106,18 @@ class CommandCustomService
     public function removePropertyService(PropertyService $propertyService): self
     {
         $this->propertyServices->removeElement($propertyService);
+
+        return $this;
+    }
+
+    public function getEntrance(): ?string
+    {
+        return $this->entrance;
+    }
+
+    public function setEntrance(?string $entrance): self
+    {
+        $this->entrance = $entrance;
 
         return $this;
     }

@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Delete;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiFilter;
@@ -32,18 +33,20 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new GetCollection(),
         new Get(normalizationContext: ['groups' => ['command:read']]),
         new Put(),
+        new Delete(),
         new Post()
     ]
 )]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'status', 'createdAt', 'madeAt', 'deliveredAt', 'trustee.title', 'property.title', 'property.zone','tour.scheduledAt'])]
-#[ApiFilter(SearchFilter::class, properties: ['status' => 'partial'])]
+#[ApiFilter(SearchFilter::class, properties: ['status' => 'partial' , 'property' => 'exact'])]
 #[ApiFilter(BooleanFilter::class, properties: ['isHanging'])]
 #[ApiFilter(ExistsFilter::class, properties: ['tour'])]
 #[ApiFilter(MultipleFieldsSearchFilter::class, properties: [
     "id",
     "trustee.title",
     "property.title",
-    "property.zone"
+    "property.zone",
+    "details"
 ])]
 
 
@@ -132,13 +135,27 @@ class Command
     #[Groups(["commands:read", "command:read", "command:write"])]
     private ?string $commentDeliver = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["commands:read", "command:read", "command:write"])]
+    private ?string $entrance = null;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(["commands:read", "command:read", "command:write"])]
+    private ?bool $isUpdate = null;
+
+    #[ORM\OneToMany(mappedBy: 'command', targetEntity: CommandReport::class, orphanRemoval: true)]
+    #[Groups(["commands:read", "command:read", "command:write"])]
+    private Collection $reports;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->images = new ArrayCollection();
         $this->customServices = new ArrayCollection();
         $this->extraServices = new ArrayCollection();
+        $this->reports = new ArrayCollection();
     }
+
 
     public function getId(): ?int
     {
@@ -241,7 +258,7 @@ class Command
         return $this;
     }
 
-    public function isIsHanging(): ?bool
+    public function getIsHanging(): ?bool
     {
         return $this->isHanging;
     }
@@ -432,6 +449,66 @@ class Command
 
         return $this;
     }
+
+    public function getEntrance(): ?string
+    {
+        return $this->entrance;
+    }
+
+    public function setEntrance(?string $entrance): self
+    {
+        $this->entrance = $entrance;
+
+        return $this;
+    }
+
+    public function isIsUpdate(): ?bool
+    {
+        return $this->isUpdate;
+    }
+
+    public function setIsUpdate(?bool $isUpdate): self
+    {
+        $this->isUpdate = $isUpdate;
+
+        return $this;
+    }
+
+
+    /**
+     * @return Collection<int, CommandReport>
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(CommandReport $report): self
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports->add($report);
+            $report->setCommand($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(CommandReport $report): self
+    {
+        if ($this->reports->removeElement($report)) {
+            // set the owning side to null (unless already changed)
+            if ($report->getCommand() === $this) {
+                $report->setCommand(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+
+
 
 
 

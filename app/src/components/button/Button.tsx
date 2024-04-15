@@ -33,7 +33,10 @@ export const Button = ({
     const buttonClassName = classNames(
         "flex items-center justify-center p-0.5 rounded-full focus:ring-2 focus:ring-accent ring-offset-2 ring-offset-dark dark:focus:ring-accent group",
         {
-            "bg-gradient-to-br from-purple-500 to-accent": isBorder,
+            "bg-gradient-to-br": isBorder,
+            "bg-gradient-to-br from-purple-500 to-accent":
+                isBorder && !disabled,
+            "from-neutral to-neutral": disabled,
             "h-8 w-8": size === ButtonSize.Small,
             "h-14 w-14": size === ButtonSize.Big,
             "h-10 w-10": size === ButtonSize.Medium,

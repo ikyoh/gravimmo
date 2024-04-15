@@ -1,15 +1,11 @@
 import { BsPiggyBank } from "react-icons/bs";
+import { LuSettings2 } from "react-icons/lu";
 import {
-    MdAccountCircle,
     MdDashboard,
-    MdGroups,
     MdLogout,
     MdOutlineAssignment,
     MdOutlineCalculate,
-    MdOutlineDriveFileRenameOutline,
-    MdOutlineHomeWork,
     MdPendingActions,
-    MdSupervisedUserCircle,
 } from "react-icons/md";
 import { useLocation } from "react-router-dom";
 import {
@@ -125,7 +121,7 @@ const Menu = ({ handleCloseModal }) => {
                             >
                                 <MdOutlineCalculate />
                             </Button>
-                            <Button
+                            {/* <Button
                                 isBorder={location.pathname.includes(
                                     "/customers"
                                 )}
@@ -207,6 +203,21 @@ const Menu = ({ handleCloseModal }) => {
                                     : {})}
                             >
                                 <MdOutlineDriveFileRenameOutline />
+                            </Button> */}
+                            <Button
+                                size={ButtonSize.Big}
+                                isBorder={location.pathname === "/settings"}
+                                link="/settings"
+                                info="Configuration"
+                                {...(handleCloseModal
+                                    ? {
+                                          onClick: () => {
+                                              handleCloseModal();
+                                          },
+                                      }
+                                    : {})}
+                            >
+                                <LuSettings2 />
                             </Button>
                         </>
                     )}

@@ -56,6 +56,18 @@ class PropertyService
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
+    private ?string $thickness = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
+    private ?string $height = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
+    private ?string $ratio = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
     private ?string $margin = null;
 
     #[ORM\Column(nullable: true)]
@@ -71,9 +83,10 @@ class PropertyService
     #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
     private ?string $configuration = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
-    private ?string $thickness = null;
+
+    #[ORM\Column(type: 'json', nullable: true)]
+    #[Groups(["propertyservice:read", "propertyservice:write", "commands:read"])]
+    private $params = [];
 
     public function getId(): ?int
     {
@@ -199,4 +212,41 @@ class PropertyService
 
         return $this;
     }
+
+    public function getHeight(): ?string
+    {
+        return $this->height;
+    }
+
+    public function setHeight(?string $height): self
+    {
+        $this->height = $height;
+
+        return $this;
+    }
+
+    public function getRatio(): ?string
+    {
+        return $this->ratio;
+    }
+
+    public function setRatio(?string $ratio): self
+    {
+        $this->ratio = $ratio;
+
+        return $this;
+    }
+
+    public function getParams(): array
+    {
+        return $this->params;
+    }
+
+    public function setParams(?array $params): self
+    {
+        $this->params = $params;
+
+        return $this;
+    }
+
 }

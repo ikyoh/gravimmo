@@ -33,7 +33,8 @@ import {
     IoIosCheckmarkCircleOutline,
 } from "react-icons/io";
 import { LuSettings2, LuTable } from "react-icons/lu";
-import { MdPendingActions } from "react-icons/md";
+import { MdPendingActions, MdWarning } from "react-icons/md";
+import { RiLockFill } from "react-icons/ri";
 import { SlPicture } from "react-icons/sl";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -56,13 +57,15 @@ export const CommandsPage = ({ title }) => {
               }
             : { value: "id", direction: "DESC" }
     );
-    const { data, isLoading, error } = useGetPaginatedDatas(
-        page,
-        sortValue,
-        sortDirection,
-        searchValue,
-        filters
-    );
+
+    const { data, isLoading, error } = useGetPaginatedDatas({
+        enabled: true,
+        page: page,
+        sortValue: sortValue,
+        sortDirection: sortDirection,
+        searchValue: searchValue,
+        filters: filters,
+    });
     const { mutate: putData } = usePutData();
     const [isCheckAll, setIsCheckAll] = useState(false);
     const [checkedList, setCheckedList] = useState([]);
@@ -176,7 +179,7 @@ export const CommandsPage = ({ title }) => {
         { label: "N° Villa", key: "details.numerodevilla" },
     ];
 
-    if (isLoading) return <Loader />;
+    if (isLoading && !data) return <Loader />;
     if (isLoadingMakeInvoices) return <Loader text="Enregistrement en cours" />;
     return (
         <>
@@ -284,14 +287,16 @@ export const CommandsPage = ({ title }) => {
                             handleSort={handleSort}
                         />
                         <Th label="">
-                            <input
-                                type="checkbox"
-                                name="selectAll"
-                                id="selectAll"
-                                onChange={handleSelectAll}
-                                checked={isCheckAll}
-                                className="checkbox"
-                            />
+                            <div className="p-3 flex items-center justify-center">
+                                <input
+                                    type="checkbox"
+                                    name="selectAll"
+                                    id="selectAll"
+                                    onChange={handleSelectAll}
+                                    checked={isCheckAll}
+                                    className="checkbox"
+                                />
+                            </div>
                         </Th>
                         <Th
                             label="Syndic / Client"
@@ -364,7 +369,7 @@ export const CommandsPage = ({ title }) => {
                                     <Td>
                                         <div
                                             onClick={(e) => e.stopPropagation()}
-                                            className=""
+                                            className="px-3"
                                         >
                                             <input
                                                 type="checkbox"
@@ -469,6 +474,13 @@ export const CommandsPage = ({ title }) => {
                                                 isHanging={data.isHanging}
                                                 date={data.createdAt}
                                             />
+                                            {data.isHanging && <RiLockFill />}
+                                            {data.reports.length !== 0 && (
+                                                <MdWarning
+                                                    size={20}
+                                                    className="text-error"
+                                                />
+                                            )}
                                             {data.images.length !== 0 && (
                                                 <div
                                                     className="tooltip flex items-center"

@@ -4,6 +4,9 @@ import Form from "components/form/form/Form";
 import { FormInput } from "components/form/input/FormInput";
 import FormLabel from "components/form/label/FormLabel";
 import { FormSelect } from "components/form/select/FormSelect";
+import Loader from "components/loader/Loader";
+import { commandDetails } from "config/translations.config";
+import { useGetIRI as useGetProperty } from "queryHooks/useProperty";
 import {
     useGetOneData,
     usePostData,
@@ -22,15 +25,19 @@ export default function PropertyServiceForm({
     propertyIRI,
     handleCloseModal,
 }) {
+    console.log("propertyIRI", propertyIRI);
+
     const [firstLoad, setFirstLoad] = useState(true);
+
+    const { isLoading: isLoadingProperty, data: property } =
+        useGetProperty(propertyIRI);
 
     const {
         isLoading: isLoadingData,
         data,
         isError,
         error,
-        isFetched,
-    } = useGetOneData(iri);
+    } = useGetOneData(iri ? iri : null);
 
     const validationSchema = yup.object({
         service: yup.string().required("Champ obligatoire"),
@@ -40,6 +47,7 @@ export default function PropertyServiceForm({
         service: "",
         property: propertyIRI,
         finishing: [],
+        params: [],
     };
 
     const {
@@ -99,10 +107,14 @@ export default function PropertyServiceForm({
         }
         handleCloseModal();
     };
+    console.log("isLoadingData", isLoadingData);
+    console.log("isLoadingProperty", isLoadingProperty);
+
+    if (isLoadingProperty) return <Loader />;
 
     if (iri) {
         if (isLoadingData) {
-            return <h2>Loading...</h2>;
+            return <Loader />;
         }
         if (isError) {
             return <h2 className="py-3">Error : {error.message}</h2>;
@@ -220,6 +232,38 @@ export default function PropertyServiceForm({
                     ))}
                 </FormSelect>
             )}
+            {dataService && dataService.height.length !== 0 && (
+                <FormSelect
+                    type="text"
+                    name="height"
+                    label="Hauteur de texte"
+                    error={errors["height"]}
+                    register={register}
+                    required={true}
+                >
+                    {dataService.height.sort().map((data) => (
+                        <option key={data} value={data}>
+                            {data}
+                        </option>
+                    ))}
+                </FormSelect>
+            )}
+            {dataService && dataService.ratio.length !== 0 && (
+                <FormSelect
+                    type="text"
+                    name="ratio"
+                    label="Ratio police"
+                    error={errors["ratio"]}
+                    register={register}
+                    required={true}
+                >
+                    {dataService.ratio.sort().map((data) => (
+                        <option key={data} value={data}>
+                            {data}
+                        </option>
+                    ))}
+                </FormSelect>
+            )}
 
             {dataService && dataService.margin.length !== 0 && (
                 <FormSelect
@@ -265,6 +309,28 @@ export default function PropertyServiceForm({
                     required={false}
                 />
             )}
+
+            <div className="grid grid-cols-2">
+                {Object.keys(commandDetails)
+                    .filter(
+                        (f) =>
+                            f !== "proprietaire" &&
+                            f !== "nouveloccupant" &&
+                            f !== "ancienoccupant" &&
+                            property.params.includes(f)
+                    )
+                    .map((key, index) => (
+                        <FormCheckbox
+                            key={index}
+                            name="params"
+                            label={commandDetails[key]}
+                            value={key}
+                            error={errors["params"]}
+                            register={register}
+                            required={true}
+                        />
+                    ))}
+            </div>
         </Form>
     );
 }

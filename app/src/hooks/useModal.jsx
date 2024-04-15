@@ -12,6 +12,7 @@ export const useModal = () => {
         content: false,
         size: "full",
         isMenu: false,
+        isPageContent: false,
     });
 
     const handleOpenModal = (props) => {
@@ -22,6 +23,7 @@ export const useModal = () => {
             content: props.content,
             size: props.size || "full",
             isMenu: props.isMenu || false,
+            isPageContent: props.isPageContent || false,
         });
     };
 
@@ -36,7 +38,8 @@ export const useModal = () => {
     });
 
     const modalClassName = classNames({
-        "modal-box max-h-full md:shadow-md shadow-black rounded-none md:rounded-md p-0 bg-white dark:bg-dark dark:bg-gradient-modal scrollbar": true,
+        "modal-box max-h-full md:shadow-md shadow-black rounded-none md:rounded-md p-0 bg-white scrollbar dark:bg-dark": true,
+        "dark:bg-gradient-modal": !modal.isPageContent,
         "w-full md:w-11/12 max-w-5xl h-full": modal.size === "full",
         "w-[80vw] h-auto rounded-md p-0": modal.isMenu === true,
     });
@@ -47,7 +50,6 @@ export const useModal = () => {
                 className={className}
                 onClick={(e) => {
                     e.stopPropagation();
-                    handleCloseModal();
                 }}
                 onMouseUp={(e) => {
                     e.stopPropagation();

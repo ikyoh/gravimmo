@@ -1,21 +1,21 @@
 import { Button } from "components/button/Button";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useFieldArray } from "react-hook-form";
 import { IoIosClose } from "react-icons/io";
 import Label from "../label/FormLabel";
 
 const FieldArray = ({ name, label, required, placeholder, control }) => {
-    const { fields, append, prepend, remove, swap, move, insert } =
-        useFieldArray({
-            control,
-            name: name,
-        });
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: name,
+    });
 
     const [inputValue, setInputValue] = useState("");
     const [error, setError] = useState();
+    const inputRef = useRef(null);
 
     const handleChange = ({ currentTarget }) => {
-        const { name, value } = currentTarget;
+        const { value } = currentTarget;
         setError();
         setInputValue(value);
     };
@@ -24,6 +24,7 @@ const FieldArray = ({ name, label, required, placeholder, control }) => {
         if (inputValue !== "") {
             append(inputValue);
             setInputValue("");
+            inputRef.current.focus();
         } else setError("Champ requis");
     };
 
@@ -38,7 +39,8 @@ const FieldArray = ({ name, label, required, placeholder, control }) => {
             <Label name={name} label={label} required={required} />
             <div className="mt-2 flex flex-row items-center gap-2">
                 <input
-                    name="data"
+                    name={"data-" + name}
+                    ref={inputRef}
                     placeholder={placeholder}
                     className="appearance-none bg-light dark:bg-dark text-dark dark:text-white h-[50px] rounded px-2 grow leading-tight focus:outline focus:outline-accent"
                     onChange={handleChange}

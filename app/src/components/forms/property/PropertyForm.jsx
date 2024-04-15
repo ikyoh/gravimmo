@@ -3,6 +3,7 @@ import FormCheckbox from "components/form/checkbox/FormCheckbox";
 import FieldArray from "components/form/field-array/FieldArray";
 import Form from "components/form/form/Form";
 import { FormInput } from "components/form/input/FormInput";
+import FormLabel from "components/form/label/FormLabel";
 import { FormSelect } from "components/form/select/FormSelect";
 import Loader from "components/loader/Loader";
 import { commandDetails } from "config/translations.config";
@@ -14,7 +15,7 @@ import * as yup from "yup";
 
 export default function PropertyForm({
     id,
-    trusteeIRI,
+    trusteeIRI = "",
     handleCloseModal,
     duplicate = false,
 }) {
@@ -24,21 +25,22 @@ export default function PropertyForm({
         isError,
         error,
     } = useGetOneData(id);
-    const {
-        isLoading: isLoadingTrustees,
-        data: dataTrustees,
-        isError: isErrorTrustees,
-        error: errorTrustees,
-    } = useGetAllDatas("", "title", "ASC");
+    const { isLoading: isLoadingTrustees, data: dataTrustees } = useGetAllDatas(
+        "",
+        "title",
+        "ASC"
+    );
     const {
         mutate: postData,
         isLoading: isPostLoading,
         isSuccess: isPostSuccess,
+        error: postError,
     } = usePostData();
     const {
         mutate: putData,
         isLoading: isPutLoading,
         isSuccess: isPutSuccess,
+        error: putError,
     } = usePutData();
 
     const validationSchema = yup.object({
@@ -53,6 +55,7 @@ export default function PropertyForm({
     });
 
     const defaultValues = {
+        trustee: "",
         deliveredAt: "2000-01-01",
         params: [],
         accesses: [],
@@ -64,6 +67,8 @@ export default function PropertyForm({
         handleSubmit,
         reset,
         control,
+        setError,
+        setFocus,
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(validationSchema),
@@ -96,6 +101,31 @@ export default function PropertyForm({
     };
 
     useEffect(() => {
+        if (putError) {
+            putError.response.data.violations.forEach(
+                ({ propertyPath, message }) => {
+                    setError(propertyPath, {
+                        type: "custom",
+                        message: message,
+                    });
+                }
+            );
+            setFocus(putError.response.data.violations[0].propertyPath);
+        }
+        if (postError) {
+            postError.response.data.violations.forEach(
+                ({ propertyPath, message }) => {
+                    setError(propertyPath, {
+                        type: "custom",
+                        message: message,
+                    });
+                }
+            );
+            setFocus(postError.response.data.violations[0].propertyPath);
+        }
+    }, [putError, postError]);
+
+    useEffect(() => {
         if (isPutSuccess || isPostSuccess) handleCloseModal();
     }, [isPutSuccess, isPostSuccess]);
 
@@ -126,8 +156,8 @@ export default function PropertyForm({
                     {isLoadingTrustees && (
                         <option disabled>Chargement des syndics</option>
                     )}
-                    {!isLoadingTrustees && dataTrustees.length != 0 && (
-                        <option disabled>Choisir un syndic</option>
+                    {!isLoadingTrustees && dataTrustees.length !== 0 && (
+                        <option value="">Choisir un syndic</option>
                     )}
                     {!isLoadingTrustees && dataTrustees.length === 0 && (
                         <option disabled>Aucun syndic trouvé</option>
@@ -190,7 +220,7 @@ export default function PropertyForm({
             />
             <FieldArray
                 name="entrances"
-                label="Entrées"
+                label="Entrées / Villas / Bâtiments"
                 placeholder="ex : A"
                 error={errors["entrances"]}
                 control={control}
@@ -215,19 +245,58 @@ export default function PropertyForm({
             <FormInput
                 type="text"
                 name="digicode"
-                label="Digicode"
+                label="Accès Digicode"
                 error={errors["digicode"]}
+                register={register}
+                required={false}
+            />
+            <FormInput
+                type="text"
+                name="vigik"
+                label="Accès Vigik"
+                error={errors["vigik"]}
+                register={register}
+                required={false}
+            />
+            <FormInput
+                type="text"
+                name="transmitter"
+                label="Accès émetteur"
+                error={errors["transmitter"]}
                 register={register}
                 required={false}
             />
             <FieldArray
                 name="accesses"
-                label="Accès"
-                placeholder="ex : VIGIK-123456"
+                label="Autres accès"
+                placeholder="ex : Pass PTT"
                 error={errors["accesses"]}
                 control={control}
                 required={false}
             />
+            <div className="mb-3">
+                <FormLabel label={"Elements à graver"} />
+                <div className="grid grid-cols-2">
+                    {Object.keys(commandDetails)
+                        .filter(
+                            (f) =>
+                                f !== "proprietaire" &&
+                                f !== "nouveloccupant" &&
+                                f !== "ancienoccupant"
+                        )
+                        .map((key, index) => (
+                            <FormCheckbox
+                                key={index}
+                                name="params"
+                                label={commandDetails[key]}
+                                value={key}
+                                error={errors["params"]}
+                                register={register}
+                                required={true}
+                            />
+                        ))}
+                </div>
+            </div>
             <FormInput
                 type="date"
                 name="deliveredAt"
@@ -236,26 +305,6 @@ export default function PropertyForm({
                 register={register}
                 required={true}
             />
-            <div className="grid grid-cols-2">
-                {Object.keys(commandDetails)
-                    .filter(
-                        (f) =>
-                            f !== "proprietaire" &&
-                            f !== "nouveloccupant" &&
-                            f !== "ancienoccupant"
-                    )
-                    .map((key, index) => (
-                        <FormCheckbox
-                            key={index}
-                            name="params"
-                            label={commandDetails[key]}
-                            value={key}
-                            error={errors["params"]}
-                            register={register}
-                            required={true}
-                        />
-                    ))}
-            </div>
         </Form>
     );
 }

@@ -9,10 +9,12 @@ import Loader from "components/loader/Loader";
 import Content from "components/templates/content/Content";
 import Header from "components/templates/header/Header";
 import { commandDetails } from "config/translations.config";
+import useMakeLetterboxes from "hooks/useMakeLetterboxes";
 import { useModal } from "hooks/useModal";
 import _ from "lodash";
+import { usePostData as PostLetterbox } from "queryHooks/useLetterbox";
 import { useGetOneData } from "queryHooks/useProperty";
-import { IoIosAddCircleOutline } from "react-icons/io";
+import { IoIosAddCircleOutline, IoIosGrid } from "react-icons/io";
 import { LuSettings2 } from "react-icons/lu";
 import { MdArrowBack, MdGroups } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -84,6 +86,39 @@ export const PropertyPage = () => {
                         <IoIosAddCircleOutline size={30} />
                         Ajouter une prestation
                     </button>
+                    {data.letterboxes.length === 0 && (
+                        <button
+                            onClick={() =>
+                                handleOpenModal({
+                                    size: "small",
+                                    title: "Créer un tableau BAL",
+                                    content: (
+                                        <LetterboxForm
+                                            iri={data["@id"]}
+                                            handleCloseModal={handleCloseModal}
+                                            entrances={data.entrances}
+                                        />
+                                    ),
+                                })
+                            }
+                        >
+                            <IoIosGrid size={30} />
+                            Créer un tableau BAL
+                        </button>
+                    )}
+
+                    {data.letterboxes.length !== 0 && (
+                        <button
+                            onClick={() =>
+                                navigate(
+                                    "/letterboxes/" + data.letterboxes[0].id
+                                )
+                            }
+                        >
+                            <IoIosGrid size={30} />
+                            Voir le tableau BAL
+                        </button>
+                    )}
                 </Dropdown>
                 {_.isEmpty(previousPageState) ? (
                     <Button size={ButtonSize.Big} onClick={() => navigate(-1)}>
@@ -135,15 +170,27 @@ export const PropertyPage = () => {
                         </div>
                         {data.digicode && (
                             <div className="_card">
-                                <div className="subtitle">Digicode</div>
+                                <div className="subtitle">Accès Digicode</div>
                                 {data.digicode}
+                            </div>
+                        )}
+                        {data.vigik && (
+                            <div className="_card">
+                                <div className="subtitle">Accès Vigik</div>
+                                {data.vigik}
+                            </div>
+                        )}
+                        {data.transmitter && (
+                            <div className="_card">
+                                <div className="subtitle">Accès Emetteur</div>
+                                {data.transmitter}
                             </div>
                         )}
                         {data.accesses.length !== 0 && (
                             <div className="_card">
-                                <div className="subtitle">Accès</div>
-                                <div className="flex gap-3">
-                                    {data.accesses?.map((access) => (
+                                <div className="subtitle">Autres accès</div>
+                                <div className="flex gap-3 flex-wrap">
+                                    {data.accesses?.sort().map((access) => (
                                         <div
                                             key={uuid()}
                                             className="border border-white/20 rounded p-2"
@@ -157,8 +204,8 @@ export const PropertyPage = () => {
                         {data.entrances.length !== 0 && (
                             <div className="_card">
                                 <div className="subtitle">Entrées</div>
-                                <div className="flex gap-3">
-                                    {data.entrances?.map((entrance) => (
+                                <div className="flex gap-3 flex-wrap">
+                                    {data.entrances?.sort().map((entrance) => (
                                         <div
                                             key={uuid()}
                                             className="border border-white/20 rounded p-2"
@@ -172,7 +219,7 @@ export const PropertyPage = () => {
                         <div className="_card">
                             <div className="subtitle">Configuration</div>
                             <div className="flex flex-wrap gap-3">
-                                {data.params.map((p) => (
+                                {data.params.sort().map((p) => (
                                     <div
                                         key={uuid()}
                                         className="border border-white/20 rounded p-2"
@@ -215,7 +262,7 @@ export const PropertyPage = () => {
                         </div>
                     </div>
                     <div className="cards-container">
-                        {data.services.map((iri) => (
+                        {data.services.sort().map((iri) => (
                             <CardService
                                 handleOpenModal={handleOpenModal}
                                 handleCloseModal={handleCloseModal}
@@ -227,5 +274,45 @@ export const PropertyPage = () => {
                 </section>
             </Content>
         </>
+    );
+};
+
+const LetterboxForm = ({ iri, entrances, handleCloseModal }) => {
+    const { isPending, setData } = useMakeLetterboxes();
+    const { mutate, isLoading } = PostLetterbox();
+
+    const handleValidate = () => {
+        if (entrances.length === 0)
+            mutate({
+                property: iri,
+                content: [],
+                columns: 1,
+                entrance: null,
+            });
+        else setData({ entrances: entrances, propertyIRI: iri });
+    };
+
+    return (
+        <div className="py-5">
+            <p>
+                Attention cette opération est irréversible, voulez-vous
+                confirmer cette action ?
+            </p>
+            <div className="flex items-center gap-5 justify-start py-5">
+                <button
+                    className="btn btn-outline"
+                    onClick={() => handleCloseModal()}
+                >
+                    Annuler
+                </button>
+                <button
+                    className="btn btn-error text-white"
+                    onClick={() => handleValidate()}
+                    disabled={isPending || isLoading}
+                >
+                    Confirmer
+                </button>
+            </div>
+        </div>
     );
 };

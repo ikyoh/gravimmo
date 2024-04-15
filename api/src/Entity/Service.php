@@ -50,7 +50,7 @@ class Service
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["commands:read", "services:read", "service:read", "service:write", "propertyservice:read", "command:read", "extraservices:read"])]
+    #[Groups(["commands:read", "services:read", "service:read", "service:write", "propertyservice:read", "command:read", "extraservices:read", "reports:read" , "command_report:read"])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
@@ -72,6 +72,14 @@ class Service
     #[ORM\Column(nullable: true)]
     #[Groups(["services:read", "service:read", "service:write"])]
     private array $font = [];
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(["services:read", "service:read", "service:write"])]
+    private array $ratio = [];
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(["services:read", "service:read", "service:write"])]
+    private array $height = [];
 
     #[ORM\Column(nullable: true)]
     #[Groups(["services:read", "service:read", "service:write"])]
@@ -183,6 +191,29 @@ class Service
     public function setFont(?array $font): self
     {
         $this->font = $font;
+
+        return $this;
+    }
+
+    public function getRatio(): array
+    {
+        return $this->ratio;
+    }
+
+    public function setRatio(?array $ratio): self
+    {
+        $this->ratio = $ratio;
+
+        return $this;
+    }
+    public function getHeight(): array
+    {
+        return $this->height;
+    }
+
+    public function setHeight(?array $height): self
+    {
+        $this->height = $height;
 
         return $this;
     }

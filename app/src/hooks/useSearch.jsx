@@ -15,7 +15,7 @@ export const useSearch = (props) => {
                     name="search"
                     type="search"
                     placeholder="Recherche"
-                    className="appearance-none outline-none bg-transparent w-full"
+                    className="appearance-none !outline-none !bg-transparent w-full"
                     onChange={(e) => setSearchvalue(e.target.value)}
                     //autoFocus={true}
                 />

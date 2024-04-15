@@ -5,8 +5,8 @@ import "./style.css";
 
 const Dropdown = ({ type = "card", isDisabled, children, icon }) => {
     const className = classNames({
-        "absolute top-2 -right-1": type === "card",
-        "absolute -top-4 -right-1": type === "table",
+        "absolute top-3 -right-1": type === "card",
+        "absolute top-2 -right-1": type === "table",
         "absolute top-4 right-0": type === "tour",
     });
 

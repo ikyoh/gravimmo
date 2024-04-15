@@ -3,6 +3,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Layout } from "components/templates/layout/Layout";
 import * as dayjs from "dayjs";
 import { ForgotPasswordPage } from "pages/ForgotPasswordPage";
+import { LetterboxPage } from "pages/LetterboxPage";
+import { ReportsPage } from "pages/ReportsPage";
 import { ResetPasswordPage } from "pages/ResetPasswordPage";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import "./assets/tailwind.css";
@@ -20,6 +22,7 @@ import { PropertyPage } from "./pages/PropertyPage";
 import { QuotePage } from "./pages/QuotePage";
 import { QuotesPage } from "./pages/QuotesPage";
 import { ServicesPage } from "./pages/ServicesPage";
+import { SettingsPage } from "./pages/SettingsPage";
 import { TourPage } from "./pages/TourPage";
 import { ToursPage } from "./pages/ToursPage";
 import { TrusteePage } from "./pages/TrusteePage";
@@ -69,6 +72,16 @@ export default function App() {
                                     roles={["ROLE_WORKSHOP", "ROLE_INSTALLER"]}
                                 >
                                     <DashboardPage title="Tableau de bord" />
+                                </Layout>
+                            }
+                        />
+                        <Route
+                            path={"/letterboxes/:id"}
+                            element={
+                                <Layout
+                                    roles={["ROLE_WORKSHOP", "ROLE_INSTALLER"]}
+                                >
+                                    <LetterboxPage />
                                 </Layout>
                             }
                         />
@@ -179,6 +192,22 @@ export default function App() {
                                     roles={["ROLE_WORKSHOP", "ROLE_INSTALLER"]}
                                 >
                                     <ToursPage title="Tournées" />
+                                </Layout>
+                            }
+                        />
+                        <Route
+                            path={"/reports"}
+                            element={
+                                <Layout roles={["ROLE_WORKSHOP"]}>
+                                    <ReportsPage title="Incidents" />
+                                </Layout>
+                            }
+                        />
+                        <Route
+                            path={"/settings"}
+                            element={
+                                <Layout roles={["ROLE_WORKSHOP"]}>
+                                    <SettingsPage title="Configuration" />
                                 </Layout>
                             }
                         />

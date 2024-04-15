@@ -36,7 +36,7 @@ import {
 } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import uuid from "react-uuid";
-import { price, roundPrice } from "utils/functions.utils";
+import { deepClone, price, roundPrice } from "utils/functions.utils";
 import * as yup from "yup";
 
 import { CommandPage } from "./CommandPage";
@@ -107,7 +107,7 @@ export const InvoicePage = ({ title }) => {
     };
 
     const handleUpdateService = (index, service) => {
-        let _content = invoiceData.content;
+        let _content = deepClone(invoiceData.content);
         _content[index] = service;
         const { amountHT, amountTTC } = calcAmounts(_content);
         handleCloseModal();
@@ -148,9 +148,6 @@ export const InvoicePage = ({ title }) => {
 
         return { amountHT: amountHT, amountTTC: amountTTC };
     };
-
-    console.log("data", data);
-    console.log("invoiceData", invoiceData);
 
     if (isLoading) return <Loader />;
     else
@@ -414,9 +411,7 @@ export const InvoicePage = ({ title }) => {
                             <p>Statut</p>
                             <div className="flex gap-2">
                                 <Dot color={statusColor[data.status]} />
-                                <div className="caspanitalize">
-                                    {data.status}
-                                </div>
+                                <div className="capitalize">{data.status}</div>
                             </div>
                         </div>
                         <div className="dark:bg-gradient-page rounded p-3">
@@ -456,7 +451,27 @@ export const InvoicePage = ({ title }) => {
                     </Thead>
                     <Tbody>
                         {invoiceData.content?.map((content, index) => (
-                            <Tr key={uuid()}>
+                            <Tr
+                                key={uuid()}
+                                onClick={() =>
+                                    handleOpenModal({
+                                        title: "Prestation",
+                                        content: (
+                                            <UpdateServiceModal
+                                                handleUpdateService={
+                                                    handleUpdateService
+                                                }
+                                                service={content}
+                                                index={index}
+                                                tva={data.tva}
+                                                handleCloseModal={
+                                                    handleCloseModal
+                                                }
+                                            />
+                                        ),
+                                    })
+                                }
+                            >
                                 <Td>{content.reference}</Td>
                                 <Td>
                                     {content.title}{" "}

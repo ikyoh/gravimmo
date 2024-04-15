@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-//import { useNavigate } from "react-router-dom";
 import _ from "lodash";
+import { useNavigate } from "react-router-dom";
 import { API_COMMANDS as API, itemsPerPage } from "../config/api.config";
 import { request, requestIRI } from "../utils/axios.utils";
 
@@ -29,18 +29,20 @@ const fetchFilteredDatas = (sortValue, sortDirection, searchValue) => {
 
 const fetchFilteredByStatus = (status) => {
     return request({
-        url: API + "?pagination=false" + "&status=" + status,
+        url: API + "?pagination=false&status=" + status,
         method: "get",
     });
 };
 
-const fetchPaginatedDatas = (
+const fetchPaginatedDatas = ({
     page = 1,
     sortValue = "id",
     sortDirection = "ASC",
     searchValue,
-    filters
-) => {
+    filters,
+    property,
+    details,
+}) => {
     let options =
         "?page=" +
         page +
@@ -50,7 +52,9 @@ const fetchPaginatedDatas = (
         sortValue +
         "]=" +
         sortDirection;
+    if (property) options += "&property=" + property;
     if (searchValue) options += "&search=" + searchValue;
+    if (details) options += "&search=" + details;
     if (filters.isHanging) options += "&isHanging=true";
     if (filters.isNotTour) options += "&exists[tour]=false";
     if (filters.status !== "all") options += "&status=" + filters.status;
@@ -73,6 +77,10 @@ const postData = (form) => {
 
 const putData = (form) => {
     return request({ url: API + "/" + form.id, method: "put", data: form });
+};
+
+const deleteData = (iri) => {
+    return requestIRI({ url: iri, method: "delete" });
 };
 
 /* HOOKS */
@@ -111,13 +119,16 @@ export const useGetFilteredDatas = (sortValue, sortDirection, searchValue) => {
     });
 };
 
-export const useGetPaginatedDatas = (
+export const useGetPaginatedDatas = ({
+    enabled = true,
     page,
     sortValue,
     sortDirection,
     searchValue,
-    filters
-) => {
+    filters,
+    property,
+    details,
+}) => {
     return useQuery({
         queryKey: [
             queryKey,
@@ -126,18 +137,23 @@ export const useGetPaginatedDatas = (
             sortDirection,
             searchValue,
             filters,
+            property,
+            details,
         ],
         queryFn: () =>
-            fetchPaginatedDatas(
+            fetchPaginatedDatas({
                 page,
                 sortValue,
                 sortDirection,
                 searchValue,
-                filters
-            ),
+                filters,
+                property,
+                details,
+            }),
         keepPreviousData: true,
         staleTime: 60000,
         cacheTime: 60000,
+        enabled: enabled,
         //select: data => {return data['hydra:member']}
     });
 };
@@ -158,13 +174,22 @@ export const useGetIRI = (iri) => {
     });
 };
 
+export const useDeleteIRI = () => {
+    const queryClient = useQueryClient();
+    return useMutation(deleteData, {
+        onSuccess: () => {
+            queryClient.invalidateQueries([queryKey]);
+        },
+    });
+};
+
 export const usePostData = () => {
     const queryClient = useQueryClient();
-    //const navigate = useNavigate();
+    const navigate = useNavigate();
     return useMutation(postData, {
-        // onSuccess: (data) => {
-        //     if (data.isCustom) navigate(API + "/" + data.id)
-        // },
+        onSuccess: (data) => {
+            if (data.customer) navigate(API + "/" + data.id);
+        },
         onError: (error, _, context) => {
             console.log("error", error);
         },
