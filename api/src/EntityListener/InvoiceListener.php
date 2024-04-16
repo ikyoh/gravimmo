@@ -100,6 +100,25 @@ class InvoiceListener extends AbstractController
             }
         }
 
+        if (!empty($invoice->getCommand()->getReports())) {
+        $reports = $invoice->getCommand()->getReports();
+        foreach ($reports as $report) {
+            if(!empty($report->getReport()->getService())){
+            $amount += $report->getReport()->getService()->getPrice();
+            array_push($content, array(
+                "type" => "service",
+                "serviceId" => $report->getReport()->getService()->getId(),
+                "reference" => $report->getReport()->getService()->getReference(),
+                "title" => $report->getReport()->getService()->getTitle(),
+                "invoiceTitle" => $report->getReport()->getService()->getInvoiceTitle(),
+                "quantity" => 1,
+                "price" => $report->getReport()->getService()->getPrice(),
+                "discount" => 0,
+                "amount" => $report->getReport()->getService()->getPrice(),
+            ));}
+        }
+    }
+
         $invoice->setStatus("édité");
         $invoice->setTva($tva);
         $invoice->setAmountHT(round($amount, 2));

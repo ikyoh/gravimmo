@@ -60,8 +60,6 @@ export const CommandPage = ({
 
     const data = dataID || dataIRI;
 
-    console.log(data);
-
     const { data: property, isLoading: isLoadingProperty } = getProperty(
         data && data.property ? data.property["@id"] || data.property : null
     );

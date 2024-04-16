@@ -68,7 +68,9 @@ export const TourPage = () => {
                     subtitle={
                         dayjs(data.scheduledAt).format("dddd D MMMM YYYY") +
                         " - " +
-                        data.user.firstname
+                        data.user.firstname +
+                        " " +
+                        data.user.lastname
                     }
                     isLoading={isLoading}
                     error={error}

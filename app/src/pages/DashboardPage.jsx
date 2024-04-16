@@ -137,7 +137,9 @@ export const DashboardPage = ({ title }) => {
                         <Loader />
                     ) : (
                         <>
-                            <div className="section-title">Tournée du jour</div>
+                            <div className="section-title">
+                                Tournées du jour
+                            </div>
                             {tours["hydra:member"].length === 0 && (
                                 <NoDataFound />
                             )}

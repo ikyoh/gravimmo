@@ -31,8 +31,20 @@ const Tour = ({ id, reorder }) => {
     if (isLoading) return <Loader />;
 
     return (
-        <div>
-            <div className="text-right">
+        <div className="">
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3 mb-5">
+                    <div className="text-xl font-bold uppercase">
+                        Tournée #{data.id}
+                    </div>
+                    <div className="chat chat-start">
+                        <div className="chat-bubble !max-w-none">
+                            <div className="mt-0.5">
+                                {data.user.firstname} {data.user.lastname}
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <Dropdown type="button">
                     <button
                         className="bg-secondary"
@@ -71,7 +83,8 @@ const Tour = ({ id, reorder }) => {
                             })
                         }
                     >
-                        <BsPiggyBank size={30} /> Facturer Facturer la tournée
+                        <BsPiggyBank size={30} />
+                        Facturer la tournée
                     </button>
                 </Dropdown>
             </div>

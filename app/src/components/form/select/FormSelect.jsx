@@ -11,6 +11,7 @@ export const FormSelect = ({
     validationSchema,
     children,
     defaultValue,
+    onChange,
 }) => (
     <div className="w-full mb-3">
         <Label name={name} label={label} required={required} />
@@ -19,6 +20,7 @@ export const FormSelect = ({
             name={name}
             placeholder={placeholder}
             {...register(name, validationSchema)}
+            onChange={onChange}
         >
             {children}
         </select>

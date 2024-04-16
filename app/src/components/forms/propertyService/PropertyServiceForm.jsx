@@ -24,8 +24,6 @@ export default function PropertyServiceForm({
     propertyIRI,
     handleCloseModal,
 }) {
-    console.log("propertyIRI", propertyIRI);
-
     const [firstLoad, setFirstLoad] = useState(true);
 
     const { isLoading: isLoadingProperty, data: property } =
@@ -99,15 +97,12 @@ export default function PropertyServiceForm({
     }, [dataService]);
 
     const onSubmit = (form) => {
-        console.log("form", form);
         if (!iri) postData(form);
         else {
             putData(form);
         }
         handleCloseModal();
     };
-    console.log("isLoadingData", isLoadingData);
-    console.log("isLoadingProperty", isLoadingProperty);
 
     if (isLoadingProperty) return <Loader />;
 

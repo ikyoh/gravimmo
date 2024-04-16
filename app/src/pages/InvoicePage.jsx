@@ -55,7 +55,6 @@ export const InvoicePage = ({ title }) => {
     const { id } = useParams();
 
     const { data, isLoading, error, isSuccess } = useGetID(id);
-    console.log("isLoading", isLoading);
 
     const {
         mutate: put,

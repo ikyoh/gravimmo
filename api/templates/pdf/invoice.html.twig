@@ -136,7 +136,7 @@
             Copropriété : {{propertydetails}}
         </div>
         {% endif %}
-        {% if details.proprietaire is defined %}
+        {% if details.proprietaire is defined and details.proprietaire != "" %}
         <div style="background-color: lightgray;display: inline-block; padding : 5pt;">
             Propriétaire : {{details.proprietaire}}
         </div>

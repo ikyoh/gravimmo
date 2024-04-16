@@ -80,7 +80,6 @@ export default function CommandReportForm({
     const watchReport = watch("report");
 
     const onSubmit = (form) => {
-        console.log("form", form);
         if (!iri) postData(form);
         else {
             putData(form);

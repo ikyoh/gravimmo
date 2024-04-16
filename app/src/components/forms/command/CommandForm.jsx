@@ -78,6 +78,7 @@ export const CommandForm = ({ id, handleCloseModal }) => {
         setValue,
         reset,
         resetField,
+        getValues,
         watch,
         trigger,
         setFocus,
@@ -93,7 +94,7 @@ export const CommandForm = ({ id, handleCloseModal }) => {
     // Set form values
     useEffect(() => {
         if (!id) {
-            reset({});
+            reset({ details: {} });
             setCurrentStep(1);
         }
     }, []);
@@ -152,28 +153,33 @@ export const CommandForm = ({ id, handleCloseModal }) => {
         let _form = { ...form };
         _form.isHanging = false;
 
-        // Set isHanging value
-        if (_form.entrance === "") {
-            _form.isHanging = true;
-        }
-        if (!_form.isHanging) {
-            _form.isHanging = Object.keys(_form.details).some((key) => {
-                return (
-                    key !== "proprietaire" &&
-                    key !== "ancienoccupant" &&
-                    key !== "orderDetails" &&
-                    _form.details[key] === ""
-                );
-            });
-        }
-
-        if (!_form.isHanging && _form.details.orderTags) {
-            _form.isHanging = Object.values(_form.details.orderTags).some(
-                (value) => value === ""
-            );
-        }
-
         console.log(_form);
+
+        if (!form.customer) {
+            if (_form.entrance === "" && !_form.isCustom) {
+                _form.isHanging = true;
+            }
+            if (!_form.isHanging && !_form.isCustom) {
+                _form.isHanging = Object.keys(_form.details).some((key) => {
+                    return (
+                        key !== "proprietaire" &&
+                        key !== "ancienoccupant" &&
+                        key !== "orderDetails" &&
+                        _form.details[key] === ""
+                    );
+                });
+            }
+
+            if (
+                !_form.isHanging &&
+                _form.details.orderTags &&
+                !_form.isCustom
+            ) {
+                _form.isHanging = Object.values(_form.details.orderTags).some(
+                    (value) => value === ""
+                );
+            }
+        }
         // case update
         if (id) {
             delete _form.service;
@@ -368,6 +374,14 @@ export const CommandForm = ({ id, handleCloseModal }) => {
             error,
         } = getProperty(watch("property"));
 
+        const handleChangeEntrance = (value) => {
+            const details = getValues("details");
+            if (details.entree || details.entree === "")
+                setValue("details[entree]", value);
+            if (details.numerodevilla || details.numerodevilla === "")
+                setValue("details[numerodevilla]", value);
+        };
+
         const ServiceCheckbox = ({ serviceIRI, name }) => {
             const { data: propertyService, isLoading: isLoadingService } =
                 usePropertyService(serviceIRI);
@@ -480,6 +494,9 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                                 error={errors["entrance"]}
                                 register={register}
                                 required={false}
+                                onChange={(e) => {
+                                    handleChangeEntrance(e.target.value);
+                                }}
                             >
                                 <option value="">Choisir</option>
                                 {property.entrances.map((entrance) => (
@@ -547,14 +564,14 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                         <div>
                             <FormCheckbox
                                 name="isUpdate"
-                                label="Mise à jour"
+                                label="Cette commande est une mise à jour"
                                 error={errors["isUpdate"]}
                                 register={register}
                             />
                             {property &&
                                 property.trustee.orderTag.length !== 0 &&
                                 property.trustee.orderTag.map((orderTag) => (
-                                    <RequiredInput
+                                    <Input
                                         key={uuid()}
                                         name={`details.orderTags.${orderTag}`}
                                         label={orderTag}
@@ -585,7 +602,7 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                                                     className="appearance-none bg-light dark:bg-dark text-dark dark:text-white rounded p-2 mt-2 w-full leading-tight focus:outline focus:outline-accent h-40"
                                                 />
                                             </div>
-                                            <div className="flex-none w-64">
+                                            <div className="flex-none w-80">
                                                 Nouvel occupant
                                                 <textarea
                                                     name={`customServices.${index}.details.nouveloccupant`}
