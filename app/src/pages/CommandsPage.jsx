@@ -452,9 +452,9 @@ export const CommandsPage = ({ title }) => {
                                     <Td
                                         label="Date"
                                         text={
-                                            data.tour
+                                            data.deliveredAt
                                                 ? dayjs(
-                                                      data.tour.scheduledAt
+                                                      data.deliveredAt
                                                   ).format("DD/MM/YYYY")
                                                 : "..."
                                         }
@@ -474,35 +474,55 @@ export const CommandsPage = ({ title }) => {
                                                 isHanging={data.isHanging}
                                                 date={data.createdAt}
                                             />
-                                            {data.isHanging && <RiLockFill />}
-                                            {data.reports.length !== 0 && (
-                                                <MdWarning
-                                                    size={20}
-                                                    className="text-error"
-                                                />
-                                            )}
-                                            {data.images.length !== 0 && (
-                                                <div
-                                                    className="tooltip flex items-center"
-                                                    data-tip={
-                                                        data.images.length
-                                                    }
-                                                >
-                                                    <button className="">
-                                                        <SlPicture size={20} />
-                                                    </button>
+
+                                            <div className="grid grid-cols-4 gap-1">
+                                                <div className="self-center">
+                                                    {data.isHanging && (
+                                                        <RiLockFill size={20} />
+                                                    )}
                                                 </div>
-                                            )}
-                                            {data.tour && (
-                                                <div
-                                                    className="tooltip flex items-center"
-                                                    data-tip={data.tour.id}
-                                                >
-                                                    <MdPendingActions
-                                                        size={23}
-                                                    />
+                                                <div className="self-center">
+                                                    {data.reports.length !==
+                                                        0 && (
+                                                        <MdWarning
+                                                            size={20}
+                                                            className="text-error"
+                                                        />
+                                                    )}
                                                 </div>
-                                            )}
+                                                <div className="self-center">
+                                                    {data.images.length !==
+                                                        0 && (
+                                                        <div
+                                                            className="tooltip flex items-center"
+                                                            data-tip={
+                                                                data.images
+                                                                    .length
+                                                            }
+                                                        >
+                                                            <button className="">
+                                                                <SlPicture
+                                                                    size={20}
+                                                                />
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="self-center">
+                                                    {data.tour && (
+                                                        <div
+                                                            className="tooltip flex items-center"
+                                                            data-tip={
+                                                                data.tour.id
+                                                            }
+                                                        >
+                                                            <MdPendingActions
+                                                                size={22}
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
                                         </div>
                                     </Td>
                                     <Td label="" text={""}>

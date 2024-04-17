@@ -584,6 +584,14 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                                 label="Email de suivi"
                                 placeholder="url de l'email"
                             />
+                            <Input
+                                name="commentMake"
+                                label="Commentaire fabrication"
+                            />
+                            <Input
+                                name="commentDeliver"
+                                label="Commentaire pose"
+                            />
 
                             {fields.map((item, index) => {
                                 return (
@@ -602,7 +610,7 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                                                     className="appearance-none bg-light dark:bg-dark text-dark dark:text-white rounded p-2 mt-2 w-full leading-tight focus:outline focus:outline-accent h-40"
                                                 />
                                             </div>
-                                            <div className="flex-none w-80">
+                                            <div className="flex-none w-96">
                                                 Nouvel occupant
                                                 <textarea
                                                     name={`customServices.${index}.details.nouveloccupant`}

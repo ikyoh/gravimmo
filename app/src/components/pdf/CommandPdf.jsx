@@ -88,6 +88,14 @@ const CommandPdf = ({ commands = [] }) => {
                             )}
                         </View>
 
+                        {order.commentDeliver && (
+                            <View style={styles.comment}>
+                                <Text>
+                                    Commentaire pose: {order.commentDeliver}
+                                </Text>
+                            </View>
+                        )}
+
                         <View>
                             <View style={styles.row}>
                                 <Text style={styles.subtitle}>
@@ -95,16 +103,7 @@ const CommandPdf = ({ commands = [] }) => {
                                     {order.customer && "Client"}
                                 </Text>
                             </View>
-                            {order.commentDeliver && (
-                                <Text
-                                    style={{
-                                        marginBottom: 5,
-                                        ...styles.bold,
-                                    }}
-                                >
-                                    Commentaire : {order.commentDeliver}
-                                </Text>
-                            )}
+
                             <View style={styles.row}>
                                 <Text style={styles.bold}>
                                     {order.property && order.property.title}
@@ -195,14 +194,12 @@ const CommandPdf = ({ commands = [] }) => {
                         </View>
 
                         {order.commentMake && (
-                            <Text
-                                style={{
-                                    marginBottom: 5,
-                                    ...styles.bold,
-                                }}
-                            >
-                                Commentaire : {order.commentDeliver}
-                            </Text>
+                            <View style={styles.comment}>
+                                <Text>
+                                    Commentaire fabrication :{" "}
+                                    {order.commentMake}
+                                </Text>
+                            </View>
                         )}
                         {order.property &&
                             order.property.services?.map(
@@ -214,44 +211,6 @@ const CommandPdf = ({ commands = [] }) => {
                                                     {service.service.title}
                                                 </Text>
                                             </View>
-
-                                            <View style={styles.row}>
-                                                {service.size && (
-                                                    <View
-                                                        style={{
-                                                            ...styles.row,
-                                                            marginRight: 8,
-                                                        }}
-                                                    >
-                                                        <Text>
-                                                            Dimensions :
-                                                        </Text>
-                                                        <Text
-                                                            style={styles.bold}
-                                                        >
-                                                            {" "}
-                                                            {service.size}
-                                                        </Text>
-                                                    </View>
-                                                )}
-                                                {service.thickness && (
-                                                    <View
-                                                        style={{
-                                                            ...styles.row,
-                                                            marginRight: 8,
-                                                        }}
-                                                    >
-                                                        <Text>Epaisseur :</Text>
-                                                        <Text
-                                                            style={styles.bold}
-                                                        >
-                                                            {" "}
-                                                            {service.thickness}
-                                                        </Text>
-                                                    </View>
-                                                )}
-                                            </View>
-
                                             <View style={styles.row}>
                                                 {service.material && (
                                                     <View
@@ -298,6 +257,42 @@ const CommandPdf = ({ commands = [] }) => {
                                                         >
                                                             {" "}
                                                             {service.margin}
+                                                        </Text>
+                                                    </View>
+                                                )}
+                                            </View>
+                                            <View style={styles.row}>
+                                                {service.size && (
+                                                    <View
+                                                        style={{
+                                                            ...styles.row,
+                                                            marginRight: 8,
+                                                        }}
+                                                    >
+                                                        <Text>
+                                                            Dimensions :
+                                                        </Text>
+                                                        <Text
+                                                            style={styles.bold}
+                                                        >
+                                                            {" "}
+                                                            {service.size}
+                                                        </Text>
+                                                    </View>
+                                                )}
+                                                {service.thickness && (
+                                                    <View
+                                                        style={{
+                                                            ...styles.row,
+                                                            marginRight: 8,
+                                                        }}
+                                                    >
+                                                        <Text>Epaisseur :</Text>
+                                                        <Text
+                                                            style={styles.bold}
+                                                        >
+                                                            {" "}
+                                                            {service.thickness}
                                                         </Text>
                                                     </View>
                                                 )}

@@ -74,6 +74,11 @@ export const styles = StyleSheet.create({
         fontWeight: 700,
         border: "2px solid black",
     },
+    comment: {
+        marginTop: 20,
+        marginBottom: 10,
+        borderBottom: "2px solid black",
+    },
     bold: {
         fontWeight: 700,
     },
