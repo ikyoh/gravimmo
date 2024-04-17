@@ -41,7 +41,7 @@ export const CardTour = ({ iri }) => {
         <>
             <Modal />
             <div className="_card dark:bg-gradient-page flex flex-col md:flex-row gap-3 items-center justify-between w-full flex-wrap">
-                <div className="flex flex-col md:flex-row items-center gap-3 md:gap-5">
+                <div className="flex flex-col md:flex-row items-center gap-3 md:gap-5 flex-wrap">
                     <div className="">#{data.id}</div>
                     <div className="text-accent font-semibold">
                         {property && property.title}
@@ -56,6 +56,16 @@ export const CardTour = ({ iri }) => {
                             {property.digicode && (
                                 <div className="rounded border border-slate-500 p-2">
                                     Digicode : {property.digicode}
+                                </div>
+                            )}
+                            {property.vigik && (
+                                <div className="rounded border border-slate-500 p-2">
+                                    Vigik : {property.vigik}
+                                </div>
+                            )}
+                            {property.transmitter && (
+                                <div className="rounded border border-slate-500 p-2">
+                                    Emetteur : {property.transmitter}
                                 </div>
                             )}
                             {property.accesses?.map((access) => (

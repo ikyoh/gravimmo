@@ -550,6 +550,7 @@ export const CommandsPage = ({ title }) => {
                                                 />
                                                 Consulter la fiche
                                             </button>
+                                            <CommandPdf commands={[data]} />
                                             {data.status !== "facturé" &&
                                                 data.status !== "posé" &&
                                                 data.status !== "annulé" && (

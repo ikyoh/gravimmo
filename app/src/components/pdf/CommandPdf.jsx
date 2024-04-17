@@ -1,19 +1,21 @@
 import {
     Circle,
     Document,
-    PDFDownloadLink,
     Page,
     Path,
     Svg,
     Text,
     View,
+    pdf,
 } from "@react-pdf/renderer";
+import fileDownload from "js-file-download";
+
 import { commandDetails } from "config/translations.config";
 import { MdOutlineFileDownload } from "react-icons/md";
 import uuid from "react-uuid";
 import { styles } from "./styles";
 
-const CommandPdf = ({ commands = [] }) => {
+const CommandPdf = ({ commands = [], onClick }) => {
     console.log("commands", commands);
     // Create Document Component
     const MyDoc = () => (
@@ -158,6 +160,27 @@ const CommandPdf = ({ commands = [] }) => {
                                             >
                                                 Digicode :{" "}
                                                 {order.property.digicode}
+                                            </Text>
+                                        )}
+                                        {order.property.vigik && (
+                                            <Text
+                                                style={{
+                                                    ...styles.bold,
+                                                    marginRight: 8,
+                                                }}
+                                            >
+                                                Vigik : {order.property.vigik}
+                                            </Text>
+                                        )}
+                                        {order.property.transmitter && (
+                                            <Text
+                                                style={{
+                                                    ...styles.bold,
+                                                    marginRight: 8,
+                                                }}
+                                            >
+                                                Emetteur :{" "}
+                                                {order.property.transmitter}
                                             </Text>
                                         )}
                                         {order.property.accesses.length !== 0 &&
@@ -494,29 +517,43 @@ const CommandPdf = ({ commands = [] }) => {
         </Document>
     );
 
-    if (commands.length === 0)
-        return (
-            <button disabled={true}>
-                <MdOutlineFileDownload size={30} /> Fiches PDF
-            </button>
+    const handleDownload = async () => {
+        const blob = await pdf(<MyDoc />).toBlob();
+        fileDownload(
+            blob,
+            commands.length === 1
+                ? "commande-" + commands[0].id + ".pdf"
+                : "commandes.pdf"
         );
-    else
-        return (
-            <PDFDownloadLink document={<MyDoc />} fileName="Commande.pdf">
-                {({ blob, url, loading, error }) =>
-                    loading ? (
-                        <button disabled={true}>
-                            <MdOutlineFileDownload size={30} />
-                        </button>
-                    ) : (
-                        <>
-                            <MdOutlineFileDownload size={30} />
-                            Fiches PDF
-                        </>
-                    )
-                }
-            </PDFDownloadLink>
-        );
+    };
+
+    //if (commands.length === 0)
+    return (
+        <button
+            disabled={commands.length === 0}
+            onClick={() => handleDownload()}
+        >
+            <MdOutlineFileDownload size={30} />
+            Fiche PDF
+        </button>
+    );
+    // else
+    //     return (
+    //         <PDFDownloadLink document={<MyDoc />} fileName="Commande.pdf">
+    //             {({ blob, url, loading, error }) =>
+    //                 loading ? (
+    //                     <button disabled={true}>
+    //                         <MdOutlineFileDownload size={30} />
+    //                     </button>
+    //                 ) : (
+    //                     <>
+    //                         <MdOutlineFileDownload size={30} />
+    //                         Fiches PDF
+    //                     </>
+    //                 )
+    //             }
+    //         </PDFDownloadLink>
+    //     );
 };
 
 export default CommandPdf;
