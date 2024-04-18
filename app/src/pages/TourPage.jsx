@@ -77,6 +77,25 @@ export const TourPage = () => {
                 >
                     {data.status !== "facturé" && (
                         <Dropdown type="button">
+                            {commands.some(
+                                (command) =>
+                                    command.status === "DEFAULT - à traiter"
+                            ) && (
+                                <button>
+                                    <IoIosCheckmarkCircleOutline size={30} />
+                                    Valider la préparation
+                                </button>
+                            )}
+                            {commands.some(
+                                (command) =>
+                                    command.status === "DEFAULT - préparé"
+                            ) && (
+                                <button>
+                                    <IoIosCheckmarkCircleOutline size={30} />
+                                    Valider la pose
+                                </button>
+                            )}
+
                             {data.status === "DEFAULT - à traiter" && (
                                 <button
                                     onClick={() =>

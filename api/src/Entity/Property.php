@@ -24,8 +24,13 @@ use DateTime;
 
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
 #[UniqueEntity(
-    fields: ['vigik', 'transmitter'],
-    message: "Donnée déjà enregistrée dans la base",
+    fields: ['vigik'],
+    message: 'Cette référence existe déjà.',
+    ignoreNull: true
+)]
+#[UniqueEntity(
+    fields: ['transmitter'],
+    message: 'Cette référence existe déjà.',
     ignoreNull: true
 )]
 #[ApiResource(
