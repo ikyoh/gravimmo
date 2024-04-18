@@ -51,7 +51,17 @@ export const TourPage = () => {
     const handleChangeCommandsStatus = async (status) => {
         await Promise.all(
             data.commands.map(async (command) => {
+                if (
+                    command.status === "facturé" ||
+                    command.status === "DEFAULT - posé"
+                )
+                    return;
                 const _command = { id: command.id, status: status };
+                if (
+                    status === "DEFAULT - préparé" &&
+                    command.status === "DEFAULT - à traiter"
+                )
+                    _command.deliveredAt = dayjs();
                 if (status === "DEFAULT - posé") _command.deliveredAt = dayjs();
                 updateCommand(_command);
             })
@@ -77,6 +87,32 @@ export const TourPage = () => {
                 >
                     {data.status !== "facturé" && (
                         <Dropdown type="button">
+                            <button
+                                onClick={() =>
+                                    handleChangeCommandsStatus(
+                                        "DEFAULT - préparé"
+                                    )
+                                }
+                            >
+                                <IoIosCheckmarkCircleOutline size={30} />
+                                Valider la préparation
+                            </button>
+                            <button>
+                                <IoIosCheckmarkCircleOutline size={30} />
+                                Valider la pose
+                            </button>
+                            <button>
+                                <IoIosCheckmarkCircleOutline size={30} />
+                                Facturer
+                            </button>
+                            <button>
+                                <IoIosCheckmarkCircleOutline size={30} />
+                                Reporter la tournée
+                            </button>
+                            <button>
+                                <IoIosCheckmarkCircleOutline size={30} />
+                                Annuler la tournée
+                            </button>
                             {commands.some(
                                 (command) =>
                                     command.status === "DEFAULT - à traiter"
