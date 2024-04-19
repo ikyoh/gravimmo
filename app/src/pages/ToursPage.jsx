@@ -51,6 +51,8 @@ export const ToursPage = ({ title }) => {
               }
             : ""
     );
+
+    console.log("filters", filters);
     const {
         data = [],
         isLoading,

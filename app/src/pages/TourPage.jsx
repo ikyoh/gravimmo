@@ -12,7 +12,6 @@ import _ from "lodash";
 import { usePutData as usePutCommand } from "queryHooks/useCommand";
 import { useGetOneData, usePutData } from "queryHooks/useTour";
 import { useEffect, useState } from "react";
-import { BsPiggyBank } from "react-icons/bs";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { MdArrowBack, MdPendingActions } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -61,8 +60,14 @@ export const TourPage = () => {
                     status === "DEFAULT - préparé" &&
                     command.status === "DEFAULT - à traiter"
                 )
+                    _command.madeAt = dayjs();
+
+                if (
+                    status === "DEFAULT - posé" &&
+                    command.status === "DEFAULT - préparé"
+                )
                     _command.deliveredAt = dayjs();
-                if (status === "DEFAULT - posé") _command.deliveredAt = dayjs();
+
                 updateCommand(_command);
             })
         );
@@ -85,8 +90,11 @@ export const TourPage = () => {
                     isLoading={isLoading}
                     error={error}
                 >
-                    {data.status !== "facturé" && (
-                        <Dropdown type="button">
+                    <Dropdown type="button">
+                        {commands.some(
+                            (command) =>
+                                command.status === "DEFAULT - à traiter"
+                        ) && (
                             <button
                                 onClick={() =>
                                     handleChangeCommandsStatus(
@@ -97,97 +105,48 @@ export const TourPage = () => {
                                 <IoIosCheckmarkCircleOutline size={30} />
                                 Valider la préparation
                             </button>
-                            <button>
+                        )}
+
+                        {commands.some(
+                            (command) => command.status === "DEFAULT - préparé"
+                        ) && (
+                            <button
+                                onClick={() =>
+                                    handleChangeCommandsStatus("DEFAULT - posé")
+                                }
+                            >
                                 <IoIosCheckmarkCircleOutline size={30} />
                                 Valider la pose
                             </button>
-                            <button>
-                                <IoIosCheckmarkCircleOutline size={30} />
-                                Facturer
-                            </button>
-                            <button>
-                                <IoIosCheckmarkCircleOutline size={30} />
-                                Reporter la tournée
-                            </button>
-                            <button>
-                                <IoIosCheckmarkCircleOutline size={30} />
-                                Annuler la tournée
-                            </button>
-                            {commands.some(
-                                (command) =>
-                                    command.status === "DEFAULT - à traiter"
-                            ) && (
-                                <button>
-                                    <IoIosCheckmarkCircleOutline size={30} />
-                                    Valider la préparation
-                                </button>
-                            )}
-                            {commands.some(
-                                (command) =>
-                                    command.status === "DEFAULT - préparé"
-                            ) && (
-                                <button>
-                                    <IoIosCheckmarkCircleOutline size={30} />
-                                    Valider la pose
-                                </button>
-                            )}
+                        )}
+                        <button>
+                            <IoIosCheckmarkCircleOutline size={30} />
+                            Facturer
+                        </button>
 
-                            {data.status === "DEFAULT - à traiter" && (
-                                <button
-                                    onClick={() =>
-                                        handleChangeCommandsStatus(
-                                            "DEFAULT - préparé"
-                                        )
-                                    }
-                                >
-                                    <IoIosCheckmarkCircleOutline size={30} />
-                                    Valider la préparation
-                                </button>
-                            )}
-                            {data.status === "DEFAULT - préparé" && (
-                                <button
-                                    onClick={() =>
-                                        handleChangeCommandsStatus(
-                                            "DEFAULT - posé"
-                                        )
-                                    }
-                                >
-                                    <IoIosCheckmarkCircleOutline size={30} />
-                                    Valider la pose
-                                </button>
-                            )}
-                            {data.status === "DEFAULT - posé" && (
-                                <button
-                                    onClick={() =>
-                                        setInvoiceCommands(data.commands)
-                                    }
-                                >
-                                    <BsPiggyBank size={26} /> Facturer
-                                </button>
-                            )}
-                            {(data.status === "DEFAULT - à traiter" ||
-                                data.status === "DEFAULT - préparé") && (
-                                <button
-                                    onClick={() =>
-                                        handleOpenModal({
-                                            title: "Date de la tournée",
-                                            content: (
-                                                <TourForm
-                                                    commands={data.commands}
-                                                    handleCloseModal={
-                                                        handleCloseModal
-                                                    }
-                                                />
-                                            ),
-                                        })
-                                    }
-                                >
-                                    <MdPendingActions size={26} />
-                                    Reporter la tournée
-                                </button>
-                            )}
-                        </Dropdown>
-                    )}
+                        <button>
+                            <IoIosCheckmarkCircleOutline size={30} />
+                            Annuler la tournée
+                        </button>
+
+                        <button
+                            onClick={() =>
+                                handleOpenModal({
+                                    title: "Date de la tournée",
+                                    content: (
+                                        <TourForm
+                                            commands={data.commands}
+                                            handleCloseModal={handleCloseModal}
+                                        />
+                                    ),
+                                })
+                            }
+                        >
+                            <MdPendingActions size={26} />
+                            Reporter la tournée
+                        </button>
+                    </Dropdown>
+
                     {_.isEmpty(previousPageState) ? (
                         <Button
                             size={ButtonSize.Big}

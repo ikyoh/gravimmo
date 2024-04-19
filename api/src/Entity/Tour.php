@@ -22,7 +22,7 @@ use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\ExistsFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
-
+use App\Filter\MultipleFieldsSearchFilter;
 
 #[ORM\Entity(repositoryClass: TourRepository::class)]
 #[ORM\EntityListeners([TourListener::class])]
@@ -41,6 +41,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiFilter(SearchFilter::class, properties: ['user' => 'exact','status' => 'partial'])]
 #[ApiFilter(DateFilter::class, properties: ['scheduledAt'])]
 #[ApiFilter(ExistsFilter::class, properties: ['commands'])]
+#[ApiFilter(MultipleFieldsSearchFilter::class, properties: [
+    "id",
+    "commands.id",
+])]
 class Tour
 {
     #[ORM\Id]
@@ -60,7 +64,7 @@ class Tour
 
     #[ORM\Column(length: 255)]
     #[Groups(["tours:read", "tour:read", "tour:write"])]
-    private ?string $status = 'programmé';
+    private ?string $status = 'DEFAULT - à traiter';
 
     #[ORM\Column(length: 255)]
     #[Groups(["tours:read", "tour:read", "tour:write"])]
