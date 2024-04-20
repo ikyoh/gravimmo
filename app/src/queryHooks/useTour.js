@@ -1,7 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import _ from "lodash";
-import { useNavigate } from "react-router-dom";
 import { API_TOURS as API, itemsPerPage } from "../config/api.config";
 import { request, requestIRI } from "../utils/axios.utils";
 
@@ -77,6 +76,10 @@ const putData = (form) => {
     if (form.scheduledAt)
         _form.scheduledAt = dayjs.utc(form.scheduledAt).local().format();
     return request({ url: API + "/" + form.id, method: "put", data: _form });
+};
+
+const deleteData = (iri) => {
+    return requestIRI({ url: iri, method: "delete" });
 };
 
 /* HOOKS */
@@ -166,13 +169,14 @@ export const usePostData = () => {
             console.log("error", error);
         },
         onSettled: () => {
-            queryClient.invalidateQueries();
+            queryClient.invalidateQueries([queryKey]);
+            queryClient.invalidateQueries(["commands"]);
         },
     });
 };
 
 export const usePutData = () => {
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
     const queryClient = useQueryClient();
     return useMutation(putData, {
         onError: (error, _, context) => {
@@ -181,9 +185,20 @@ export const usePutData = () => {
         },
         onSettled: () => {
             queryClient.invalidateQueries([queryKey]);
+            queryClient.invalidateQueries("commands");
         },
+        // onSuccess: () => {
+        //     navigate(-1);
+        // },
+    });
+};
+
+export const useDeleteIRI = () => {
+    const queryClient = useQueryClient();
+    return useMutation(deleteData, {
         onSuccess: () => {
-            navigate(-1);
+            queryClient.invalidateQueries([queryKey]);
+            queryClient.invalidateQueries("commands");
         },
     });
 };
