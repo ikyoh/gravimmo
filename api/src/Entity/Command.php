@@ -120,7 +120,7 @@ class Command
     private ?Tour $tour = null;
 
     #[ORM\OneToOne(mappedBy: 'command', cascade: ['persist', 'remove'])]
-    #[Groups(["commands:read", "command:read", "command:write"])]
+    #[Groups(["commands:read", "command:read", "command:write", "tour:read", "tours:read"])]
     private ?Invoice $invoice = null;
 
     #[ORM\Column(length: 255, nullable: true)]

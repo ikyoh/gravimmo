@@ -1,13 +1,9 @@
 import Loader from "components/loader/Loader";
 import { NoDataFound } from "components/noDataFound/NoDataFound";
 import dayjs from "dayjs";
-import {
-    useGetOrdersToDeliverNumber,
-    useGetOrdersToInvoiceNumber,
-} from "queryHooks/useCommand";
+import { useGetCommandStats } from "queryHooks/useCommand";
 import { useGetPaginatedDatas } from "queryHooks/useTour";
-import { AiOutlineSlack } from "react-icons/ai";
-import { MdPendingActions } from "react-icons/md";
+import { MdOutlineAssignment } from "react-icons/md";
 import uuid from "react-uuid";
 import Content from "../components/templates/content/Content";
 import Header from "../components/templates/header/Header";
@@ -15,23 +11,39 @@ import Tour from "../components/tour/Tour";
 import { useGetCurrentAccount } from "../queryHooks/useAccount";
 
 export const DashboardPage = ({ title }) => {
-    const card = "bg-dark/60 rounded p-5 md:p-10 flex gap-20 items-center";
-    const card2 = "bg-dark/60 rounded p-10 flex justify-between items-center";
+    const card = "bg-dark/60 rounded p-5 md:p-10 flex flex-col gap-3";
+    const card2 = "bg-dark/60 rounded p-5 flex items-center gap-5";
     const cardtitle = "text-3xl font-bold";
     const text = "text-white/50";
 
-    const { data: toInvoiceNumber } = useGetOrdersToInvoiceNumber();
-    const { data: toDeliverNumber } = useGetOrdersToDeliverNumber();
+    const { data: totalCommands, isLoading: isLoadingTotalCommands } =
+        useGetCommandStats({ queryName: "totalCommands" });
+    const { data: toPrepareCommand, isLoading: isLoadingToPrepareCommand } =
+        useGetCommandStats({
+            queryName: "toPrepareCommands",
+            status: "DEFAULT - à traiter",
+        });
+    const { data: toDeliverCommand, isLoading: isLoadingToDeliverCommand } =
+        useGetCommandStats({
+            queryName: "toDeliverCommands",
+            status: "DEFAULT - préparé",
+        });
+    const { data: toInvoiceCommand, isLoading: isLoadingToInvoiceCommand } =
+        useGetCommandStats({
+            queryName: "toInvoiceCommands",
+            status: "DEFAULT - posé",
+        });
+    const { data: isHangingCommands, isLoading: isLoadingIsHangingCommands } =
+        useGetCommandStats({ queryName: "IsHangingCommands", isHanging: true });
+
     const { data: account } = useGetCurrentAccount();
-    const { data: tours, isLoading: isLoadingTours } = useGetPaginatedDatas(
-        1,
-        "id",
-        "ASC",
-        "",
-        {
-            scheduledAt: dayjs().format("YYYY-MM-DD"),
-        }
-    );
+    const { data: tours, isLoading: isLoadingTours } = useGetPaginatedDatas({
+        page: 1,
+        sortValue: "id",
+        sortDirection: "ASC",
+        searchValue: "",
+        filters: { scheduledAt: dayjs().format("YYYY-MM-DD"), status: "all" },
+    });
 
     return (
         <>
@@ -42,90 +54,78 @@ export const DashboardPage = ({ title }) => {
             <Content>
                 {account.roles.includes("ROLE_WORKSHOP") && (
                     <section>
-                        <div className="px-4 py-6">
-                            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                                <div className={card}>
-                                    <AiOutlineSlack
-                                        size={70}
-                                        className="bg-accent rounded-full p-3 text-dark"
-                                    />
+                        <div className="p-3">
+                            <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-8">
+                                <div className={card2}>
+                                    <div className="rounded-full flex items-center justify-center p-3 bg-accent">
+                                        <MdOutlineAssignment
+                                            size={30}
+                                            className="text-white"
+                                        />
+                                    </div>
                                     <div>
-                                        <div className={text}>
-                                            Commandes traitées
-                                        </div>
                                         <div className={cardtitle}>
-                                            12365656
+                                            {isLoadingToPrepareCommand
+                                                ? "..."
+                                                : toPrepareCommand}
+                                        </div>
+                                        <div className={text}>
+                                            Commandes à préparer
                                         </div>
                                     </div>
                                 </div>
-                                <div className={card}>
-                                    <AiOutlineSlack
-                                        size={70}
-                                        className="bg-green-500 rounded-full p-3 text-dark"
-                                    />
+                                <div className={card2}>
+                                    <div className="rounded-full flex items-center justify-center p-3 bg-mention">
+                                        <MdOutlineAssignment
+                                            size={30}
+                                            className="text-white"
+                                        />
+                                    </div>
                                     <div>
-                                        <div className={text}>
-                                            Commandes prêtes à poser
-                                        </div>
                                         <div className={cardtitle}>
-                                            {toDeliverNumber}
+                                            {isLoadingToDeliverCommand
+                                                ? "..."
+                                                : toDeliverCommand}
+                                        </div>
+                                        <div className={text}>
+                                            Commandes à poser
                                         </div>
                                     </div>
                                 </div>
-                                <div className={card}>
-                                    <MdPendingActions
-                                        size={70}
-                                        className="bg-red-500 rounded-full p-3 text-dark"
-                                    />
+                                <div className={card2}>
+                                    <div className="rounded-full flex items-center justify-center p-3 bg-waiting">
+                                        <MdOutlineAssignment
+                                            size={30}
+                                            className="text-white"
+                                        />
+                                    </div>
                                     <div>
+                                        <div className={cardtitle}>
+                                            {isLoadingToInvoiceCommand
+                                                ? "..."
+                                                : toInvoiceCommand}
+                                        </div>
                                         <div className={text}>
                                             Commandes à facturer
                                         </div>
+                                    </div>
+                                </div>
+                                <div className={card2}>
+                                    <div className="rounded-full flex items-center justify-center p-3 bg-warning">
+                                        <MdOutlineAssignment
+                                            size={30}
+                                            className="text-white"
+                                        />
+                                    </div>
+                                    <div>
                                         <div className={cardtitle}>
-                                            {toInvoiceNumber}
+                                            {isLoadingIsHangingCommands
+                                                ? "..."
+                                                : isHangingCommands}
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-8 mt-10">
-                                <div className={card2}>
-                                    <AiOutlineSlack
-                                        size={70}
-                                        className="text-violet-800 rounded-full"
-                                    />
-                                    <div>
-                                        <div className={cardtitle}>123</div>
-                                        <div className={text}>Lorem Ipsum</div>
-                                    </div>
-                                </div>
-                                <div className={card2}>
-                                    <AiOutlineSlack
-                                        size={70}
-                                        className="text-violet-800 rounded-full"
-                                    />
-                                    <div>
-                                        <div className={cardtitle}>456</div>
-                                        <div className={text}>Lorem Ipsum</div>
-                                    </div>
-                                </div>
-                                <div className={card2}>
-                                    <AiOutlineSlack
-                                        size={70}
-                                        className="text-violet-800 rounded-full"
-                                    />
-                                    <div>
-                                        <div className={cardtitle}>789</div>
-                                        <div className={text}>Lorem Ipsum</div>
-                                    </div>
-                                </div>
-                                <div className={card2}>
-                                    <AiOutlineSlack
-                                        size={70}
-                                        className="text-violet-800 rounded-full"
-                                    />
-                                    <div>
-                                        <div className={cardtitle}>333</div>
-                                        <div className={text}>Lorem Ipsum</div>
+                                        <div className={text}>
+                                            Commandes en attente
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -143,11 +143,15 @@ export const DashboardPage = ({ title }) => {
                             {tours["hydra:member"].length === 0 && (
                                 <NoDataFound />
                             )}
-                            {tours["hydra:member"]?.map((tour) => (
-                                <div key={uuid()} className="_card">
-                                    <Tour id={tour.id} />
-                                </div>
-                            ))}
+                            {tours["hydra:member"]?.map((tour) =>
+                                tour.commands.length === 0 ? (
+                                    <NoDataFound />
+                                ) : (
+                                    <div key={uuid()} className="_card">
+                                        <Tour id={tour.id} />
+                                    </div>
+                                )
+                            )}
                         </>
                     )}
                 </section>

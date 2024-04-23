@@ -16,8 +16,8 @@ const fetchPaginatedDatas = ({
     page = 1,
     sortValue = "id",
     sortDirection = "ASC",
-    filters = "DEFAULT",
-    searchValue,
+    filters = { status: "all" },
+    searchValue = null,
 }) => {
     let options =
         "?page=" +
@@ -30,12 +30,12 @@ const fetchPaginatedDatas = ({
         sortDirection;
     if (searchValue) options += "&search=" + searchValue;
     if (filters.status !== "all") options += "&status=" + filters.status;
-    if (filters.scheduledAt !== "")
+    if (filters.scheduledAt)
         options +=
-            "&scheduledAt[after]=" +
-            filters.scheduledAt +
-            "&scheduledAt[before]=" +
-            dayjs(filters.scheduledAt).add(1, "day").format("YYYY-MM-DD");
+            "&scheduledAt[strictly_before]=" +
+            dayjs(filters.scheduledAt).add(1, "day").format("YYYY-MM-DD") +
+            "&scheduledAt[strictly_after]=" +
+            dayjs(filters.scheduledAt).subtract(1, "day").format("YYYY-MM-DD");
     return request({ url: API + options, method: "get" });
 };
 
@@ -53,9 +53,7 @@ const fetchDate = ({ queryKey }) => {
             "?scheduledAt[strictly_before]=" +
             dayjs(date).add(1, "day").format("YYYY-MM-DD") +
             "&scheduledAt[strictly_after]=" +
-            dayjs(date).subtract(1, "day").format("YYYY-MM-DD") +
-            "&user=" +
-            user,
+            dayjs(date).subtract(1, "day").format("YYYY-MM-DD"),
         method: "get",
     });
 };
@@ -106,14 +104,13 @@ export const useGetAllDatas = (search = "", sortValue, sortDirection) => {
     });
 };
 
-export const useGetPaginatedDatas = (
+export const useGetPaginatedDatas = ({
     page,
     sortValue,
     sortDirection,
     searchValue,
-    filters
-) => {
-    console.log("filters", filters);
+    filters,
+}) => {
     return useQuery({
         queryKey: [
             queryKey,
@@ -185,7 +182,7 @@ export const usePutData = () => {
         },
         onSettled: () => {
             queryClient.invalidateQueries([queryKey]);
-            queryClient.invalidateQueries("commands");
+            queryClient.invalidateQueries(["commands"]);
         },
         // onSuccess: () => {
         //     navigate(-1);
@@ -198,7 +195,7 @@ export const useDeleteIRI = () => {
     return useMutation(deleteData, {
         onSuccess: () => {
             queryClient.invalidateQueries([queryKey]);
-            queryClient.invalidateQueries("commands");
+            queryClient.invalidateQueries(["commands"]);
         },
     });
 };

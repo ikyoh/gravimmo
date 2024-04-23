@@ -1,14 +1,11 @@
 import { CardTour } from "components/cards/tour/CardTour";
-import Dropdown from "components/dropdown/Dropdown";
 import Loader from "components/loader/Loader";
-import dayjs from "dayjs";
-import { useGetOneData, usePutData } from "queryHooks/useTour";
+import { useDeleteIRI, useGetOneData, usePutData } from "queryHooks/useTour";
 import { useEffect, useState } from "react";
-import { BsPiggyBank } from "react-icons/bs";
-import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 
 import { arrayOfIris } from "utils/functions.utils";
 
+import TourDropdown from "components/dropdown/contents/TourDropdown";
 import { Reorder } from "framer-motion";
 
 const Tour = ({ id, reorder }) => {
@@ -16,6 +13,7 @@ const Tour = ({ id, reorder }) => {
     const [commands, setCommands] = useState([]);
 
     const { mutate } = usePutData();
+    const { mutate: deleteTour } = useDeleteIRI();
 
     useEffect(() => {
         if (isSuccess && data && data.positions.length === 0)
@@ -45,7 +43,8 @@ const Tour = ({ id, reorder }) => {
                         </div>
                     </div>
                 </div>
-                <Dropdown type="button">
+                <TourDropdown tourID={id} />
+                {/* <Dropdown type="button">
                     <button
                         className="bg-secondary"
                         disabled={data.status === "annulé" || data.isHanging}
@@ -86,7 +85,11 @@ const Tour = ({ id, reorder }) => {
                         <BsPiggyBank size={30} />
                         Facturer la tournée
                     </button>
-                </Dropdown>
+                    <button onClick={() => mutate({ id: id, commands: [] })}>
+                        <IoIosCloseCircle size={30} />
+                        Annuler la tournée
+                    </button>
+                </Dropdown> */}
             </div>
 
             <div className="flex">

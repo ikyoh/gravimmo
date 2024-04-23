@@ -29,7 +29,16 @@ const fetchFilteredDatas = (sortValue, sortDirection, searchValue) => {
 
 const fetchFilteredByStatus = (status) => {
     return request({
-        url: API + "?pagination=false&status=" + status,
+        url: API + "?pagination=true&status=" + status,
+        method: "get",
+    });
+};
+
+const fetchStats = ({ status, isHanging = false }) => {
+    let options = "?pagination=true&itemsPerPage=1&isHanging=" + isHanging;
+    if (status) options += "&status=" + status;
+    return request({
+        url: API + options,
         method: "get",
     });
 };
@@ -226,6 +235,16 @@ export const useGetOrdersToDeliverNumber = () => {
     return useQuery({
         queryKey: [queryKey, "ToInvoiceNumber"],
         queryFn: () => fetchFilteredByStatus("DEFAULT -préparé"),
+        staleTime: 60000,
+        cacheTime: 60000,
+        select: (data) => data["hydra:totalItems"],
+    });
+};
+
+export const useGetCommandStats = ({ queryName, status, isHanging }) => {
+    return useQuery({
+        queryKey: [queryKey, queryName],
+        queryFn: () => fetchStats({ status, isHanging }),
         staleTime: 60000,
         cacheTime: 60000,
         select: (data) => data["hydra:totalItems"],

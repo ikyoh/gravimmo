@@ -13,8 +13,6 @@ const Form = ({
     handleNextStep,
     handlePrevStep,
 }) => {
-    console.log("steps", steps);
-    console.log("currentStep", currentStep);
     return (
         <form className="flex flex-col h-full" onSubmit={onSubmit}>
             <div className="px-1 pt-3 grow">{children}</div>

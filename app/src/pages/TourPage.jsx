@@ -1,22 +1,19 @@
 import { Button, ButtonSize } from "components/button/Button";
 import { CardTour } from "components/cards/tour/CardTour";
-import Dropdown from "components/dropdown/Dropdown";
-import TourForm from "components/forms/tour/TourForm";
 import Loader from "components/loader/Loader";
 import Content from "components/templates/content/Content";
 import Header from "components/templates/header/Header";
 import dayjs from "dayjs";
-import useMakeInvoices from "hooks/useMakeInvoices";
 import { useModal } from "hooks/useModal";
 import _ from "lodash";
-import { usePutData as usePutCommand } from "queryHooks/useCommand";
 import { useGetOneData, usePutData } from "queryHooks/useTour";
 import { useEffect, useState } from "react";
-import { IoIosCheckmarkCircleOutline } from "react-icons/io";
-import { MdArrowBack, MdPendingActions } from "react-icons/md";
+import { MdArrowBack } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { arrayOfIris } from "utils/functions.utils";
 
+import TourDropdown from "components/dropdown/contents/TourDropdown";
+import { NoDataFound } from "components/noDataFound/NoDataFound";
 import { Reorder } from "framer-motion";
 
 export const TourPage = () => {
@@ -24,53 +21,22 @@ export const TourPage = () => {
     const { state: previousPageState } = useLocation();
     const { Modal, handleOpenModal, handleCloseModal } = useModal();
     const { id } = useParams();
-    const { data = [], isLoading, error, isSuccess } = useGetOneData(id);
-
-    const {
-        setCommands: setInvoiceCommands,
-        isLoading: isLoadingMakeInvoices,
-    } = useMakeInvoices();
+    const { data, isLoading, error, isSuccess, fetchStatus, isFetching } =
+        useGetOneData(id);
 
     const [commands, setCommands] = useState([]);
 
-    const { mutate } = usePutData();
-    const { mutate: updateCommand } = usePutCommand();
+    const { mutate, isSuccess: isPutSuccess } = usePutData();
 
     useEffect(() => {
         if (isSuccess && data && data.positions.length === 0)
             setCommands(arrayOfIris(data.commands));
         if (isSuccess && data && data.positions.length !== 0)
             setCommands(data.positions);
-    }, [isSuccess]);
+    }, [isSuccess, data]);
 
     const handleSaveOrder = () => {
         mutate({ id: id, positions: commands });
-    };
-
-    const handleChangeCommandsStatus = async (status) => {
-        await Promise.all(
-            data.commands.map(async (command) => {
-                if (
-                    command.status === "facturé" ||
-                    command.status === "DEFAULT - posé"
-                )
-                    return;
-                const _command = { id: command.id, status: status };
-                if (
-                    status === "DEFAULT - préparé" &&
-                    command.status === "DEFAULT - à traiter"
-                )
-                    _command.madeAt = dayjs();
-
-                if (
-                    status === "DEFAULT - posé" &&
-                    command.status === "DEFAULT - préparé"
-                )
-                    _command.deliveredAt = dayjs();
-
-                updateCommand(_command);
-            })
-        );
     };
 
     if (isLoading) return <Loader />;
@@ -90,62 +56,7 @@ export const TourPage = () => {
                     isLoading={isLoading}
                     error={error}
                 >
-                    <Dropdown type="button">
-                        {commands.some(
-                            (command) =>
-                                command.status === "DEFAULT - à traiter"
-                        ) && (
-                            <button
-                                onClick={() =>
-                                    handleChangeCommandsStatus(
-                                        "DEFAULT - préparé"
-                                    )
-                                }
-                            >
-                                <IoIosCheckmarkCircleOutline size={30} />
-                                Valider la préparation
-                            </button>
-                        )}
-
-                        {commands.some(
-                            (command) => command.status === "DEFAULT - préparé"
-                        ) && (
-                            <button
-                                onClick={() =>
-                                    handleChangeCommandsStatus("DEFAULT - posé")
-                                }
-                            >
-                                <IoIosCheckmarkCircleOutline size={30} />
-                                Valider la pose
-                            </button>
-                        )}
-                        <button>
-                            <IoIosCheckmarkCircleOutline size={30} />
-                            Facturer
-                        </button>
-
-                        <button>
-                            <IoIosCheckmarkCircleOutline size={30} />
-                            Annuler la tournée
-                        </button>
-
-                        <button
-                            onClick={() =>
-                                handleOpenModal({
-                                    title: "Date de la tournée",
-                                    content: (
-                                        <TourForm
-                                            commands={data.commands}
-                                            handleCloseModal={handleCloseModal}
-                                        />
-                                    ),
-                                })
-                            }
-                        >
-                            <MdPendingActions size={26} />
-                            Reporter la tournée
-                        </button>
-                    </Dropdown>
+                    <TourDropdown tourID={id} />
 
                     {_.isEmpty(previousPageState) ? (
                         <Button
@@ -166,34 +77,38 @@ export const TourPage = () => {
                     )}
                 </Header>
                 <Content>
-                    <div className="flex">
-                        <ul className="steps steps-vertical">
-                            {commands.map((item) => (
-                                <li
-                                    key={item}
-                                    className="step step-neutral"
-                                ></li>
-                            ))}
-                        </ul>
-                        <div className="grow">
-                            <Reorder.Group
-                                axis="y"
-                                values={commands}
-                                onReorder={setCommands}
-                                onMouseUp={() => handleSaveOrder()}
-                            >
-                                {commands.map((iri) => (
-                                    <Reorder.Item
-                                        key={iri}
-                                        value={iri}
-                                        className="mb-3"
-                                    >
-                                        <CardTour iri={iri} />
-                                    </Reorder.Item>
+                    {data.commands.length === 0 ? (
+                        <NoDataFound />
+                    ) : (
+                        <div className="flex">
+                            <ul className="steps steps-vertical">
+                                {commands.map((item) => (
+                                    <li
+                                        key={item}
+                                        className="step step-neutral"
+                                    ></li>
                                 ))}
-                            </Reorder.Group>
+                            </ul>
+                            <div className="grow">
+                                <Reorder.Group
+                                    axis="y"
+                                    values={commands}
+                                    onReorder={setCommands}
+                                    onMouseUp={() => handleSaveOrder()}
+                                >
+                                    {commands.map((iri) => (
+                                        <Reorder.Item
+                                            key={iri}
+                                            value={iri}
+                                            className="mb-3"
+                                        >
+                                            <CardTour iri={iri} />
+                                        </Reorder.Item>
+                                    ))}
+                                </Reorder.Group>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </Content>
             </>
         );
