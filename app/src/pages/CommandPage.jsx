@@ -8,7 +8,6 @@ import Dropdown from "components/dropdown/Dropdown";
 import { CommandForm } from "components/forms/command/CommandForm";
 import { CommandImageForm } from "components/forms/commandImage/CommandImageForm";
 import CommandReportForm from "components/forms/commandReport/CommandReportForm";
-import { CustomServiceForm } from "components/forms/customService/CustomServiceForm";
 import { ExtraServiceForm } from "components/forms/extraService/ExtraServiceForm";
 import Loader from "components/loader/Loader";
 import CommandStatus from "components/status/CommandStatus";
@@ -85,35 +84,6 @@ export const CommandPage = ({
 
         return (
             <div className="_card">
-                {customServiceIRI && (
-                    <div className="absolute top-2 right-1">
-                        <Dropdown>
-                            <button
-                                onClick={() =>
-                                    handleOpenModal({
-                                        title: "Modifier",
-                                        content: (
-                                            <CustomServiceForm
-                                                iri={data["@id"]}
-                                                propertyIRI={data.property}
-                                                handleCloseModal={
-                                                    handleCloseModal
-                                                }
-                                            />
-                                        ),
-                                    })
-                                }
-                            >
-                                <LuSettings2 size={30} />
-                                Modifier
-                            </button>
-                            <button onClick={() => deleteData(data.id)}>
-                                <IoIosCloseCircle size={30} />
-                                Retirer la prestation
-                            </button>
-                        </Dropdown>
-                    </div>
-                )}
                 <div className="flex flex-col gap-3 mt-3">
                     <div className="mr-auto text-white bg-success text-sm px-3 py-1 rounded-full">
                         Infos gravure

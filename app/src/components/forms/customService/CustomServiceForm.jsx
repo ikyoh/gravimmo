@@ -1,44 +1,55 @@
-import React, { useEffect } from "react"
-import { useForm, useFieldArray } from "react-hook-form"
-import { useGetIRI, usePutData } from 'queryHooks/useCommand';
-import { useGetIRI as useProperty } from "queryHooks/useProperty"
-import { useGetIRI as usePropertyService } from "queryHooks/usePropertyService"
+import { Button, ButtonSize } from "components/button/Button";
+import Dropdown from "components/dropdown/Dropdown";
+import FormCheckbox from "components/form/checkbox/FormCheckbox";
 import Form from "components/form/form/Form";
-import { FormInput } from "components/form/input/FormInput"
-import FormCheckbox from 'components/form/checkbox/FormCheckbox'
-import Loader from "components/loader/Loader"
-import { commandDetails } from "config/translations.config"
-import Dropdown from 'components/dropdown/Dropdown'
-import { Button, ButtonSize } from 'components/button/Button'
-
+import { FormInput } from "components/form/input/FormInput";
+import Loader from "components/loader/Loader";
+import { commandDetails } from "config/translations.config";
+import { useGetIRI, usePutData } from "queryHooks/useCommand";
+import { useGetIRI as useProperty } from "queryHooks/useProperty";
+import { useGetIRI as usePropertyService } from "queryHooks/usePropertyService";
+import { useEffect } from "react";
+import { useFieldArray, useForm } from "react-hook-form";
 
 export const CustomServiceForm = ({ commandIRI, handleCloseModal }) => {
-
-    const { isLoading: isLoadingCommand, data: dataCommand } = useGetIRI(commandIRI)
-    const { data: property, isLoading: isLoadingProperty } = useProperty(dataCommand && dataCommand.property ? dataCommand.property : '')
+    const { isLoading: isLoadingCommand, data: dataCommand } =
+        useGetIRI(commandIRI);
+    const { data: property, isLoading: isLoadingProperty } = useProperty(
+        dataCommand && dataCommand.property ? dataCommand.property : ""
+    );
     //const { mutate: postData, isLoading: isPostLoading, isSuccess: isPostSuccess } = usePostData()
-    const { mutate: putData, isLoading: isPutLoading, isSuccess: isPutSuccess } = usePutData()
+    const {
+        mutate: putData,
+        isLoading: isPutLoading,
+        isSuccess: isPutSuccess,
+    } = usePutData();
 
+    console.log("dataCommand", dataCommand);
     const defaultValues = {
         id: dataCommand ? dataCommand.id : "",
-        customServices: []
-    }
+        customServices: [],
+    };
 
-    const { handleSubmit, register, reset, control, formState: { isSubmitting } } = useForm({
-        defaultValues: defaultValues
-    })
+    const {
+        handleSubmit,
+        register,
+        reset,
+        control,
+        formState: { isSubmitting },
+    } = useForm({
+        defaultValues: defaultValues,
+    });
 
     const { fields, append, remove } = useFieldArray({
         control,
-        name: "customServices"
-    })
-
+        name: "customServices",
+    });
 
     const ServiceCheckbox = ({ serviceIRI, name }) => {
+        const { data: propertyService, isLoading: isLoadingService } =
+            usePropertyService(serviceIRI);
 
-        const { data: propertyService, isLoading: isLoadingService } = usePropertyService(serviceIRI)
-
-        if (isLoadingService) return (<Loader />)
+        if (isLoadingService) return <Loader />;
         return (
             <FormCheckbox
                 name={name}
@@ -46,30 +57,32 @@ export const CustomServiceForm = ({ commandIRI, handleCloseModal }) => {
                 value={serviceIRI}
                 register={register}
             />
-        )
+        );
+    };
 
-    }
-
-    const onSubmit = form => {
-        putData(form)
-    }
+    const onSubmit = (form) => {
+        putData(form);
+    };
 
     useEffect(() => {
-        if (isPutSuccess)
-            handleCloseModal()
-    }, [isPutSuccess])
+        if (isPutSuccess) handleCloseModal();
+    }, [isPutSuccess]);
 
-    if (isLoadingCommand || isLoadingProperty) return <Loader />
+    if (isLoadingCommand || isLoadingProperty) return <Loader />;
 
     return (
-        <Form onSubmit={handleSubmit(onSubmit)}
-        isLoading={isPutLoading}
-        isDisabled={isPutLoading}
+        <Form
+            onSubmit={handleSubmit(onSubmit)}
+            isLoading={isPutLoading}
+            isDisabled={isPutLoading}
         >
             <ul>
                 {fields.map((item, index) => {
                     return (
-                        <li key={item.id} className="mb-3 rounded p-3 pr-10 bg-black/10 md:grid md:grid-cols-2 gap-10 relative">
+                        <li
+                            key={item.id}
+                            className="mb-3 rounded p-3 pr-10 bg-black/10 md:grid md:grid-cols-2 gap-10 relative"
+                        >
                             <div>
                                 <FormInput
                                     type="text"
@@ -85,55 +98,65 @@ export const CustomServiceForm = ({ commandIRI, handleCloseModal }) => {
                                     register={register}
                                     required={false}
                                 />
-                                {property && property.params
-                                    .filter(f => f !== 'tableauptt' && f !== 'platineparlophoneelectricien' && f !== 'platineadefilement')
-                                    .map((item) => (
-                                        <FormInput
-                                            type="text"
-                                            key={`customServices.${index}.details.${item}`}
-                                            name={`customServices.${index}.details.${item}`}
-                                            label={commandDetails[item]}
-                                            register={register}
-                                            required={false}
-                                        />
-                                    ))
-                                }
+                                {property &&
+                                    property.params
+                                        .filter(
+                                            (f) =>
+                                                f !== "tableauptt" &&
+                                                f !==
+                                                    "platineparlophoneelectricien" &&
+                                                f !== "platineadefilement"
+                                        )
+                                        .map((item) => (
+                                            <FormInput
+                                                type="text"
+                                                key={`customServices.${index}.details.${item}`}
+                                                name={`customServices.${index}.details.${item}`}
+                                                label={commandDetails[item]}
+                                                register={register}
+                                                required={false}
+                                            />
+                                        ))}
                             </div>
                             <div className="">
-                                {property.services.map(IRI =>
+                                {property.services.map((IRI) => (
                                     <ServiceCheckbox
                                         key={`${index}.${IRI}`}
                                         serviceIRI={IRI}
                                         name={`customServices.${index}.propertyServices`}
                                     />
-                                )}
+                                ))}
                             </div>
                             <div className="absolute top-2 right-1">
                                 <Dropdown>
-                                    <button
-                                        onClick={() => remove(index)}
-                                    >
+                                    <button onClick={() => remove(index)}>
                                         Retirer la prestation
                                     </button>
                                 </Dropdown>
                             </div>
                         </li>
-                    )
+                    );
                 })}
             </ul>
             <div className="card-button">
-                <Button size={ButtonSize.Big}
+                <Button
+                    size={ButtonSize.Big}
                     onClick={() => {
-                        append({
-                            details: { nouveloccupant: "" },
-                            propertyServices: property.services
-                        },
-                            { focusName: `services.${fields.length}.details.nouveloccupant` })
-                    }} />
+                        append(
+                            {
+                                details: { nouveloccupant: "" },
+                                propertyServices: property.services,
+                            },
+                            {
+                                focusName: `services.${fields.length}.details.nouveloccupant`,
+                            }
+                        );
+                    }}
+                />
                 <div className="text-dark dark:text-white">
                     ajouter <br /> une prestation
                 </div>
             </div>
         </Form>
-    )
-}
+    );
+};
