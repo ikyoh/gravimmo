@@ -5,7 +5,11 @@ import { useGetAllDatas } from "queryHooks/useInstaller";
 import { useGetDate, usePostData, usePutData } from "queryHooks/useTour";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { arrayOfIris, deepClone } from "utils/functions.utils";
+import {
+    arrayOfIris,
+    deepClone,
+    removeDuplicates,
+} from "utils/functions.utils";
 import * as yup from "yup";
 
 import FormError from "components/form/error/FormError";
@@ -14,6 +18,8 @@ import uuid from "react-uuid";
 import "./style.css";
 
 const TourForm = ({ id, commands = [], handleCloseModal }) => {
+    console.log("commands", commands);
+
     const { data: installers, isLoading: isLoadingInstallers } =
         useGetAllDatas();
     const { mutate: postData, isLoading: isPostLoading } = usePostData();
@@ -27,7 +33,11 @@ const TourForm = ({ id, commands = [], handleCloseModal }) => {
     const defaultValues = {
         scheduledAt: new Date(),
         commands: arrayOfIris(commands),
-        positions: [],
+        positions: arrayOfIris(
+            commands.sort((a, b) =>
+                a.property.zone.localeCompare(b.property.zone)
+            )
+        ),
     };
 
     const {
@@ -66,6 +76,14 @@ const TourForm = ({ id, commands = [], handleCloseModal }) => {
                         ...arrayOfIris(tour["hydra:member"][0].commands),
                         ...arrayOfIris(commands),
                     ],
+                    positions: removeDuplicates([
+                        ...tour["hydra:member"][0].positions,
+                        ...arrayOfIris(
+                            commands.sort((a, b) =>
+                                a.property.zone.localeCompare(b.property.zone)
+                            )
+                        ),
+                    ]),
                     id: tour["hydra:member"][0].id,
                 });
             }

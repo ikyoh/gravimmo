@@ -7,7 +7,7 @@ const Dropdown = ({ type = "card", isDisabled, children, icon }) => {
     const className = classNames({
         "absolute top-3 -right-1": type === "card",
         "absolute top-2 -right-1": type === "table",
-        "absolute top-4 right-0": type === "tour",
+        "absolute top-2 right-0": type === "tour",
     });
 
     const classNameContent = classNames(

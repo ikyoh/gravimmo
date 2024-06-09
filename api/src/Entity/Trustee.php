@@ -109,7 +109,6 @@ class Trustee
     #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: Invoice::class)]
     private Collection $invoices;
 
-
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
@@ -371,7 +370,7 @@ class Trustee
     {
         if (!$this->invoices->contains($invoice)) {
             $this->invoices->add($invoice);
-            $invoice->setTrusteeIri($this);
+            $invoice->setTrustee($this);
         }
 
         return $this;
@@ -381,12 +380,14 @@ class Trustee
     {
         if ($this->invoices->removeElement($invoice)) {
             // set the owning side to null (unless already changed)
-            if ($invoice->getTrusteeIri() === $this) {
-                $invoice->setTrusteeIri(null);
+            if ($invoice->getTrustee() === $this) {
+                $invoice->setTrustee(null);
             }
         }
 
         return $this;
     }
+
+
 
 }

@@ -55,6 +55,32 @@ const fetchDatasByTrusteeIRI = (trusteeIRI) => {
     });
 };
 
+const fetchDatasByVigik = (vigik, id) => {
+    return request({
+        url:
+            API +
+            "?pagination=false&notequal=" +
+            id +
+            "&vigik=" +
+            vigik +
+            "&order[title]=asc",
+        method: "get",
+    });
+};
+
+const fetchDatasByTransmitter = (transmitter, id) => {
+    return request({
+        url:
+            API +
+            "?pagination=false&notequal=" +
+            id +
+            "&transmitter=" +
+            transmitter +
+            "&order[title]=asc",
+        method: "get",
+    });
+};
+
 const fetchOneData = ({ queryKey }) => {
     const id = queryKey[1];
     return request({ url: API + "/" + id, method: "get" });
@@ -117,6 +143,32 @@ export const useGetFilteredDatasByTrustee = (trusteeIRI) => {
     return useQuery({
         queryKey: [queryKey, trusteeIRI],
         queryFn: () => fetchDatasByTrusteeIRI(trusteeIRI),
+        keepPreviousData: true,
+        staleTime: 60000,
+        cacheTime: 60000,
+        select: (data) => {
+            return data["hydra:member"];
+        },
+    });
+};
+
+export const useGetFilteredDatasByVigik = ({ vigik, id }) => {
+    return useQuery({
+        queryKey: [queryKey, vigik, id],
+        queryFn: () => fetchDatasByVigik(vigik, id),
+        keepPreviousData: true,
+        staleTime: 60000,
+        cacheTime: 60000,
+        select: (data) => {
+            return data["hydra:member"];
+        },
+    });
+};
+
+export const useGetFilteredDatasByTransmitter = ({ transmitter, id }) => {
+    return useQuery({
+        queryKey: [queryKey, transmitter, id],
+        queryFn: () => fetchDatasByTransmitter(transmitter, id),
         keepPreviousData: true,
         staleTime: 60000,
         cacheTime: 60000,

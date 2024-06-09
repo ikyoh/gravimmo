@@ -17,6 +17,7 @@ import {
 } from "queryHooks/useService";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import uuid from "react-uuid";
 import * as yup from "yup";
 
 export default function PropertyServiceForm({
@@ -82,7 +83,7 @@ export default function PropertyServiceForm({
     // CASE UPDATE
     useEffect(() => {
         if (iri && data) {
-            reset({ ...data, service: watchService });
+            reset({ ...data, service: data.service["@id"] });
         }
     }, [isLoadingData, data]);
 
@@ -99,7 +100,7 @@ export default function PropertyServiceForm({
     const onSubmit = (form) => {
         if (!iri) postData(form);
         else {
-            putData(form);
+            putData({ ...form, id: data.id });
         }
         handleCloseModal();
     };
@@ -145,190 +146,197 @@ export default function PropertyServiceForm({
                         </option>
                     ))}
             </FormSelect>
-            {dataService && dataService.material.length !== 0 && (
-                <FormSelect
-                    type="text"
-                    name="material"
-                    label="Matière"
-                    error={errors["material"]}
-                    register={register}
-                    required={true}
-                >
-                    {dataService.material.sort().map((data) => (
-                        <option key={data} value={data}>
-                            {data}
-                        </option>
-                    ))}
-                </FormSelect>
-            )}
-            {dataService && dataService.color.length !== 0 && (
-                <FormSelect
-                    type="text"
-                    name="color"
-                    label="Couleur"
-                    error={errors["color"]}
-                    register={register}
-                    required={true}
-                >
-                    {dataService.color.sort().map((data) => (
-                        <option key={data} value={data}>
-                            {data}
-                        </option>
-                    ))}
-                </FormSelect>
-            )}
-            {dataService && dataService.size.length !== 0 && (
-                <FormSelect
-                    type="text"
-                    name="size"
-                    label="Dimensions"
-                    error={errors["size"]}
-                    register={register}
-                    required={true}
-                >
-                    {dataService.size.sort().map((data) => (
-                        <option key={data} value={data}>
-                            {data}
-                        </option>
-                    ))}
-                </FormSelect>
-            )}
-            {dataService && dataService.thickness.length !== 0 && (
-                <FormSelect
-                    type="text"
-                    name="thickness"
-                    label="Epaisseur"
-                    error={errors["thickness"]}
-                    register={register}
-                    required={true}
-                >
-                    {dataService.thickness.sort().map((data) => (
-                        <option key={data} value={data}>
-                            {data}
-                        </option>
-                    ))}
-                </FormSelect>
-            )}
 
-            {dataService && dataService.font.length !== 0 && (
-                <FormSelect
-                    type="text"
-                    name="font"
-                    label="Police"
-                    error={errors["font"]}
-                    register={register}
-                    required={true}
-                >
-                    {dataService.font.sort().map((data) => (
-                        <option key={data} value={data}>
-                            {data}
-                        </option>
-                    ))}
-                </FormSelect>
-            )}
-            {dataService && dataService.height.length !== 0 && (
-                <FormSelect
-                    type="text"
-                    name="height"
-                    label="Hauteur de texte"
-                    error={errors["height"]}
-                    register={register}
-                    required={true}
-                >
-                    {dataService.height.sort().map((data) => (
-                        <option key={data} value={data}>
-                            {data}
-                        </option>
-                    ))}
-                </FormSelect>
-            )}
-            {dataService && dataService.ratio.length !== 0 && (
-                <FormSelect
-                    type="text"
-                    name="ratio"
-                    label="Ratio police"
-                    error={errors["ratio"]}
-                    register={register}
-                    required={true}
-                >
-                    {dataService.ratio.sort().map((data) => (
-                        <option key={data} value={data}>
-                            {data}
-                        </option>
-                    ))}
-                </FormSelect>
-            )}
-
-            {dataService && dataService.margin.length !== 0 && (
-                <FormSelect
-                    type="text"
-                    name="margin"
-                    label="Marges"
-                    error={errors["margin"]}
-                    register={register}
-                    required={true}
-                >
-                    {dataService.margin.sort().map((data) => (
-                        <option key={data} value={data}>
-                            {data}
-                        </option>
-                    ))}
-                </FormSelect>
-            )}
-
-            {dataService && (
-                <FormInput
-                    type="text"
-                    name="configuration"
-                    label="Configuration machine"
-                    error={errors["configuration"]}
-                    register={register}
-                    required={false}
-                />
-            )}
-
-            {dataService && dataService.finishing.length !== 0 && (
+            {isLoadingService ? (
+                <Loader />
+            ) : (
                 <>
-                    <div className="divider uppercase">Façonnage</div>
+                    {dataService && dataService.material.length !== 0 && (
+                        <FormSelect
+                            type="text"
+                            name="material"
+                            label="Matière"
+                            error={errors["material"]}
+                            register={register}
+                            required={true}
+                        >
+                            {dataService.material.sort().map((data) => (
+                                <option key={uuid()} value={data}>
+                                    {data}
+                                </option>
+                            ))}
+                        </FormSelect>
+                    )}
+                    {dataService && dataService.color.length !== 0 && (
+                        <FormSelect
+                            type="text"
+                            name="color"
+                            label="Couleur"
+                            error={errors["color"]}
+                            register={register}
+                            required={true}
+                        >
+                            {dataService.color.sort().map((data) => (
+                                <option key={uuid()} value={data}>
+                                    {data}
+                                </option>
+                            ))}
+                        </FormSelect>
+                    )}
+                    {dataService && dataService.size.length !== 0 && (
+                        <FormSelect
+                            type="text"
+                            name="size"
+                            label="Dimensions"
+                            error={errors["size"]}
+                            register={register}
+                            required={true}
+                        >
+                            {dataService.size.sort().map((data) => (
+                                <option key={uuid()} value={data}>
+                                    {data}
+                                </option>
+                            ))}
+                        </FormSelect>
+                    )}
+                    {dataService && dataService.thickness.length !== 0 && (
+                        <FormSelect
+                            type="text"
+                            name="thickness"
+                            label="Epaisseur"
+                            error={errors["thickness"]}
+                            register={register}
+                            required={true}
+                        >
+                            {dataService.thickness.sort().map((data) => (
+                                <option key={uuid()} value={data}>
+                                    {data}
+                                </option>
+                            ))}
+                        </FormSelect>
+                    )}
+
+                    {dataService && dataService.font.length !== 0 && (
+                        <FormSelect
+                            type="text"
+                            name="font"
+                            label="Police"
+                            error={errors["font"]}
+                            register={register}
+                            required={true}
+                        >
+                            {dataService.font.sort().map((data) => (
+                                <option key={uuid()} value={data}>
+                                    {data}
+                                </option>
+                            ))}
+                        </FormSelect>
+                    )}
+                    {dataService && dataService.height.length !== 0 && (
+                        <FormSelect
+                            type="text"
+                            name="height"
+                            label="Hauteur de texte"
+                            error={errors["height"]}
+                            register={register}
+                            required={true}
+                        >
+                            {dataService.height.sort().map((data) => (
+                                <option key={uuid()} value={data}>
+                                    {data}
+                                </option>
+                            ))}
+                        </FormSelect>
+                    )}
+                    {dataService && dataService.ratio.length !== 0 && (
+                        <FormSelect
+                            type="text"
+                            name="ratio"
+                            label="Ratio police"
+                            error={errors["ratio"]}
+                            register={register}
+                            required={true}
+                        >
+                            {dataService.ratio.sort().map((data) => (
+                                <option key={uuid()} value={data}>
+                                    {data}
+                                </option>
+                            ))}
+                        </FormSelect>
+                    )}
+
+                    {dataService && dataService.margin.length !== 0 && (
+                        <FormSelect
+                            type="text"
+                            name="margin"
+                            label="Marges"
+                            error={errors["margin"]}
+                            register={register}
+                            required={true}
+                        >
+                            {dataService.margin.sort().map((data) => (
+                                <option key={uuid()} value={data}>
+                                    {data}
+                                </option>
+                            ))}
+                        </FormSelect>
+                    )}
+
+                    {dataService && (
+                        <FormInput
+                            type="text"
+                            name="configuration"
+                            label="Configuration machine"
+                            error={errors["configuration"]}
+                            register={register}
+                            required={false}
+                        />
+                    )}
+
+                    {dataService && dataService.finishing.length !== 0 && (
+                        <>
+                            <div className="divider uppercase">Façonnage</div>
+                            <div className="grid grid-cols-2">
+                                {dataService.finishing.sort().map((data) => (
+                                    <FormCheckbox
+                                        key={uuid()}
+                                        name="finishing"
+                                        label={data}
+                                        value={data}
+                                        error={errors["finishing"]}
+                                        register={register}
+                                    />
+                                ))}
+                            </div>
+                        </>
+                    )}
+
+                    {Object.keys(commandDetails).length > 3 && (
+                        <div className="divider uppercase">A graver</div>
+                    )}
                     <div className="grid grid-cols-2">
-                        {dataService.finishing.sort().map((data) => (
-                            <FormCheckbox
-                                key={data}
-                                name="finishing"
-                                label={data}
-                                value={data}
-                                error={errors["finishing"]}
-                                register={register}
-                            />
-                        ))}
+                        {Object.keys(commandDetails)
+                            .filter(
+                                (f) =>
+                                    f !== "proprietaire" &&
+                                    f !== "nouveloccupant" &&
+                                    f !== "ancienoccupant" &&
+                                    property.params.includes(f)
+                            )
+                            .map((key, index) => (
+                                <FormCheckbox
+                                    key={uuid()}
+                                    name="params"
+                                    label={commandDetails[key]}
+                                    value={key}
+                                    error={errors["params"]}
+                                    register={register}
+                                    required={true}
+                                />
+                            ))}
                     </div>
                 </>
             )}
-
-            {Object.keys(commandDetails).length > 3 && (
-                <div className="divider uppercase">A graver</div>
-            )}
-            <div className="grid grid-cols-2">
-                {Object.keys(commandDetails)
-                    .filter(
-                        (f) =>
-                            f !== "proprietaire" &&
-                            f !== "nouveloccupant" &&
-                            f !== "ancienoccupant" &&
-                            property.params.includes(f)
-                    )
-                    .map((key, index) => (
-                        <FormCheckbox
-                            key={index}
-                            name="params"
-                            label={commandDetails[key]}
-                            value={key}
-                            error={errors["params"]}
-                            register={register}
-                            required={true}
-                        />
-                    ))}
-            </div>
         </Form>
     );
 }

@@ -3,6 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
     <title>Devis</title>
 
     <style>
@@ -12,117 +13,46 @@
             margin-top: 24 !important;
             margin-bottom: 24 !important;
             padding: 0 !important;
-        }
-
-        body {
             font-size: 12px;
-            font-family: Arial, Helvetica, sans-serif";
-
-        }
-
-        p {
-            line-height: 0.6;
-        }
-
-        .card-header {
-            border: 1pt black solid;
-            border-radius: 5pt;
-            display: inline-block;
-            overflow: hidden;
-        }
-
-        .card-header div {
-            text-align: center;
-            height: 20px;
-            padding: 2 10 0 10;
-            white-space: nowrap;
-        }
-
-        .card {
-            border: 1pt black solid;
-            border-radius: 5pt;
-            padding: 10 10;
-            display: inline-block;
-        }
-
-        .client {
-            display: inline-block;
-            max-width: 200;
-            font-weight: bold;
-        }
-
-        .content-table th,
-        .content-table td {
-            padding: 5 10;
-            text-align: left;
-        }
-
-        th {
-            border-color: lightgray;
-        }
-
-
-        .content-table {
-            width: 100%;
-            border-spacing: 0;
-            border-collapse: separate;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 1pt solid black;
-            position: relative;
-        }
-
-        .border-right {
-            border-right: 1pt solid black;
-        }
-
-
-        thead {
-            background-color: lightgray;
-            text-align: left;
-            border-bottom: 1 solid black;
-        }
-
-        .footer {
-            width: 100%;
-            text-align: center;
-            position: absolute;
-            bottom: 0px;
         }
     </style>
 
 </head>
 
-
 <body>
-
     <table style="width: 100%;">
         <tr>
-            <td style="width: auto">
-                <img src="{{imageSrc}}" style="width:280px">
+            <td style="width: 100%;">
+                <img src="data:image/svg+xml;base64, {{ logo1 }}" width="300px">
             </td>
             <td style="width: 100%; text-align:right">
-                <div class="card-header">
-                    <div style="background-color : lightgray;">
-                        Facture N°
+                <div style="background-color : black; display: inline-block; overflow: hidden; min-width:80px;">
+                    <div
+                        style="background-color : lightgray; padding: 5px; margin-top:1pt; margin-left:1pt; margin-right:1pt; text-align: center;">
+                        Devis N°
                     </div>
-                    <div>
+                    <div
+                        style="background-color : white; padding: 5px; margin-bottom:1pt; margin-left:1pt; margin-right:1pt; text-align: center;">
                         {{chrono}}
                     </div>
                 </div>
-                <div class="card-header">
-                    <div style="background-color : lightgray;">
+                <div style="background-color : black; display: inline-block; overflow: hidden; min-width:80px;">
+                    <div
+                        style="background-color : lightgray; padding: 5px; margin-top:1pt; margin-left:1pt; margin-right:1pt; text-align: center;">
                         Date
                     </div>
-                    <div>
+                    <div
+                        style="background-color : white; padding: 5px; margin-bottom:1pt; margin-left:1pt; margin-right:1pt; text-align: center;">
                         {{date}}
                     </div>
                 </div>
-                <div class="card-header">
-                    <div style="background-color : lightgray;">
+                <div style="background-color : black; display: inline-block; overflow: hidden; min-width:80px;">
+                    <div
+                        style="background-color : lightgray; padding: 5px; margin-top:1pt; margin-left:1pt; margin-right:1pt; text-align: center;">
                         Client
                     </div>
-                    <div>
+                    <div
+                        style="background-color : white; padding: 5px; margin-bottom:1pt; margin-left:1pt; margin-right:1pt; text-align: center;">
                         {% if trusteeRef is defined %}
                         {{trusteeRef}}
                         {% endif %}
@@ -140,43 +70,43 @@
     <table style="width: 100%; margin-top: 40;">
         <tr>
             <td style="width: 100%;">
-                <p style="font-weight: bold;">
+                <p style="font-weight: bold; line-height: 0.6;">
                     39 rue du Docteur Pierre Richelmi
                 </p>
-                <p style="font-weight: bold;">
+                <p style="font-weight: bold; line-height: 0.6;">
                     Le Michaela
                 </p>
-                <p style="font-weight: bold;">
+                <p style="font-weight: bold; line-height: 0.6;">
                     06300 Nice
                 </p>
-                <p>
+                <p style="line-height: 0.6;">
                     Tél : +33 4 93 26 36 67
                 </p>
-                <p>
+                <p style="line-height: 0.6;">
                     SIRET : 920 461 357 00013
                 </p>
-                <p>
+                <p style="line-height: 0.6;">
                     R.C.S. : 920 461 357
                 </p>
             </td>
             <td style="text-align: left; font-weight: bold;">
                 {% if property is defined %}
-                <p style="white-space: nowrap;">
+                <p style="white-space: nowrap; line-height: 0.6;">
                     {{property}}
                 </p>
-                <p style="white-space: nowrap;">
+                <p style="white-space: nowrap; line-height: 0.6;">
                     c/o {{trustee}}
                 </p>
                 {% endif %}
                 {% if customer is defined %}
-                <p style="white-space: nowrap;">
+                <p style="white-space: nowrap; line-height: 0.6;">
                     {{customer}}
                 </p>
                 {% endif %}
-                <p style="white-space: nowrap;">
+                <p style="white-space: nowrap; line-height: 0.6;">
                     {{address}}
                 </p>
-                <p style="white-space: nowrap;">
+                <p style="white-space: nowrap; line-height: 0.6;">
                     {{postcode}} {{city}}
                 </p>
             </td>
@@ -186,62 +116,64 @@
     </table>
 
 
+
     <div style="margin-top: 40; margin-bottom: 10">
-        {% if refundReference is defined %}
-        <div class="card" style="background-color : lightgray;">
-            Avoir sur la facture : {{refundReference}}
-        </div>
-        {% endif %}
         {% if details.orderTags is defined %}
         {% for k,v in details.orderTags %}
-        <div class="card">
+        <div style="background-color: lightgray;display: inline-block; padding : 5pt;">
             {{k}} : {{v}}
         </div>
         {% endfor %}
         {% endif %}
 
         {% if property is defined %}
-        <div class="card">
-            Copropriété : {{property}}
+        <div style="background-color: lightgray;display: inline-block; padding : 5pt;">
+            Copropriété : {{propertydetails}}
         </div>
         {% endif %}
-        {% if details.proprietaire is defined %}
-        <div class="card">
+        {% if details.proprietaire is defined and details.proprietaire != "" %}
+        <div style="background-color: lightgray;display: inline-block; padding : 5pt;">
             Propriétaire : {{details.proprietaire}}
         </div>
         {% endif %}
     </div>
 
 
-    <table class="content-table" style="min-height: 500px;">
-        <thead>
+    <table style="min-height: 500px; width:100%; width: 100%; border-spacing: 0; border-collapse: separate;
+    overflow: hidden;
+    border: 1pt solid black;
+    position: relative;">
+        <thead style=" background-color: lightgray;
+        text-align: left;
+        border-bottom: 1 solid black;">
             <tr>
-                <th class="border-right">Réf.</th>
-                <th class="border-right" style="width: 100%;">Désignation</th>
-                <th class="border-right" style="width: 40; text-align: center">Quantité</th>
-                <th class="border-right" style="width : 50; text-align: right;">PU TTC</th>
-                <th style="width : 50; text-align: right;">Total TTC</th>
+                <th style="padding: 5 10; border-right: 1pt solid black">Réf.</th>
+                <th style="padding: 5 10; border-right: 1pt solid black; width: 100%;">Désignation</th>
+                <th style="padding: 5 10; border-right: 1pt solid black; width: 40; text-align: center">Quantité
+                </th>
+                <th style="padding: 5 10; border-right: 1pt solid black; width : 50; text-align: right;">PU TTC</th>
+                <th style="padding: 5 10; width : 50; text-align: right;">Total TTC</th>
             </tr>
         </thead>
         <tbody style="height: 100%; position:relative;">
             {% for content in contents %}
             <tr>
-                <td class="border-right">
+                <td style="padding: 5 10; border-right: 1pt solid black;">
                     {{content.reference}}
                 </td>
-                <td class="border-right">
+                <td style="padding: 5 10; border-right: 1pt solid black;">
                     {{content.title}}
                     {% if content.occupant is defined %}
                     ({{content.occupant}})
                     {% endif %}
 
                 </td>
-                <td class="border-right" style="text-align:center;">
+                <td style="padding: 5 10; border-right: 1pt solid black; text-align:center;">
                     {{content.quantity}}</td>
-                <td class="border-right" style="text-align: right;">
+                <td style="padding: 5 10; border-right: 1pt solid black; text-align: right;">
                     {{ (content.amount + content.amount * tva / 100)|format_currency('EUR', locale='fr') }}
                 </td>
-                <td style="text-align: right;">
+                <td style="padding: 5 10; text-align: right;">
                     {{ ((content.amount + content.amount * tva / 100) * content.quantity)|format_currency('EUR',
                     locale='fr') }}
                 </td>
@@ -260,22 +192,30 @@
     </table>
 
     <div style="margin-top: 20;">
-        <table class="content-table" style="width: 200; margin-left: auto;">
+        <table style="width: 200; margin-left: auto; border-spacing: 0; border-collapse: separate;
+        overflow: hidden;
+        border: 1pt solid black;">
             <tr>
-                <td style="background-color: lightgray; width: 50%;">Total HT</td>
-                <td style="text-align: right;">{{ amountHT|format_currency('EUR', locale='fr') }}</td>
+                <td style="padding: 5 10; background-color: lightgray; width: 50%;">Total HT</td>
+                <td style="padding: 5 10; text-align: right;">{{ amountHT|format_currency('EUR', locale='fr') }}
+                </td>
             </tr>
             <tr>
-                <td style="background-color: lightgray; width: 50%;">Total TVA ({{tva}}%)</td>
-                <td style="text-align: right;">{{ (amountTTC - amountHT) |format_currency('EUR', locale='fr') }}</td>
+                <td style="padding: 5 10; background-color: lightgray; width: 50%;">Total TVA ({{tva}}%)</td>
+                <td style="padding: 5 10; text-align: right;">{{ (amountTTC - amountHT) |format_currency('EUR',
+                    locale='fr') }}</td>
             </tr>
             <tr>
-                <td style="background-color: lightgray; width: 50%;">Total TTC</td>
-                <td style="text-align: right;">{{ amountTTC|format_currency('EUR', locale='fr') }}</td>
+                <td style="padding: 5 10; background-color: lightgray; width: 50%;">Total TTC</td>
+                <td style="padding: 5 10; text-align: right;">{{ amountTTC|format_currency('EUR', locale='fr') }}
+                </td>
             </tr>
             <tr style="font-weight: bold;">
-                <td style="background-color: lightgray; width: 50%; border-top: 1pt solid black;">Net à payer</td>
-                <td style="text-align: right; border-top: 1pt solid black;">{{ amountTTC|format_currency('EUR',
+                <td style="padding: 5 10; background-color: lightgray; width: 50%; border-top: 1pt solid black;">Net
+                    à
+                    payer</td>
+                <td style="padding: 5 10; text-align: right; border-top: 1pt solid black;">{{
+                    amountTTC|format_currency('EUR',
                     locale='fr') }}</td>
             </tr>
         </table>

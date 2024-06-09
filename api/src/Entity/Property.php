@@ -17,22 +17,24 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\ExistsFilter;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Filter\NotEqualFilter;
 
 
 use DateTime;
 
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
-#[UniqueEntity(
-    fields: ['vigik'],
-    message: 'Cette référence existe déjà.',
-    ignoreNull: true
-)]
-#[UniqueEntity(
-    fields: ['transmitter'],
-    message: 'Cette référence existe déjà.',
-    ignoreNull: true
-)]
+// #[UniqueEntity(
+//     fields: ['vigik'],
+//     message: 'Cette référence existe déjà.',
+//     ignoreNull: true
+// )]
+// #[UniqueEntity(
+//     fields: ['transmitter'],
+//     message: 'Cette référence existe déjà.',
+//     ignoreNull: true
+// )]
 #[ApiResource(
     normalizationContext: ['groups' => ['properties:read']],
     denormalizationContext: ['groups' => ["property:write"]],
@@ -44,10 +46,13 @@ use DateTime;
     ]
 )]
 #[ApiFilter(OrderFilter::class, properties: ['id', 'reference', 'title', 'postcode', 'city', 'zone', 'trustee.title'])]
-#[ApiFilter(SearchFilter::class, properties: ['trustee' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['trustee' => 'exact','vigik' => 'exact', 'transmitter' => 'exact'])]
+#[ApiFilter(NotEqualFilter::class, properties: ["id"])]
 #[ApiFilter(MultipleFieldsSearchFilter::class, properties: [
     "id",
     "reference",
+    "vigik",
+    "transmitter",
     "title",
     "city",
     "zone",

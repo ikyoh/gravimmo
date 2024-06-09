@@ -39,6 +39,13 @@ export const arrayOfIris = (array) => {
     );
 };
 
+export const arrayOfIds = (array) => {
+    return array.reduce(
+        (accumulator, currentValue) => [...accumulator, currentValue.id],
+        []
+    );
+};
+
 export const roundPrice = (price) => {
     return Math.round((price + Number.EPSILON) * 100) / 100;
 };

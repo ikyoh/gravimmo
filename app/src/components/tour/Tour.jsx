@@ -44,58 +44,15 @@ const Tour = ({ id, reorder }) => {
                     </div>
                 </div>
                 <TourDropdown tourID={id} />
-                {/* <Dropdown type="button">
-                    <button
-                        className="bg-secondary"
-                        disabled={data.status === "annulé" || data.isHanging}
-                        onClick={() =>
-                            mutate({
-                                id: data.id,
-                                status: "préparé",
-                                madeAt: dayjs(),
-                            })
-                        }
-                    >
-                        <IoIosCheckmarkCircleOutline size={30} />
-                        Valider la préparation
-                    </button>
-                    <button
-                        disabled={data.status === "annulé" || data.isHanging}
-                        onClick={() =>
-                            mutate({
-                                id: data.id,
-                                status: "posé",
-                                deliveredAt: dayjs(),
-                            })
-                        }
-                    >
-                        <IoIosCheckmarkCircleOutline size={30} />
-                        Valider la pose
-                    </button>
-                    <button
-                        disabled={data.status === "annulé" || data.isHanging}
-                        onClick={() =>
-                            mutate({
-                                id: data.id,
-                                status: "posé",
-                                deliveredAt: dayjs(),
-                            })
-                        }
-                    >
-                        <BsPiggyBank size={30} />
-                        Facturer la tournée
-                    </button>
-                    <button onClick={() => mutate({ id: id, commands: [] })}>
-                        <IoIosCloseCircle size={30} />
-                        Annuler la tournée
-                    </button>
-                </Dropdown> */}
             </div>
 
             <div className="flex">
                 <ul className="steps steps-vertical">
                     {commands.map((item) => (
-                        <li key={item} className="step step-neutral"></li>
+                        <li
+                            key={item}
+                            className="step step-neutral !min-h-0"
+                        ></li>
                     ))}
                 </ul>
                 <div className="grow">

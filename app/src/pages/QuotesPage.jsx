@@ -2,7 +2,7 @@ import axios from "axios";
 import { Button, ButtonSize } from "components/button/Button";
 import { Dot } from "components/dot/Dot";
 import Dropdown from "components/dropdown/Dropdown";
-import InvoiceForm from "components/forms/invoice/InvoiceForm";
+import QuoteForm from "components/forms/quote/QuoteForm";
 import Loader from "components/loader/Loader";
 import { NoDataFound } from "components/noDataFound/NoDataFound";
 import Pagination from "components/pagination/Pagination";
@@ -15,19 +15,17 @@ import Thead from "components/templates/table/Thead";
 import Tr from "components/templates/table/Tr";
 import { statusColor } from "config/translations.config";
 import dayjs from "dayjs";
-import { useInvoicesFilter } from "hooks/useInvoicesFilter";
 import { useModal } from "hooks/useModal";
+import { useQuotesFilter } from "hooks/useQuotesFilter";
 import { useSearch } from "hooks/useSearch";
 import { useSortBy } from "hooks/useSortBy";
 import fileDownload from "js-file-download";
 import _ from "lodash";
 import { useGetPaginatedDatas } from "queryHooks/useQuote";
 import { useEffect, useState } from "react";
-import { IoIosCheckmarkCircleOutline, IoIosSend } from "react-icons/io";
-import { IoReloadCircleOutline } from "react-icons/io5";
+import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { MdOutlineAssignment, MdOutlineFileDownload } from "react-icons/md";
 import { useLocation, useNavigate } from "react-router-dom";
-import { price } from "utils/functions.utils";
 import { CommandPage } from "./CommandPage";
 
 export const QuotesPage = ({ title }) => {
@@ -37,7 +35,7 @@ export const QuotesPage = ({ title }) => {
     const { searchValue, searchbar } = useSearch(
         initialPageState ? initialPageState.searchValue : ""
     );
-    const { filter, filters } = useInvoicesFilter();
+    const { filter, filters } = useQuotesFilter();
     const [page, setPage] = useState(
         initialPageState ? initialPageState.page : 1
     );
@@ -88,39 +86,13 @@ export const QuotesPage = ({ title }) => {
         }
     };
 
-    const calcTotalHTTVA10 = () => {
-        return price(
-            checkedList.reduce((acc, curr) => {
-                if (curr.tva === 10) {
-                    return acc + curr.amountHT;
-                }
-                return acc;
-            }, 0)
-        );
-    };
-
-    const calcTotalHTTVA20 = () => {
-        return price(
-            checkedList.reduce((acc, curr) => {
-                if (curr.tva === 20) {
-                    return acc + curr.amountHT;
-                }
-                return acc;
-            }, 0)
-        );
-    };
-
-    const calcTotalHT = () => {
-        return price(checkedList.reduce((acc, curr) => acc + curr.amountHT, 0));
-    };
-
     const downloadFile = (id, chrono) => {
         axios({
-            url: "/api/pdf/invoice/" + id,
+            url: "/api/pdf/quote/" + id,
             method: "GET",
             responseType: "blob",
         }).then((response) => {
-            fileDownload(response.data, "facture_" + chrono + ".pdf");
+            fileDownload(response.data, "devis_" + chrono + ".pdf");
         });
     };
 
@@ -134,26 +106,6 @@ export const QuotesPage = ({ title }) => {
                     subtitle={data["hydra:totalItems"].toString()}
                     error={error}
                 >
-                    {checkedList.length !== 0 && (
-                        <>
-                            <div className="chat chat-end">
-                                <div className="chat-bubble !max-w-none">
-                                    <div className="mt-0.5 flex flex-row gap-3">
-                                        <p>TVA(10%) : {calcTotalHTTVA10()}</p>
-                                        <p>TVA(20%) : {calcTotalHTTVA20()}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="chat chat-end">
-                                <div className="chat-bubble !max-w-none">
-                                    <div className="mt-0.5">
-                                        Total HT : {calcTotalHT()}
-                                    </div>
-                                </div>
-                            </div>
-                        </>
-                    )}
-
                     {searchbar}
                     {filter}
                     <Dropdown
@@ -167,29 +119,14 @@ export const QuotesPage = ({ title }) => {
                             <MdOutlineFileDownload size={30} />
                             Télécharger
                         </button>
-                        <button
-                            onClick={() =>
-                                navigate("/commands/" + data.id, {
-                                    state: {
-                                        page: page,
-                                        sortDirection: sortDirection,
-                                        sortValue: sortValue,
-                                        searchValue: searchValue,
-                                    },
-                                })
-                            }
-                        >
-                            <IoIosCheckmarkCircleOutline size={30} />
-                            Valider
-                        </button>
                     </Dropdown>
                     <Button
                         size={ButtonSize.Big}
                         onClick={() =>
                             handleOpenModal({
-                                title: "Nouvelle facture",
+                                title: "Nouveau devis",
                                 content: (
-                                    <InvoiceForm
+                                    <QuoteForm
                                         handleCloseModal={handleCloseModal}
                                     />
                                 ),
@@ -270,7 +207,7 @@ export const QuotesPage = ({ title }) => {
                                     <Tr
                                         key={data.id}
                                         onClick={() =>
-                                            navigate("/invoices/" + data.id, {
+                                            navigate("/quotes/" + data.id, {
                                                 state: {
                                                     page: page,
                                                     sortDirection:
@@ -351,20 +288,6 @@ export const QuotesPage = ({ title }) => {
                                                         {data.status}
                                                     </span>
                                                 </div>
-                                                <div className="flex items-center">
-                                                    {(data.refundReference ||
-                                                        data.isRefund) && (
-                                                        <IoReloadCircleOutline
-                                                            size={23}
-                                                        />
-                                                    )}
-                                                    {data.refundReference &&
-                                                        "F-" +
-                                                            data.refundReference}
-                                                    {data.isSend && (
-                                                        <IoIosSend size={23} />
-                                                    )}
-                                                </div>
                                             </div>
                                         </Td>
                                         <Td label="" text={""}>
@@ -429,7 +352,7 @@ export const QuotesPage = ({ title }) => {
                                                         <IoIosCheckmarkCircleOutline
                                                             size={30}
                                                         />
-                                                        Valider la facture
+                                                        Valider le devis
                                                     </button>
                                                 )}
                                             </Dropdown>

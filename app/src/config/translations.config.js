@@ -46,6 +46,7 @@ export const commandDetails = {
     nouveloccupant: "Nouvel occupant",
     ancienoccupant: "Ancien occupant",
     entree: "Entrée",
+    entrance: "Entrée pose",
     numerodeporte: "N° de porte",
     numeroappartement: "N° d'appartement",
     numeroetage: "N° d'étage",
@@ -57,4 +58,5 @@ export const commandDetails = {
     platineadefilement: "Platine à défilement",
     platineparlophoneelectricien: "Platine parlophone électricien",
     tableauptt: "Tableau PTT",
+    numeroappel: "N° d'appel",
 };

@@ -48,7 +48,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiFilter(SearchFilter::class, properties: ['status' => 'exact'])]
 #[ApiFilter(DateFilter::class, properties: ['createdAt'])]
 #[ApiFilter(BooleanFilter::class, properties: ['isSend'])]
-#[ApiFilter(ExistsFilter::class, properties: ['refundReference'])]
 #[ApiFilter(MultipleFieldsSearchFilter::class, properties: [
     "chrono",
     "trusteeTitle",
@@ -78,10 +77,10 @@ class Quote
     #[Groups(["quotes:read", "quote:read"])]
     private ?int $chrono = null;
 
-    // #[ORM\OneToOne(inversedBy: 'quote')]
-    // #[ORM\JoinColumn(nullable: true)]
-    // #[Groups(["quotes:read", "quote:read", "quote:write"])]
-    // private ?Command $command = null;
+    #[ORM\OneToOne(inversedBy: 'quote')]
+    #[ORM\JoinColumn(nullable: true)]
+    #[Groups(["quotes:read", "quote:read", "quote:write"])]
+    private ?Command $command = null;
 
     #[ORM\Column(nullable: true)]
     #[Groups(["quote:read", "quote:write"])]
@@ -101,7 +100,7 @@ class Quote
 
     #[ORM\Column]
     #[Groups(["quotes:read", "quote:read", "quote:write"])]
-    private ?float $tva = 10;
+    private ?float $tva = 20;
 
     #[ORM\Column]
     #[Groups(["quotes:read", "quote:read", "quote:write"])]
@@ -111,33 +110,26 @@ class Quote
     #[Groups(["quotes:read", "quote:read", "quote:write"])]
     private ?float $amountTTC = null;
 
-    #[ORM\Column(nullable: true)]
-    #[Groups(["quotes:read", "quote:read", "quote:write"])]
-    private ?int $refundReference = null;
-
     #[ORM\Column]
     #[Groups(["quotes:read", "quote:read", "quote:write"])]
     private ?bool $isSend = false;
 
-    #[ORM\Column]
-    #[Groups(["quotes:read", "quote:read", "quote:write"])]
-    private ?bool $isRefund = false;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["quotes:read", "quote:read", "quote:write"])]
     private ?string $comment = null;
 
-    // #[ORM\ManyToOne(inversedBy: 'quotes')]
-    // #[Groups(["quotes:read", "quote:read", "quote:write"])]
-    // private ?Trustee $trustee = null;
+    #[ORM\ManyToOne]
+    #[Groups(["quotes:read", "quote:read", "quote:write"])]
+    private ?Trustee $trustee = null;
 
-    // #[ORM\ManyToOne(inversedBy: 'quotes')]
-    // #[Groups(["quotes:read", "quote:read", "quote:write"])]
-    // private ?Customer $customer = null;
-    
-    // #[ORM\ManyToOne(inversedBy: 'quotes')]
-    // #[Groups(["quotes:read", "quote:read", "quote:write"])]
-    // private ?Property $property = null;
+    #[ORM\ManyToOne]
+    #[Groups(["quotes:read", "quote:read", "quote:write"])]
+    private ?Property $property = null;
+
+    #[ORM\ManyToOne]
+    #[Groups(["quotes:read", "quote:read", "quote:write"])]
+    private ?Customer $customer = null;
 
 
     public function __construct()
@@ -297,19 +289,8 @@ class Quote
         return $this;
     }
 
-    public function getRefundReference(): ?int
-    {
-        return $this->refundReference;
-    }
 
-    public function setRefundReference(?int $refundReference): self
-    {
-        $this->refundReference = $refundReference;
-
-        return $this;
-    }
-
-    public function isIsSend(): ?bool
+    public function getIsSend(): ?bool
     {
         return $this->isSend;
     }
@@ -317,18 +298,6 @@ class Quote
     public function setIsSend(bool $isSend): self
     {
         $this->isSend = $isSend;
-
-        return $this;
-    }
-
-    public function isIsRefund(): ?bool
-    {
-        return $this->isRefund;
-    }
-
-    public function setIsRefund(bool $isRefund): self
-    {
-        $this->isRefund = $isRefund;
 
         return $this;
     }
@@ -357,18 +326,6 @@ class Quote
         return $this;
     }
 
-    public function getCustomer(): ?Customer
-    {
-        return $this->customer;
-    }
-
-    public function setCustomer(?Customer $customer): self
-    {
-        $this->customer = $customer;
-
-        return $this;
-    }
-
     public function getProperty(): ?Property
     {
         return $this->property;
@@ -377,6 +334,18 @@ class Quote
     public function setProperty(?Property $property): self
     {
         $this->property = $property;
+
+        return $this;
+    }
+
+    public function getCustomer(): ?Customer
+    {
+        return $this->customer;
+    }
+
+    public function setCustomer(?Customer $customer): self
+    {
+        $this->customer = $customer;
 
         return $this;
     }

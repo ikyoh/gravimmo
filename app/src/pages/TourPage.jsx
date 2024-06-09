@@ -15,7 +15,7 @@ import { arrayOfIris } from "utils/functions.utils";
 import TourDropdown from "components/dropdown/contents/TourDropdown";
 import { NoDataFound } from "components/noDataFound/NoDataFound";
 import { Reorder } from "framer-motion";
-
+import useMakeInvoices from "hooks/useMakeInvoices";
 export const TourPage = () => {
     const navigate = useNavigate();
     const { state: previousPageState } = useLocation();
@@ -25,6 +25,11 @@ export const TourPage = () => {
         useGetOneData(id);
 
     const [commands, setCommands] = useState([]);
+
+    const {
+        setCommands: setCommandsInvoice,
+        isLoading: isLoadingMakeInvoices,
+    } = useMakeInvoices();
 
     const { mutate, isSuccess: isPutSuccess } = usePutData();
 
@@ -40,76 +45,76 @@ export const TourPage = () => {
     };
 
     if (isLoading) return <Loader />;
-    else
-        return (
-            <>
-                <Modal />
-                <Header
-                    title={"Tournée #" + data.id}
-                    subtitle={
-                        dayjs(data.scheduledAt).format("dddd D MMMM YYYY") +
-                        " - " +
-                        data.user.firstname +
-                        " " +
-                        data.user.lastname
-                    }
-                    isLoading={isLoading}
-                    error={error}
-                >
-                    <TourDropdown tourID={id} />
+    if (isLoadingMakeInvoices) return <Loader text="Enregistrement en cours" />;
+    return (
+        <>
+            <Modal />
+            <Header
+                title={"Tournée #" + data.id}
+                subtitle={
+                    dayjs(data.scheduledAt).format("dddd D MMMM YYYY") +
+                    " - " +
+                    data.user.firstname +
+                    " " +
+                    data.user.lastname
+                }
+                isLoading={isLoading}
+                error={error}
+            >
+                <TourDropdown
+                    tourID={id}
+                    setCommandsInvoice={setCommandsInvoice}
+                />
 
-                    {_.isEmpty(previousPageState) ? (
-                        <Button
-                            size={ButtonSize.Big}
-                            onClick={() => navigate(-1)}
-                        >
-                            <MdArrowBack />
-                        </Button>
-                    ) : (
-                        <Button
-                            size={ButtonSize.Big}
-                            onClick={() =>
-                                navigate("/tours", { state: previousPageState })
-                            }
-                        >
-                            <MdArrowBack />
-                        </Button>
-                    )}
-                </Header>
-                <Content>
-                    {data.commands.length === 0 ? (
-                        <NoDataFound />
-                    ) : (
-                        <div className="flex">
-                            <ul className="steps steps-vertical">
-                                {commands.map((item) => (
-                                    <li
-                                        key={item}
-                                        className="step step-neutral"
-                                    ></li>
+                {_.isEmpty(previousPageState) ? (
+                    <Button size={ButtonSize.Big} onClick={() => navigate(-1)}>
+                        <MdArrowBack />
+                    </Button>
+                ) : (
+                    <Button
+                        size={ButtonSize.Big}
+                        onClick={() =>
+                            navigate("/tours", { state: previousPageState })
+                        }
+                    >
+                        <MdArrowBack />
+                    </Button>
+                )}
+            </Header>
+            <Content>
+                {data.commands.length === 0 ? (
+                    <NoDataFound />
+                ) : (
+                    <div className="flex">
+                        <ul className="steps steps-vertical">
+                            {commands.map((item) => (
+                                <li
+                                    key={item}
+                                    className="step step-neutral text-xs !min-h-0"
+                                ></li>
+                            ))}
+                        </ul>
+                        <div className="grow">
+                            <Reorder.Group
+                                axis="y"
+                                values={commands}
+                                onReorder={setCommands}
+                                onMouseUp={() => handleSaveOrder()}
+                            >
+                                {commands.map((iri) => (
+                                    <Reorder.Item
+                                        key={iri}
+                                        value={iri}
+                                        className="mb-2"
+                                    >
+                                        <CardTour iri={iri} />
+                                    </Reorder.Item>
                                 ))}
-                            </ul>
-                            <div className="grow">
-                                <Reorder.Group
-                                    axis="y"
-                                    values={commands}
-                                    onReorder={setCommands}
-                                    onMouseUp={() => handleSaveOrder()}
-                                >
-                                    {commands.map((iri) => (
-                                        <Reorder.Item
-                                            key={iri}
-                                            value={iri}
-                                            className="mb-3"
-                                        >
-                                            <CardTour iri={iri} />
-                                        </Reorder.Item>
-                                    ))}
-                                </Reorder.Group>
-                            </div>
+                            </Reorder.Group>
                         </div>
-                    )}
-                </Content>
-            </>
-        );
+                    </div>
+                )}
+            </Content>
+        </>
+    );
 };

@@ -38,7 +38,7 @@ export const useModal = () => {
     });
 
     const modalClassName = classNames({
-        "modal-box max-h-full md:shadow-md shadow-black rounded-none md:rounded-md p-0 bg-white scrollbar dark:bg-dark": true,
+        "modal-box max-h-full md:shadow-md shadow-black rounded-none md:rounded-md p-0 bg-white thinscrollbar dark:bg-dark": true,
         "dark:bg-gradient-modal": !modal.isPageContent,
         "w-full md:w-11/12 max-w-5xl h-full": modal.size === "full",
         "w-[80vw] h-auto rounded-md p-0": modal.isMenu === true,

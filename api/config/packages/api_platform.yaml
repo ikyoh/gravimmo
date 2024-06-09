@@ -4,3 +4,5 @@ api_platform:
         pagination_client_enabled: true
         pagination_client_items_per_page: true
         pagination_items_per_page: 50
+    eager_loading:
+        force_eager: false

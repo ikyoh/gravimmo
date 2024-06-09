@@ -260,6 +260,21 @@ export const PropertyPage = () => {
                                 {data.services.length}
                             </div>
                         </div>
+                        <button
+                            onClick={() =>
+                                handleOpenModal({
+                                    title: "Ajouter une prestation",
+                                    content: (
+                                        <PropertyServiceForm
+                                            propertyIRI={data["@id"]}
+                                            handleCloseModal={handleCloseModal}
+                                        />
+                                    ),
+                                })
+                            }
+                        >
+                            <IoIosAddCircleOutline size={50} />
+                        </button>
                     </div>
                     <div className="cards-container">
                         {data.services.sort().map((iri) => (

@@ -2,14 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;700&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;700&display=swap");
 
 @layer base {
-
     * {
-        font-family: 'Montserrat', sans-serif;
+        font-family: "Montserrat", sans-serif;
     }
 
     body {
@@ -25,7 +22,7 @@
     }
 
     button {
-        font-family: 'Montserrat', sans-serif;
+        font-family: "Montserrat", sans-serif;
     }
 }
 
@@ -36,7 +33,6 @@
 .submit-button-disabled {
     @apply text-white font-semibold uppercase p-3 rounded w-[220px] h-[50px] flex justify-center items-center bg-gradient-to-b from-slate-400 to-slate-500;
 }
-
 
 /* MODAL */
 
@@ -73,7 +69,7 @@
 
 /* scrollbar itself */
 .scrollbar::-webkit-scrollbar-thumb {
-    border: 1px solid #26263F;
+    border: 1px solid #26263f;
     @apply rounded absolute -right-6;
 }
 
@@ -84,7 +80,7 @@
 
 /* Global */
 .scroll::-webkit-scrollbar {
-    width: 8px;
+    width: 3px;
 }
 
 /* Fond */
@@ -98,7 +94,6 @@
     border-radius: 8px;
 }
 
-
 /* Boutons */
 .scroll::-webkit-scrollbar-button:single-button {
     display: block;
@@ -107,6 +102,10 @@
     width: 16px;
 }
 
+.thinscrollbar {
+    scrollbar-color: gray transparent;
+    scrollbar-width: thin;
+}
 
 section {
     @apply rounded flex flex-col gap-8 !p-6 dark:bg-gradient-page;
@@ -125,7 +124,7 @@ section {
 }
 
 .subtitle {
-    @apply	text-accent text-xl mb-2 font-semibold;
+    @apply text-accent text-xl mb-2 font-semibold;
 }
 
 .cards-container {
@@ -141,7 +140,6 @@ section {
 .card-button {
     @apply py-5 flex gap-5 items-center font-bold uppercase text-white xl:col-span-5;
 }
-
 
 input[type="text"],
 input[type="password"],
@@ -162,7 +160,8 @@ textarea {
 }
 
 select {
-    background: url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='gray' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>") no-repeat;
+    background: url("data:image/svg+xml,<svg height='10px' width='10px' viewBox='0 0 16 16' fill='gray' xmlns='http://www.w3.org/2000/svg'><path d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/></svg>")
+        no-repeat;
     background-position: calc(100% - 0.75rem) center !important;
     -moz-appearance: none !important;
     -webkit-appearance: none !important;

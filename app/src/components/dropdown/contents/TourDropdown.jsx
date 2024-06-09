@@ -1,17 +1,14 @@
 import Dropdown from "components/dropdown/Dropdown";
 import dayjs from "dayjs";
-import useMakeInvoices from "hooks/useMakeInvoices";
 import { usePutData as usePutCommand } from "queryHooks/useCommand";
 import { useGetOneData, usePutData } from "queryHooks/useTour";
 import { BsPiggyBank } from "react-icons/bs";
 import { IoIosCheckmarkCircleOutline, IoIosCloseCircle } from "react-icons/io";
 
-const TourDropdown = ({ tourID }) => {
+const TourDropdown = ({ tourID, setCommandsInvoice }) => {
     const { mutate } = usePutData();
     const { data } = useGetOneData(tourID);
     const { mutate: updateCommand } = usePutCommand();
-
-    const { setCommands, isLoading: isLoadingMakeInvoices } = useMakeInvoices();
 
     const handleChangeCommandsStatus = async (status) => {
         await Promise.all(
@@ -72,7 +69,7 @@ const TourDropdown = ({ tourID }) => {
                         Valider la pose
                     </button>
                 )}
-            <button onClick={() => setCommands(data.commands)}>
+            <button onClick={() => setCommandsInvoice(data.commands)}>
                 <BsPiggyBank size={30} />
                 Facturer la tournée
             </button>

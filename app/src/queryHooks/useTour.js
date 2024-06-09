@@ -20,7 +20,7 @@ const fetchPaginatedDatas = ({
     searchValue = null,
 }) => {
     let options =
-        "?page=" +
+        "?exists[commands]=true&page=" +
         page +
         "&itemsPerPage=" +
         itemsPerPage +

@@ -46,7 +46,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     "trustee.title",
     "property.title",
     "property.zone",
-    "details"
+    "details",
+    "customServices.details.nouveloccupant"
 ])]
 
 
@@ -82,7 +83,7 @@ class Command
     #[Groups(["commands:read", "command:read", "command:write"])]
     private ?\DateTimeInterface $deliveredAt = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 1000, nullable: true)]
     #[Groups(["command:read", "command:write"])]
     private ?string $trackingEmail = null;
 
@@ -122,6 +123,10 @@ class Command
     #[ORM\OneToOne(mappedBy: 'command', cascade: ['persist', 'remove'])]
     #[Groups(["commands:read", "command:read", "command:write", "tour:read", "tours:read"])]
     private ?Invoice $invoice = null;
+
+    #[ORM\OneToOne(mappedBy: 'command', cascade: ['persist', 'remove'])]
+    #[Groups(["commands:read", "command:read", "command:write", "tour:read", "tours:read"])]
+    private ?Quote $quote = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["commands:read", "command:read", "command:write"])]
@@ -414,6 +419,23 @@ class Command
         return $this;
     }
 
+    public function getQuote(): ?Quote
+    {
+        return $this->quote;
+    }
+
+    public function setQuote(Quote $quote): self
+    {
+        // set the owning side of the relation if necessary
+        if ($quote->getCommand() !== $this) {
+            $quote->setCommand($this);
+        }
+
+        $this->quote = $quote;
+
+        return $this;
+    }
+
     public function getContractorEmail(): ?string
     {
         return $this->contractorEmail;
@@ -504,12 +526,5 @@ class Command
 
         return $this;
     }
-
-
-
-
-
-
-
 
 }

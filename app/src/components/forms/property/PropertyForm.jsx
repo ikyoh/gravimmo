@@ -7,7 +7,13 @@ import FormLabel from "components/form/label/FormLabel";
 import { FormSelect } from "components/form/select/FormSelect";
 import Loader from "components/loader/Loader";
 import { commandDetails } from "config/translations.config";
-import { useGetOneData, usePostData, usePutData } from "queryHooks/useProperty";
+import {
+    useGetFilteredDatasByTransmitter,
+    useGetFilteredDatasByVigik,
+    useGetOneData,
+    usePostData,
+    usePutData,
+} from "queryHooks/useProperty";
 import { useGetAllDatas } from "queryHooks/useTrustee";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -69,6 +75,7 @@ export default function PropertyForm({
         control,
         setError,
         setFocus,
+        watch,
         formState: { errors, isSubmitting },
     } = useForm({
         resolver: yupResolver(validationSchema),
@@ -258,6 +265,7 @@ export default function PropertyForm({
                 register={register}
                 required={false}
             />
+            <SearchVigik watch={watch} propertyId={id} />
             <FormInput
                 type="text"
                 name="transmitter"
@@ -266,6 +274,7 @@ export default function PropertyForm({
                 register={register}
                 required={false}
             />
+            <SearchTransmitter watch={watch} propertyId={id} />
             <FieldArray
                 name="accesses"
                 label="Autres accès"
@@ -308,3 +317,27 @@ export default function PropertyForm({
         </Form>
     );
 }
+const SearchVigik = ({ watch, propertyId }) => {
+    const watchVigik = watch("vigik", false);
+    const { isLoading, isFetching, isRefetching, data } =
+        useGetFilteredDatasByVigik({ vigik: watchVigik, id: propertyId });
+    if (isLoading || isFetching || isRefetching)
+        return <p className="mb-2">Recherche de doublon</p>;
+    if (data.length !== 0)
+        return <p className="mb-2 text-error">Attention doublon</p>;
+    return null;
+};
+
+const SearchTransmitter = ({ watch, propertyId }) => {
+    const watchTransmitter = watch("transmitter", false);
+    const { isLoading, isFetching, isRefetching, data } =
+        useGetFilteredDatasByTransmitter({
+            transmitter: watchTransmitter,
+            id: propertyId,
+        });
+    if (isLoading || isFetching || isRefetching)
+        return <p className="mb-2">Recherche de doublon</p>;
+    if (data.length !== 0)
+        return <p className="mb-2 text-error">Attention doublon</p>;
+    return null;
+};

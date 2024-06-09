@@ -10,20 +10,24 @@ export const FormSelect = ({
     placeholder,
     validationSchema,
     children,
-    defaultValue,
     onChange,
-}) => (
-    <div className="w-full mb-3">
-        <Label name={name} label={label} required={required} />
-        <select
-            id={name}
-            name={name}
-            placeholder={placeholder}
-            {...register(name, validationSchema)}
-            onChange={onChange}
-        >
-            {children}
-        </select>
-        <Error error={error} />
-    </div>
-);
+}) => {
+    return (
+        <div className="w-full mb-3">
+            <Label name={name} label={label} required={required} />
+            <select
+                // id={name}
+                // name={name}
+                placeholder={placeholder}
+                //{...register(name, validationSchema)}
+                {...register(name, {
+                    validationSchema: validationSchema,
+                    onChange: onChange,
+                })}
+            >
+                {children}
+            </select>
+            <Error error={error} />
+        </div>
+    );
+};

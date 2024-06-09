@@ -16,7 +16,6 @@ import uuid from "react-uuid";
 import { styles } from "./styles";
 
 const CommandPdf = ({ commands = [], onClick }) => {
-    console.log("commands", commands);
     // Create Document Component
     const MyDoc = () => (
         <Document>
@@ -231,6 +230,7 @@ const CommandPdf = ({ commands = [], onClick }) => {
                                         <View key={uuid()}>
                                             <View style={styles.row}>
                                                 <Text style={styles.subtitle}>
+                                                    Config.{" "}
                                                     {service.service.title}
                                                 </Text>
                                             </View>
@@ -421,7 +421,7 @@ const CommandPdf = ({ commands = [], onClick }) => {
                             <>
                                 <View style={styles.row}>
                                     <Text style={styles.subtitle}>
-                                        Infos gravure
+                                        Commande
                                     </Text>
                                 </View>
 
@@ -462,7 +462,10 @@ const CommandPdf = ({ commands = [], onClick }) => {
                                             (customService) => (
                                                 <View
                                                     key={uuid}
-                                                    style={styles.column}
+                                                    style={{
+                                                        ...styles.column,
+                                                        width: "45%",
+                                                    }}
                                                 >
                                                     {customService.propertyServices.map(
                                                         (propertyService) =>
@@ -489,6 +492,7 @@ const CommandPdf = ({ commands = [], onClick }) => {
                                                         orderdetails={
                                                             customService.details
                                                         }
+                                                        isCustom={true}
                                                     />
                                                 </View>
                                             )
@@ -558,21 +562,42 @@ const CommandPdf = ({ commands = [], onClick }) => {
 
 export default CommandPdf;
 
-export const OrderDetails = ({ orderdetails }) => {
+export const OrderDetails = ({ orderdetails, isCustom }) => {
     return (
-        <View style={styles.row}>
+        <View>
+            {isCustom && (
+                <>
+                    <View style={{ ...styles.row, marginRight: 6 }}>
+                        <Text>Nouvel occupant{" : "}</Text>
+                        <Text style={styles.bold}>
+                            {orderdetails["nouveloccupant"]}
+                        </Text>
+                    </View>
+                    {orderdetails["ancienoccupant"] && (
+                        <View style={{ ...styles.row, marginRight: 6 }}>
+                            <Text>Ancien occupant{" : "}</Text>
+                            <Text style={styles.bold}>
+                                {orderdetails["ancienoccupant"]}
+                            </Text>
+                        </View>
+                    )}
+                </>
+            )}
             {Object.keys(orderdetails)
                 .filter(
                     (f) =>
-                        f !== "ancienoccupant" &&
                         f !== "proprietaire" &&
                         f !== "orderTags" &&
+                        f !== "ancienoccupant" &&
                         f !== "nouveloccupant"
                 )
                 .map((key) => (
                     <View
                         key={uuid()}
-                        style={{ ...styles.row, marginRight: 6 }}
+                        style={{
+                            ...styles.row,
+                            marginRight: 6,
+                        }}
                     >
                         <Text>
                             {commandDetails[key]}
