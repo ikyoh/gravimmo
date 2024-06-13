@@ -91,6 +91,7 @@ class InvoiceListener extends AbstractController
                         "title" => $propertyService->getService()->getTitle(),
                         "invoiceTitle" => $propertyService->getService()->getInvoiceTitle(),
                         "occupant" => $customService->getDetails()['nouveloccupant'],
+                        "proprietaire" => $customService->getDetails()['proprietaire'] && $customService->getDetails()['proprietaire'] !== "" ? $customService->getDetails()['proprietaire'] : "",
                         "quantity" => 1,
                         "price" => $propertyService->getService()->getPrice(),
                         "discount" => 0,

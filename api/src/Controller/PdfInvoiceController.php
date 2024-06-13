@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use NumberFormatter;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use App\Entity\Invoice;

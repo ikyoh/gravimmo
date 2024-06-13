@@ -438,10 +438,11 @@ export const InvoicePage = ({ title }) => {
                     <section className="mx-10 mb-10">{data.comment}</section>
                 )}
 
-                <Table>
+                <Table width="auto">
                     <Thead>
-                        <Th label="Réf." />
+                        <Th label="Réf." widthAuto={true} />
                         <Th label="Désignation" />
+                        <Th label="Intitulé" />
                         <Th label="Quantité" style={{ textAlign: "center" }} />
                         <Th label="Prix unitaire HT" />
                         <Th label="Total HT" />
@@ -477,11 +478,8 @@ export const InvoicePage = ({ title }) => {
                                     {content.occupant &&
                                         " (" + content.occupant + ")"}{" "}
                                 </Td>
-                                <Td
-                                    className="text-center"
-                                    text={content.quantity}
-                                    style={{ textAlign: "center" }}
-                                />
+                                <Td>{content.invoiceTitle}</Td>
+                                <Td text={content.quantity} />
                                 <Td>{price(content.price)}</Td>
                                 <Td>{price(content.amount)}</Td>
                                 <Td>
@@ -565,6 +563,7 @@ const UpdateServiceModal = ({
 }) => {
     const validationSchema = yup.object({
         title: yup.string().required("Champ obligatoire"),
+        invoiceTitle: yup.string().required("Champ obligatoire"),
         amount: yup.number().required().typeError("Champ obligatoire"),
         quantity: yup.number().required().typeError("Champ obligatoire"),
         price: yup.number(),
@@ -603,6 +602,7 @@ const UpdateServiceModal = ({
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
+            <h1 className="text-xl text-info mb-3">{service.title}</h1>
             <FormInputs register={register} errors={errors} />
         </Form>
     );
@@ -612,16 +612,16 @@ const FormInputs = ({ errors, register }) => (
     <>
         <FormInput
             type="text"
-            name="title"
+            name="invoiceTitle"
             label="Intitulé"
-            error={errors["title"]}
+            error={errors["invoiceTitle"]}
             register={register}
-            required={true}
+            required={false}
         />
         <FormInput
             type="text"
             name="occupant"
-            label="Information complémentaire"
+            label="Information complémentaire / Occupant"
             error={errors["occupant"]}
             register={register}
             required={false}
