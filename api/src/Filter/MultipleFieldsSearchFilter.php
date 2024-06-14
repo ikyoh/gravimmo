@@ -7,10 +7,7 @@ namespace App\Filter;
 use ApiPlatform\Doctrine\Orm\Filter\AbstractFilter;
 use ApiPlatform\Doctrine\Orm\Util\QueryNameGeneratorInterface;
 use ApiPlatform\Metadata\Operation;
-
 use Doctrine\ORM\QueryBuilder;
-
-use Symfony\Component\PropertyInfo\Type;
 
 
 final class MultipleFieldsSearchFilter extends AbstractFilter
@@ -42,9 +39,9 @@ final class MultipleFieldsSearchFilter extends AbstractFilter
                 if (!in_array($exploded_field[0], $queryBuilder->getAllAliases())) {
                     $queryBuilder->leftJoin($alias . '.' . $exploded_field[0], $exploded_field[0]);
                 }
-                $orExpressions[] = sprintf('%s.%s LIKE :search', $exploded_field[0], $exploded_field[1]);
+                $orExpressions[] = sprintf('LOWER(%s.%s) LIKE LOWER(:search)', $exploded_field[0], $exploded_field[1]);
             } else {
-                $orExpressions[] = sprintf('%s.%s LIKE :search', $alias, $field);
+                $orExpressions[] = sprintf('LOWER(%s.%s) LIKE LOWER(:search)', $alias, $field);
             }
         }
 
