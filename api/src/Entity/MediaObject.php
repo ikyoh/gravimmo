@@ -21,11 +21,13 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ApiResource(
     normalizationContext: ['groups' => ['media_object:read']], 
     types: ['https://schema.org/MediaObject'],
+    outputFormats: ['jsonld' => ['application/ld+json']],
     operations: [
         new Get(),
         new GetCollection(),
         new Delete(),
         new Post(
+            inputFormats: ['multipart' => ['multipart/form-data']],
             controller: CreateMediaObjectAction::class, 
             deserialize: false, 
             validationContext: ['groups' => ['Default', 'media_object_create']], 
