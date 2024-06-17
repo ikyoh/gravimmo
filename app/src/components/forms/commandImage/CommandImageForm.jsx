@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { API_MEDIAS, IRI } from "../../../config/api.config";
 
-import "./style.css";
+//import "./style.css";
 
 // Import React FilePond
 import { FilePond, registerPlugin } from "react-filepond";
