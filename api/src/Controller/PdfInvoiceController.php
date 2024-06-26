@@ -18,5 +18,4 @@ class PdfInvoiceController extends AbstractController
         $html = $this->render('pdf/invoice.html.twig', $pdf->formatTwigContent($data));
         $pdf->downloadPDF($html);
     }
-
 }
