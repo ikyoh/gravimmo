@@ -10,13 +10,14 @@ use Symfony\Component\Scheduler\RecurringMessage;
 use Symfony\Component\Scheduler\ScheduleProviderInterface;
 
 
-#[AsSchedule('default')]
+
+#[AsSchedule('invoices')]
 class InvoicesScheduler implements ScheduleProviderInterface
 {
     public function getSchedule(): Schedule
 	{
 		return (new Schedule())->add(
-			//RecurringMessage::every('3 seconds', new SendInvoicesMessage()));
-			RecurringMessage::every('first Saturday of next week', new SendInvoicesMessage()));
+			RecurringMessage::every('10 seconds', new SendInvoicesMessage()));
+			//RecurringMessage::every('first Saturday of next week', new SendInvoicesMessage()));
 	}
 }

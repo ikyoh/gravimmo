@@ -15,8 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[AsMessageHandler]
 final class SendInvoicesHandler extends AbstractController
 {
-
-
     public function __construct(private MailerInterface $mailer, private InvoiceRepository $invoiceRepository, private EntityManagerInterface $entityManager, private PdfInvoiceService $pdf)
     {
     }
@@ -47,7 +45,6 @@ final class SendInvoicesHandler extends AbstractController
         $invoice->setIsSend(true);
         $this->entityManager->persist($invoice);
         $this->entityManager->flush();
-            var_dump($invoice->getChrono());
         }
     }
 }
