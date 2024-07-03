@@ -8,17 +8,15 @@ const useMakeInvoices = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
 
+    console.log(commands);
+
     const queryClient = useQueryClient();
 
     const makeInvoiceQueries = useQueries({
         queries:
             commands.length !== 0
                 ? commands.map((command) => {
-                      if (
-                          command.invoice &&
-                          command.status !== "DEFAULT - préparé"
-                      )
-                          return null;
+                      if (command.invoice) return null;
                       else
                           return {
                               queryKey: ["makeInvoice", command["@id"]],

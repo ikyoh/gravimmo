@@ -443,7 +443,7 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                             );
                         }}
                     >
-                        Commande personnalisée
+                        Commande multiple
                     </button>
                 </div>
 
@@ -634,8 +634,7 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                                                     />
                                                 </div>
                                                 <div className="flex-none w-96">
-                                                    <div className="flex"></div>
-                                                    <div className="flex gap-3">
+                                                    <div className="flex gap-3 items-center">
                                                         Nouvel occupant
                                                         <CheckIfExist
                                                             field={`customServices.${index}.details.nouveloccupant`}
@@ -749,18 +748,6 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                                                             </div>
                                                         ))}
                                             </div>
-                                            <div className="flex gap-5 flex-wrap">
-                                                {property.services.map(
-                                                    (IRI) => (
-                                                        <ServiceCheckbox
-                                                            key={`${index}.${IRI}`}
-                                                            serviceIRI={IRI}
-                                                            name={`customServices.${index}.propertyServices`}
-                                                        />
-                                                    )
-                                                )}
-                                            </div>
-
                                             <div className="absolute top-2 right-1">
                                                 <Dropdown>
                                                     <button
@@ -798,6 +785,17 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                                                         Retirer la ligne
                                                     </button>
                                                 </Dropdown>
+                                            </div>
+                                            <div className="flex gap-5 flex-wrap">
+                                                {property.services.map(
+                                                    (IRI) => (
+                                                        <ServiceCheckbox
+                                                            key={`${index}.${IRI}`}
+                                                            serviceIRI={IRI}
+                                                            name={`customServices.${index}.propertyServices`}
+                                                        />
+                                                    )
+                                                )}
                                             </div>
                                         </div>
                                     );
@@ -936,21 +934,44 @@ const CheckIfExist = ({ field, property }) => {
     const [search, setSearch] = useState("");
 
     useEffect(() => {
+        setSearch("");
         const timeoutId = setTimeout(() => setSearch(searchTerm), 750);
         return () => clearTimeout(timeoutId);
     }, [searchTerm]);
 
-    const { data, isLoading, isSuccess, error } = useGetPaginatedDatas({
+    const {
+        data = null,
+        isLoading,
+        isFetching,
+        isSuccess,
+        error,
+    } = useGetPaginatedDatas({
         enabled: searchTerm ? true : false,
         page: 1,
         sortValue: "id",
-        sortDirection: "ASC",
+        sortDirection: "DESC",
         details: search,
         filters: { status: "all" },
         property: property,
     });
 
-    if (data && data["hydra:totalItems"] !== 0)
-        return <div className="text-error">soupçon de doublon</div>;
+    if (
+        search &&
+        !isLoading &&
+        !isFetching &&
+        data &&
+        data["hydra:totalItems"] !== 0
+    )
+        return (
+            <div
+                role="button"
+                className="text-error"
+                onClick={() => {
+                    console.log(data["hydra:member"][0]);
+                }}
+            >
+                soupçon de doublon
+            </div>
+        );
     return null;
 };

@@ -18,8 +18,6 @@ import uuid from "react-uuid";
 import "./style.css";
 
 const TourForm = ({ id, commands = [], handleCloseModal }) => {
-    console.log("commands", commands);
-
     const { data: installers, isLoading: isLoadingInstallers } =
         useGetAllDatas();
     const { mutate: postData, isLoading: isPostLoading } = usePostData();
@@ -49,6 +47,10 @@ const TourForm = ({ id, commands = [], handleCloseModal }) => {
         resolver: yupResolver(validationSchema),
         defaultValues: defaultValues,
     });
+
+    useEffect(() => {
+        if (installers) setValue("user", installers["hydra:member"][0]["@id"]);
+    }, [installers, setValue]);
 
     const watchDate = watch("scheduledAt");
     const watchUser = watch("user");
