@@ -438,6 +438,11 @@ export const InvoicePage = ({ title }) => {
                     <section className="mx-10 mb-10">{data.comment}</section>
                 )}
 
+                <div className="px-10 py-5">
+                    Intitulé de la facture : {""}
+                    {data.subject ? data.subject : "aucun intitulé"}
+                </div>
+
                 <Table width="auto">
                     <Thead>
                         <Th label="Réf." widthAuto={true} />

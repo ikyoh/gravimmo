@@ -32,7 +32,11 @@ class InvoiceListener extends AbstractController
         if ($invoice->getProperty()) {
             $invoice->setPropertyTitle($invoice->getProperty()->getTitle());
         }
-        
+
+        if ($invoice->getCommand() && $invoice->getCommand()->getIsUpdate() === true) {
+            $invoice->setSubject("Suite à mise à jour demandée");
+        }
+
         if (is_null($invoice->getStatus())) $this->createInvoice($invoice);
     }
 

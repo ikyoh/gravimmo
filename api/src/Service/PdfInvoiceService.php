@@ -4,7 +4,6 @@ namespace App\Service;
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use Symfony\Component\HttpFoundation\Response;
 
 class PdfInvoiceService
 {
@@ -64,6 +63,7 @@ class PdfInvoiceService
             'amountHT' => $invoice->getAmountHT(),
             'amountTTC' => $invoice->getAmountTTC(),
             'date' => $invoice->getCreatedAt()->format('d/m/Y'),
+            'subject' => $invoice->getSubject(),
         ];
 
         if ($invoice->getCommand()) {

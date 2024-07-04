@@ -150,6 +150,10 @@ class Invoice
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     #[Groups(["invoices:read", "invoice:read", "invoice:write"])]
     private ?\DateTimeInterface $cashedAt = null;
+    
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["invoices:read", "invoice:read", "invoice:write"])]
+    private ?string $subject = null;
 
 
     public function __construct()
@@ -401,6 +405,18 @@ class Invoice
     public function setCashedAt(?\DateTimeInterface $cashedAt): self
     {
         $this->cashedAt = $cashedAt;
+
+        return $this;
+    }
+
+    public function getSubject(): ?string
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(?string $subject): static
+    {
+        $this->subject = $subject;
 
         return $this;
     }

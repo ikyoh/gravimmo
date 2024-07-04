@@ -70,7 +70,7 @@ export const CommandForm = ({ id, handleCloseModal }) => {
     const methods = useForm({
         defaultValues: id
             ? data
-            : { isCustom: false, property: "", trustee: "" },
+            : { isCustom: false, property: "", trustee: "", isUpdate: false },
         shouldUnregister: false,
         shouldFocusError: true,
         reValidateMode: "onSubmit",

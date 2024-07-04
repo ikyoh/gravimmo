@@ -146,7 +146,7 @@ class Command
 
     #[ORM\Column(nullable: true)]
     #[Groups(["commands:read", "command:read", "command:write"])]
-    private ?bool $isUpdate = null;
+    private ?bool $isUpdate = false;
 
     #[ORM\OneToMany(mappedBy: 'command', targetEntity: CommandReport::class, orphanRemoval: true)]
     #[Groups(["commands:read", "command:read", "command:write"])]
@@ -484,7 +484,7 @@ class Command
         return $this;
     }
 
-    public function isIsUpdate(): ?bool
+    public function getIsUpdate(): ?bool
     {
         return $this->isUpdate;
     }
