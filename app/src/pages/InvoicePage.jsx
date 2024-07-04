@@ -173,6 +173,28 @@ export const InvoicePage = ({ title }) => {
                         </Button>
                     )}
                     <Dropdown type="button">
+                        {data.status !== "validé" && (
+                            <button
+                                onClick={() =>
+                                    handleOpenModal({
+                                        title: "Intitulé",
+                                        size: "small",
+                                        content: (
+                                            <SubjectForm
+                                                handleCloseModal={
+                                                    handleCloseModal
+                                                }
+                                                data={data}
+                                            />
+                                        ),
+                                    })
+                                }
+                            >
+                                <LiaCommentAlt size={30} />
+                                Intitulé
+                            </button>
+                        )}
+
                         <button
                             onClick={() =>
                                 downloadFile(
@@ -872,12 +894,7 @@ const ObservationForm = ({ data, handleCloseModal }) => {
     const {
         register,
         handleSubmit,
-        setValue,
-        setError,
-        reset,
-        setFocus,
-        control,
-        formState: { errors, isSubmitting, isSubmitted },
+        formState: { errors, isSubmitting },
     } = useForm({
         //resolver: yupResolver(validationSchema),
         defaultValues: { id: data.id, comment: data.comment },
@@ -904,6 +921,46 @@ const ObservationForm = ({ data, handleCloseModal }) => {
                 error={errors["comment"]}
                 register={register}
                 required={true}
+            />
+        </Form>
+    );
+};
+
+const SubjectForm = ({ data, handleCloseModal }) => {
+    const {
+        mutate: put,
+        isLoading: isPutPending,
+        isSuccess: isPutSuccess,
+    } = usePutData();
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm({
+        defaultValues: { id: data.id, subject: data.subject },
+    });
+
+    const onSubmit = (form) => {
+        put(form);
+    };
+
+    useEffect(() => {
+        if (isPutSuccess) handleCloseModal();
+    }, [isPutPending]);
+
+    return (
+        <Form
+            onSubmit={handleSubmit(onSubmit)}
+            isLoading={isSubmitting || isPutPending}
+            isDisabled={isSubmitting || isPutPending}
+        >
+            <FormInput
+                type="text"
+                name="subject"
+                label="Intitulé de la facture"
+                error={errors["subject"]}
+                register={register}
             />
         </Form>
     );
