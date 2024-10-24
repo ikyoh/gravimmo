@@ -40,7 +40,7 @@ export const CardTour = ({ iri }) => {
     return (
         <>
             <Modal />
-            <div className="_card !py-1 dark:bg-gradient-page flex flex-col md:flex-row gap-3 items-center justify-between w-full flex-wrap">
+            <div className="_card !py-2 dark:bg-gradient-page flex flex-col md:flex-row gap-3 items-center justify-between w-full flex-wrap">
                 <div className="flex flex-col md:flex-row items-center gap-3 md:gap-5 flex-wrap">
                     <div className="">#{data.id}</div>
                     <div className="text-accent font-semibold">
@@ -83,7 +83,7 @@ export const CardTour = ({ iri }) => {
                 <div className="flex gap-5 items-center">
                     {data.images.length !== 0 && (
                         <div className="relative mr-14">
-                            <span className="text-xs absolute -top-3 -right-4 rounded-full bg-action px-2">
+                            <span className="text-xs absolute -top-1 -right-4 rounded-full bg-action px-2">
                                 {data.images.length}
                             </span>
                             <SlPicture size={30} />

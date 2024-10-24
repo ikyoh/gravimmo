@@ -56,6 +56,8 @@ export const CommandForm = ({ id, handleCloseModal }) => {
     const [choice, setChoice] = useState("property");
     const [isCustom, setIsCustom] = useState(false);
 
+    const ref = useRef(null);
+
     const handleNextStep = async () => {
         const isStepValid = await trigger();
         if (isStepValid) {
@@ -95,6 +97,15 @@ export const CommandForm = ({ id, handleCloseModal }) => {
         control,
         name: "customServices",
     });
+
+    useEffect(() => {
+        if (fields.length > 0) {
+            ref.current.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+            });
+        }
+    }, [fields]);
 
     // Set form values
     useEffect(() => {
@@ -315,11 +326,10 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                             <button
                                 key={data["@id"]}
                                 type="button"
-                                className={`btn flex justify-between ${
-                                    data["@id"] === customer
-                                        ? "btn-primary"
-                                        : "btn-neutral"
-                                }`}
+                                className={`btn flex justify-between ${data["@id"] === customer
+                                    ? "btn-primary"
+                                    : "btn-neutral"
+                                    }`}
                                 onClick={() =>
                                     setValue("customer", data["@id"])
                                 }
@@ -337,9 +347,8 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                 <div className="btn-group w-full mb-10">
                     <button
                         type="button"
-                        className={`btn w-1/2 ${
-                            choice === "property" && "btn-active"
-                        }`}
+                        className={`btn w-1/2 ${choice === "property" && "btn-active"
+                            }`}
                         onClick={() => {
                             setChoice("property");
                             reset({});
@@ -349,9 +358,8 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                     </button>
                     <button
                         type="button"
-                        className={`btn w-1/2 ${
-                            choice === "customer" && "btn-active"
-                        }`}
+                        className={`btn w-1/2 ${choice === "customer" && "btn-active"
+                            }`}
                         onClick={() => {
                             setChoice("customer");
                             setSteps(1);
@@ -368,7 +376,6 @@ export const CommandForm = ({ id, handleCloseModal }) => {
     };
 
     const Step2 = () => {
-        const ref = useRef(null);
         useEffect(() => {
             if (!isCustom && errors.details)
                 setFocus("details." + Object.keys(errors.details)[0]);
@@ -412,9 +419,8 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                 <div className="btn-group w-full mb-10">
                     <button
                         type="button"
-                        className={`btn w-1/2 ${
-                            !isCustom && "btn-active btn-disabled"
-                        }`}
+                        className={`btn w-1/2 ${!isCustom && "btn-active btn-disabled"
+                            }`}
                         onClick={() => {
                             setValue("isCustom", false);
                             setIsCustom(false);
@@ -425,9 +431,8 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                     </button>
                     <button
                         type="button"
-                        className={`btn w-1/2 ${
-                            isCustom && "btn-active btn-disabled"
-                        }`}
+                        className={`btn w-1/2 ${isCustom && "btn-active btn-disabled"
+                            }`}
                         onClick={() => {
                             resetField("details");
                             setValue("isCustom", true);
@@ -583,85 +588,84 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                     </>
                 )}
                 {isCustom && (
-                    <>
-                        <div ref={ref}>
-                            <FormCheckbox
-                                name="isUpdate"
-                                label="Cette commande est une mise à jour"
-                                error={errors["isUpdate"]}
-                                register={register}
-                            />
-                            {property &&
-                                property.trustee.orderTag.length !== 0 &&
-                                property.trustee.orderTag.map((orderTag) => (
-                                    <Input
-                                        key={uuid()}
-                                        name={`details.orderTags.${orderTag}`}
-                                        label={orderTag}
-                                        placeholder=""
-                                    />
-                                ))}
+                    <div>
+                        <FormCheckbox
+                            name="isUpdate"
+                            label="Cette commande est une mise à jour"
+                            error={errors["isUpdate"]}
+                            register={register}
+                        />
+                        {property &&
+                            property.trustee.orderTag.length !== 0 &&
+                            property.trustee.orderTag.map((orderTag) => (
+                                <Input
+                                    key={uuid()}
+                                    name={`details.orderTags.${orderTag}`}
+                                    label={orderTag}
+                                    placeholder=""
+                                />
+                            ))}
 
-                            <Input
-                                name="trackingEmail"
-                                label="Email de suivi"
-                                placeholder="url de l'email"
-                            />
-                            <Input
-                                name="commentMake"
-                                label="Commentaire fabrication"
-                            />
-                            <Input
-                                name="commentDeliver"
-                                label="Commentaire pose"
-                            />
+                        <Input
+                            name="trackingEmail"
+                            label="Email de suivi"
+                            placeholder="url de l'email"
+                        />
+                        <Input
+                            name="commentMake"
+                            label="Commentaire fabrication"
+                        />
+                        <Input
+                            name="commentDeliver"
+                            label="Commentaire pose"
+                        />
 
-                            <div className="">
-                                {fields.map((item, index) => {
-                                    return (
-                                        <div
-                                            key={item.id}
-                                            className="mb-3 rounded py-3 pr-10 gap-1 relative w-full"
-                                        >
-                                            <div className="flex flex-nowrap gap-3 pr-2 pb-2 overflow-x-auto thinscrollbar">
-                                                <div className="flex-none w-64">
-                                                    Propriétaire
-                                                    <input
-                                                        type="text"
-                                                        {...register(
-                                                            `customServices.${index}.details.proprietaire`
-                                                        )}
+                        <div className="">
+                            {fields.map((item, index) => {
+                                return (
+                                    <div
+                                        key={item.id}
+                                        className="mb-3 rounded py-3 pr-10 gap-1 relative w-full"
+                                    >
+                                        <div className="flex flex-nowrap gap-3 pr-2 pb-2 overflow-x-auto thinscrollbar">
+                                            <div className="flex-none w-64">
+                                                Propriétaire
+                                                <input
+                                                    type="text"
+                                                    {...register(
+                                                        `customServices.${index}.details.proprietaire`
+                                                    )}
+                                                />
+                                            </div>
+                                            <div className="flex-none w-96">
+                                                <div className="flex gap-3 items-center">
+                                                    Nouvel occupant
+                                                    <CheckIfExist
+                                                        field={`customServices.${index}.details.nouveloccupant`}
+                                                        property={id}
                                                     />
                                                 </div>
-                                                <div className="flex-none w-96">
-                                                    <div className="flex gap-3 items-center">
-                                                        Nouvel occupant
-                                                        <CheckIfExist
-                                                            field={`customServices.${index}.details.nouveloccupant`}
-                                                            property={id}
-                                                        />
-                                                    </div>
-                                                    <input
-                                                        type="text"
-                                                        name={`customServices.${index}.details.nouveloccupant`}
-                                                        {...register(
-                                                            `customServices.${index}.details.nouveloccupant`
-                                                        )}
-                                                    />
-                                                </div>
+                                                <input
+                                                    type="text"
+                                                    name={`customServices.${index}.details.nouveloccupant`}
+                                                    {...register(
+                                                        `customServices.${index}.details.nouveloccupant`
+                                                    )}
+                                                />
+                                            </div>
 
-                                                <div className="flex-none w-64">
-                                                    Ancien occupant
-                                                    <input
-                                                        type="text"
-                                                        name={`customServices.${index}.details.ancienoccupant`}
-                                                        {...register(
-                                                            `customServices.${index}.details.ancienoccupant`
-                                                        )}
-                                                    />
-                                                </div>
-                                                {property.entrances.length !==
-                                                    0 && (
+                                            <div className="flex-none w-64">
+                                                Ancien occupant
+                                                <input
+                                                    type="text"
+                                                    name={`customServices.${index}.details.ancienoccupant`}
+                                                    {...register(
+                                                        `customServices.${index}.details.ancienoccupant`
+                                                    )}
+                                                />
+                                            </div>
+                                            {property.entrances.length !==
+                                                0 && (
                                                     <div>
                                                         Entrée / Villa
                                                         <select
@@ -674,7 +678,7 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                                                                         if (
                                                                             `customServices.${index}.details.entree` ||
                                                                             `customServices.${index}.details.entree` ===
-                                                                                ""
+                                                                            ""
                                                                         )
                                                                             setValue(
                                                                                 `customServices.${index}.details.entree`,
@@ -685,7 +689,7 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                                                                         if (
                                                                             `customServices.${index}.details.numerodevilla` ||
                                                                             `customServices.${index}.details.numerodevilla` ===
-                                                                                ""
+                                                                            ""
                                                                         )
                                                                             setValue(
                                                                                 `customServices.${index}.details.numerodevilla`,
@@ -718,112 +722,101 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                                                         </select>
                                                     </div>
                                                 )}
-                                                {property &&
-                                                    property.params
-                                                        .filter(
-                                                            (f) =>
-                                                                f !==
-                                                                    "tableauptt" &&
-                                                                f !==
-                                                                    "platineparlophoneelectricien" &&
-                                                                f !==
-                                                                    "platineadefilement"
-                                                        )
-                                                        .map((item) => (
-                                                            <div
-                                                                className="flex-none w-32"
-                                                                key={uuid()}
-                                                            >
-                                                                {
-                                                                    commandDetails[
-                                                                        item
-                                                                    ]
-                                                                }
-                                                                <input
-                                                                    type="text"
-                                                                    {...register(
-                                                                        `customServices.${index}.details.${item}`
-                                                                    )}
-                                                                />
-                                                            </div>
-                                                        ))}
-                                            </div>
-                                            <div className="absolute top-2 right-1">
-                                                <Dropdown>
-                                                    <button
-                                                        onClick={() => {
-                                                            append(
-                                                                {
-                                                                    details: {
-                                                                        nouveloccupant:
-                                                                            "",
-                                                                    },
-                                                                    propertyServices:
-                                                                        property.services,
-                                                                },
-                                                                {
-                                                                    focusName: `customServices.${fields.length}.details.nouveloccupant`,
-                                                                }
-                                                            );
-                                                            ref.current.scrollIntoView(
-                                                                {
-                                                                    behavior:
-                                                                        "instant",
-                                                                    block: "end",
-                                                                    inline: "end",
-                                                                }
-                                                            );
-                                                        }}
-                                                    >
-                                                        Ajouter une ligne
-                                                    </button>
-                                                    <button
-                                                        onClick={() =>
-                                                            remove(index)
-                                                        }
-                                                    >
-                                                        Retirer la ligne
-                                                    </button>
-                                                </Dropdown>
-                                            </div>
-                                            <div className="flex gap-5 flex-wrap">
-                                                {property.services.map(
-                                                    (IRI) => (
-                                                        <ServiceCheckbox
-                                                            key={`${index}.${IRI}`}
-                                                            serviceIRI={IRI}
-                                                            name={`customServices.${index}.propertyServices`}
-                                                        />
+                                            {property &&
+                                                property.params
+                                                    .filter(
+                                                        (f) =>
+                                                            f !==
+                                                            "tableauptt" &&
+                                                            f !==
+                                                            "platineparlophoneelectricien" &&
+                                                            f !==
+                                                            "platineadefilement"
                                                     )
-                                                )}
-                                            </div>
+                                                    .map((item) => (
+                                                        <div
+                                                            className="flex-none w-32"
+                                                            key={uuid()}
+                                                        >
+                                                            {
+                                                                commandDetails[
+                                                                item
+                                                                ]
+                                                            }
+                                                            <input
+                                                                type="text"
+                                                                {...register(
+                                                                    `customServices.${index}.details.${item}`
+                                                                )}
+                                                            />
+                                                        </div>
+                                                    ))}
                                         </div>
-                                    );
-                                })}
-                            </div>
-                            <Button
-                                size={ButtonSize.Big}
-                                onClick={() => {
-                                    append(
-                                        {
-                                            details: {
-                                                nouveloccupant: "",
-                                            },
-                                            propertyServices: property.services,
-                                        },
-                                        {
-                                            focusName: `customServices.${fields.length}.details.nouveloccupant`,
-                                        }
-                                    );
-                                    ref.current.scrollIntoView({
-                                        behavior: "instant",
-                                        block: "end",
-                                        inline: "end",
-                                    });
-                                }}
-                            />
+                                        <div className="absolute top-[2.5rem] right-1">
+                                            <Dropdown>
+                                                <button
+                                                    onClick={() => {
+                                                        append(
+                                                            {
+                                                                details: {
+                                                                    nouveloccupant:
+                                                                        "",
+                                                                },
+                                                                propertyServices:
+                                                                    property.services,
+                                                            },
+                                                            {
+                                                                focusName: `customServices.${fields.length}.details.nouveloccupant`,
+                                                            }
+                                                        );
+                                                    }}
+                                                >
+                                                    Ajouter une ligne
+                                                </button>
+                                                <button
+                                                    onClick={() =>
+                                                        remove(index)
+                                                    }
+                                                >
+                                                    Retirer la ligne
+                                                </button>
+                                            </Dropdown>
+                                        </div>
+                                        <div className="flex gap-5 flex-wrap">
+                                            {property.services.map(
+                                                (IRI) => (
+                                                    <ServiceCheckbox
+                                                        key={`${index}.${IRI}`}
+                                                        serviceIRI={IRI}
+                                                        name={`customServices.${index}.propertyServices`}
+                                                    />
+                                                )
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
-                    </>
+
+                        <Button
+                            size={ButtonSize.Big}
+                            onClick={() => {
+                                append(
+                                    {
+                                        details: {
+                                            nouveloccupant:
+                                                "",
+                                        },
+                                        propertyServices:
+                                            property.services,
+                                    },
+                                    {
+                                        focusName: `customServices.${fields.length}.details.nouveloccupant`,
+                                    }
+                                );
+                            }}
+                        />
+                    </div>
                 )}
             </div>
         );
@@ -923,6 +916,8 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                 {currentStep === 1 && <Step1 />}
                 {currentStep === 2 && <Step2 />}
                 {currentStep === 3 && <Step3 register={register} />}
+                <div ref={ref}>
+                </div>
             </Form>
         </FormProvider>
     );

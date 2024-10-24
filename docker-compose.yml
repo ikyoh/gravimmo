@@ -14,7 +14,7 @@ services:
       DOMAIN_NAME: ${DOMAIN_NAME}
       APP_UPSTREAM: app:3000
     volumes:
-      - php_socket:/var/run/php 
+      - php_socket:/var/run/php
       - ./api:/srv/api
       - ./app/build:/srv/app
       - caddy_data:/data
@@ -39,7 +39,6 @@ services:
       - "3000:3000"
     networks:
       appnetwork: {}
-
 
   api:
     container_name: ${APP_NAME}-api
@@ -70,7 +69,7 @@ services:
       - "4306:3306"
     volumes:
       - ./docker/database:/var/lib/mysql
-    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    command: --mysql-native-password=ON --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
@@ -92,12 +91,10 @@ services:
     networks:
       appnetwork: {}
 
-
 networks:
   appnetwork:
     name: ${APP_NAME}
     driver: bridge
-
 
 volumes:
   php_socket:

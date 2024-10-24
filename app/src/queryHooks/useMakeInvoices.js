@@ -1,7 +1,6 @@
-import { useQuery, useMutation, useQueryClient, useQueries } from '@tanstack/react-query'
+import { useQueries } from '@tanstack/react-query'
+import { API_INVOICES as API } from '../config/api.config'
 import { request, requestIRI } from '../utils/axios.utils'
-import { API_INVOICES as API, itemsPerPage } from '../config/api.config'
-import _ from 'lodash'
 
 
 /* CONFIG */
@@ -34,7 +33,6 @@ export const useMakeInvoices = (commandsIRI) => {
     const invoices = useQueries({
         queries: isSuccess && commands
             ? commands.map((command) => {
-                console.log('data', command)
                 return
             })
             : [], // if commandsIRI is undefined, an empty array will be returned

@@ -46,13 +46,13 @@ export const ToursPage = ({ title }) => {
     const { sortValue, sortDirection, handleSort } = useSortBy(
         initialPageState
             ? {
-                  value: initialPageState.sortValue,
-                  direction: initialPageState.sortDirection,
-              }
+                value: initialPageState.sortValue,
+                direction: initialPageState.sortDirection,
+            }
             : ""
     );
 
-    console.log("filters", filters);
+
     const {
         data = [],
         isLoading,
@@ -201,7 +201,7 @@ export const ToursPage = ({ title }) => {
                                                 <p className="first-letter:uppercase">
                                                     {
                                                         translateStatus[
-                                                            data.status
+                                                        data.status
                                                         ]
                                                     }
                                                 </p>
@@ -235,78 +235,78 @@ export const ToursPage = ({ title }) => {
                                                 </button>
                                                 {data.status ===
                                                     "DEFAULT - à traiter" && (
-                                                    <button
-                                                        onClick={() =>
-                                                            handleChangeCommandsStatus(
-                                                                data.commands,
-                                                                "DEFAULT - préparé"
-                                                            )
-                                                        }
-                                                    >
-                                                        <IoIosCheckmarkCircleOutline
-                                                            size={26}
-                                                        />
-                                                        Valider la préparation
-                                                    </button>
-                                                )}
+                                                        <button
+                                                            onClick={() =>
+                                                                handleChangeCommandsStatus(
+                                                                    data.commands,
+                                                                    "DEFAULT - préparé"
+                                                                )
+                                                            }
+                                                        >
+                                                            <IoIosCheckmarkCircleOutline
+                                                                size={26}
+                                                            />
+                                                            Valider la préparation
+                                                        </button>
+                                                    )}
                                                 {(data.status ===
                                                     "DEFAULT - préparé" ||
                                                     data.status ===
-                                                        "DEFAULT - à traiter") && (
-                                                    <button
-                                                        onClick={() =>
-                                                            handleOpenModal({
-                                                                title: "Date de la tournée",
-                                                                content: (
-                                                                    <TourForm
-                                                                        commands={
-                                                                            data.commands
-                                                                        }
-                                                                        handleCloseModal={
-                                                                            handleCloseModal
-                                                                        }
-                                                                    />
-                                                                ),
-                                                            })
-                                                        }
-                                                    >
-                                                        <MdPendingActions
-                                                            size={26}
-                                                        />
-                                                        Reporter la tournée
-                                                    </button>
-                                                )}
+                                                    "DEFAULT - à traiter") && (
+                                                        <button
+                                                            onClick={() =>
+                                                                handleOpenModal({
+                                                                    title: "Date de la tournée",
+                                                                    content: (
+                                                                        <TourForm
+                                                                            commands={
+                                                                                data.commands
+                                                                            }
+                                                                            handleCloseModal={
+                                                                                handleCloseModal
+                                                                            }
+                                                                        />
+                                                                    ),
+                                                                })
+                                                            }
+                                                        >
+                                                            <MdPendingActions
+                                                                size={26}
+                                                            />
+                                                            Reporter la tournée
+                                                        </button>
+                                                    )}
                                                 {data.status ===
                                                     "DEFAULT - préparé" && (
-                                                    <button
-                                                        onClick={() =>
-                                                            handleChangeCommandsStatus(
-                                                                data.commands,
-                                                                "DEFAULT - posé"
-                                                            )
-                                                        }
-                                                    >
-                                                        <IoIosCheckmarkCircleOutline
-                                                            size={26}
-                                                        />
-                                                        Valider la pose
-                                                    </button>
-                                                )}
+                                                        <button
+                                                            onClick={() =>
+                                                                handleChangeCommandsStatus(
+                                                                    data.commands,
+                                                                    "DEFAULT - posé"
+                                                                )
+                                                            }
+                                                        >
+                                                            <IoIosCheckmarkCircleOutline
+                                                                size={26}
+                                                            />
+                                                            Valider la pose
+                                                        </button>
+                                                    )}
                                                 {data.status ===
                                                     "DEFAULT - posé" && (
-                                                    <button
-                                                        onClick={() =>
-                                                            setInvoiceCommands(
-                                                                data.commands
-                                                            )
-                                                        }
-                                                    >
-                                                        <BsPiggyBank
-                                                            size={26}
-                                                        />
-                                                        Facturer la tournée
-                                                    </button>
-                                                )}
+                                                        <button
+                                                            onClick={() =>
+                                                                setInvoiceCommands(
+                                                                    data.commands
+                                                                )
+                                                            }
+                                                        >
+                                                            <BsPiggyBank
+                                                                size={26}
+                                                            />
+                                                            Facturer la tournée
+                                                        </button>
+                                                    )}
                                             </Dropdown>
                                         </Td>
                                     </Tr>

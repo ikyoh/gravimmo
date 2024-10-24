@@ -16,7 +16,7 @@ const fetchPaginatedDatas = ({
     page = 1,
     sortValue = "id",
     sortDirection = "ASC",
-    filters = { status: "all" },
+    filters = { status: "DEFAULT" },
     searchValue = null,
 }) => {
     let options =
@@ -104,13 +104,13 @@ export const useGetAllDatas = (search = "", sortValue, sortDirection) => {
     });
 };
 
-export const useGetPaginatedDatas = ({
+export const useGetPaginatedDatas = (
     page,
     sortValue,
     sortDirection,
     searchValue,
     filters,
-}) => {
+) => {
     return useQuery({
         queryKey: [
             queryKey,

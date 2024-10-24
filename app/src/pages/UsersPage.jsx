@@ -1,24 +1,24 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
-import Header from 'components/templates/header/Header'
 import { Button, ButtonSize } from 'components/button/Button'
-import UserForm from '../components/forms/user/UserForm'
+import Dropdown from 'components/dropdown/Dropdown'
+import Loader from 'components/loader/Loader'
+import { NoDataFound } from 'components/noDataFound/NoDataFound'
+import Pagination from 'components/pagination/Pagination'
+import UserStatus from 'components/status/UserStatus'
+import Header from 'components/templates/header/Header'
 import Table from 'components/templates/table/Table'
-import Thead from 'components/templates/table/Thead'
-import Th from 'components/templates/table/Th'
 import Tbody from 'components/templates/table/Tbody'
-import Tr from 'components/templates/table/Tr'
 import Td from 'components/templates/table/Td'
-import { useGetPaginatedDatas } from 'queryHooks/useUser'
+import Th from 'components/templates/table/Th'
+import Thead from 'components/templates/table/Thead'
+import Tr from 'components/templates/table/Tr'
+import { useModal } from 'hooks/useModal'
 import { useSearch } from 'hooks/useSearch'
 import { useSortBy } from 'hooks/useSortBy'
-import Pagination from 'components/pagination/Pagination'
-import Dropdown from 'components/dropdown/Dropdown'
-import { useModal } from 'hooks/useModal'
-import Loader from 'components/loader/Loader'
+import { useGetPaginatedDatas } from 'queryHooks/useUser'
+import { useEffect, useState } from 'react'
 import { LuSettings2 } from 'react-icons/lu'
-import { NoDataFound } from 'components/noDataFound/NoDataFound'
-import UserStatus from 'components/status/UserStatus'
+import { useLocation, useNavigate } from 'react-router-dom'
+import UserForm from '../components/forms/user/UserForm'
 
 export const UsersPage = ({ title }) => {
 
@@ -114,7 +114,7 @@ export const UsersPage = ({ title }) => {
 											onClick={() => handleOpenModal({ title: "Utilisateur", content: <UserForm iri={data["@id"]} handleCloseModal={handleCloseModal} /> })}
 										>
 											<LuSettings2 size={30} />
-											Modifier le contact
+											Modifier l'utilisateur
 										</button>
 									</Dropdown>
 								</Td>

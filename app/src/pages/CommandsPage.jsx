@@ -52,9 +52,9 @@ export const CommandsPage = ({ title }) => {
     const { sortValue, sortDirection, handleSort } = useSortBy(
         initialPageState
             ? {
-                  value: initialPageState.sortValue,
-                  direction: initialPageState.sortDirection,
-              }
+                value: initialPageState.sortValue,
+                direction: initialPageState.sortDirection,
+            }
             : { value: "id", direction: "DESC" }
     );
 
@@ -136,28 +136,28 @@ export const CommandsPage = ({ title }) => {
             (commandAccumulator, currentCommand) =>
                 !currentCommand.isCustom
                     ? [
-                          ...commandAccumulator,
-                          {
-                              ...currentCommand,
-                              references: getRegularServicesReferences(
-                                  currentCommand.property.services
-                              ),
-                          },
-                      ]
+                        ...commandAccumulator,
+                        {
+                            ...currentCommand,
+                            references: getRegularServicesReferences(
+                                currentCommand.property.services
+                            ),
+                        },
+                    ]
                     : _.concat(
-                          commandAccumulator,
-                          _.compact(
-                              currentCommand.customServices.map(
-                                  (customService) => ({
-                                      ...currentCommand,
-                                      details: customService.details,
-                                      references: getRegularServicesReferences(
-                                          customService.propertyServices
-                                      ),
-                                  })
-                              )
-                          )
-                      ),
+                        commandAccumulator,
+                        _.compact(
+                            currentCommand.customServices.map(
+                                (customService) => ({
+                                    ...currentCommand,
+                                    details: customService.details,
+                                    references: getRegularServicesReferences(
+                                        customService.propertyServices
+                                    ),
+                                })
+                            )
+                        )
+                    ),
             []
         );
         return reducedDatas;
@@ -253,7 +253,9 @@ export const CommandsPage = ({ title }) => {
                         <MdPendingActions size={26} /> Programmer la tournée
                     </button>
                     <button
-                        disabled={checkedList.length === 0}
+                        disabled={checkedList.length === 0 ||
+                            checkedList.filter((command) => command.status === "DEFAULT - posé").length === 0
+                        }
                         onClick={() => setCommands(checkedList)}
                     >
                         <BsPiggyBank size={26} /> Facturer
@@ -454,8 +456,8 @@ export const CommandsPage = ({ title }) => {
                                         text={
                                             data.deliveredAt
                                                 ? dayjs(
-                                                      data.deliveredAt
-                                                  ).format("DD/MM/YYYY")
+                                                    data.deliveredAt
+                                                ).format("DD/MM/YYYY")
                                                 : "..."
                                         }
                                     />
@@ -484,29 +486,29 @@ export const CommandsPage = ({ title }) => {
                                                 <div className="self-center">
                                                     {data.reports.length !==
                                                         0 && (
-                                                        <MdWarning
-                                                            size={20}
-                                                            className="text-error"
-                                                        />
-                                                    )}
+                                                            <MdWarning
+                                                                size={20}
+                                                                className="text-error"
+                                                            />
+                                                        )}
                                                 </div>
                                                 <div className="self-center">
                                                     {data.images.length !==
                                                         0 && (
-                                                        <div
-                                                            className="tooltip flex items-center"
-                                                            data-tip={
-                                                                data.images
-                                                                    .length
-                                                            }
-                                                        >
-                                                            <button className="">
-                                                                <SlPicture
-                                                                    size={20}
-                                                                />
-                                                            </button>
-                                                        </div>
-                                                    )}
+                                                            <div
+                                                                className="tooltip flex items-center"
+                                                                data-tip={
+                                                                    data.images
+                                                                        .length
+                                                                }
+                                                            >
+                                                                <button className="">
+                                                                    <SlPicture
+                                                                        size={20}
+                                                                    />
+                                                                </button>
+                                                            </div>
+                                                        )}
                                                 </div>
                                                 <div className="self-center">
                                                     {data.tour && (
@@ -582,42 +584,42 @@ export const CommandsPage = ({ title }) => {
                                                         </button>
                                                         {data.status ===
                                                             "DEFAULT - à traiter" && (
-                                                            <button
-                                                                onClick={() =>
-                                                                    putData({
-                                                                        id: data.id,
-                                                                        status: "DEFAULT - préparé",
-                                                                        madeAt: dayjs(),
-                                                                    })
-                                                                }
-                                                            >
-                                                                <IoIosCheckmarkCircleOutline
-                                                                    size={26}
-                                                                />
-                                                                Valider la
-                                                                préparation
-                                                            </button>
-                                                        )}
+                                                                <button
+                                                                    onClick={() =>
+                                                                        putData({
+                                                                            id: data.id,
+                                                                            status: "DEFAULT - préparé",
+                                                                            madeAt: dayjs(),
+                                                                        })
+                                                                    }
+                                                                >
+                                                                    <IoIosCheckmarkCircleOutline
+                                                                        size={26}
+                                                                    />
+                                                                    Valider la
+                                                                    préparation
+                                                                </button>
+                                                            )}
                                                         {data.status ===
                                                             "DEFAULT - préparé" && (
-                                                            <button
-                                                                onClick={() =>
-                                                                    putData({
-                                                                        id: data.id,
-                                                                        status: "DEFAULT - posé",
-                                                                        madeAt: dayjs(),
-                                                                    })
-                                                                }
-                                                            >
-                                                                <IoIosCheckmarkCircleOutline
-                                                                    size={26}
-                                                                />
-                                                                Valider la pose
-                                                            </button>
-                                                        )}
+                                                                <button
+                                                                    onClick={() =>
+                                                                        putData({
+                                                                            id: data.id,
+                                                                            status: "DEFAULT - posé",
+                                                                            madeAt: dayjs(),
+                                                                        })
+                                                                    }
+                                                                >
+                                                                    <IoIosCheckmarkCircleOutline
+                                                                        size={26}
+                                                                    />
+                                                                    Valider la pose
+                                                                </button>
+                                                            )}
                                                         {!data.invoice &&
                                                             data.status ===
-                                                                "DEFAULT - posé" && (
+                                                            "DEFAULT - posé" && (
                                                                 <button
                                                                     onClick={() =>
                                                                         setCommands(

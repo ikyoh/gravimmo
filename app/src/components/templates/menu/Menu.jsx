@@ -20,8 +20,6 @@ const Menu = ({ handleCloseModal }) => {
     const { mutate: logout } = useLogoutAccount();
     const {
         data: account,
-        isLoading: isLoadingAccount,
-        error,
     } = useGetCurrentAccount();
 
     return (
@@ -39,54 +37,58 @@ const Menu = ({ handleCloseModal }) => {
                         <path d="M49.5558 74.0762C51.2022 72.0885 52.1952 69.5733 52.7692 66.6956C52.8093 66.4951 52.9595 66.385 52.9941 66.1806C53.2701 64.4689 53.4084 62.0684 53.4092 59.0099V37.5316C53.4084 35.6989 52.9768 34.3103 52.7692 32.693C52.1245 27.6711 50.8075 23.3428 48.1554 20.3904C44.3201 16.1918 39.5325 14.083 33.8306 14.083C28.4054 14.083 23.8608 16.018 20.2314 19.8887C16.5171 23.8114 14.6678 28.5117 14.6686 33.9722C14.6678 39.1207 16.4133 43.5961 19.9389 47.3811C23.6886 51.4248 28.3354 53.4455 33.884 53.4463C37.478 53.4463 40.8125 52.513 43.8711 50.6291C45.218 49.765 47.0326 48.3482 49.3144 46.344V56.8154C46.4626 58.9753 44.1133 60.4613 42.2813 61.2735C39.343 62.6212 36.1823 63.295 32.7943 63.295C28.9927 63.295 25.2957 62.5009 21.6671 60.9111C18.0558 59.3212 14.9108 57.0922 12.2155 54.242C6.9106 48.6085 4.26641 41.904 4.2672 34.0941C4.2672 28.01 5.8523 22.5825 9.00677 17.813C-4.14893 35.2876 -2.94595 60.1358 12.9656 76.0466C13.8352 76.9154 14.8369 77.5444 15.7576 78.3275C22.0964 80.1697 27.7268 81.1109 32.6056 81.1109C40.0703 81.1109 45.7204 78.7607 49.5565 74.0778L49.5558 74.0762Z" />
                     </svg>
                 </div>
-
                 <div className="grid grid-cols-3 md:grid-cols-1 gap-3">
-                    <Button
-                        isBorder={location.pathname.includes("/dashboard")}
-                        link="/dashboard"
-                        size={ButtonSize.Big}
-                        info="Tableau de bord"
-                        {...(handleCloseModal
-                            ? {
-                                  onClick: () => {
-                                      handleCloseModal();
-                                  },
-                              }
-                            : {})}
-                    >
-                        <MdDashboard />
-                    </Button>
-                    <Button
-                        isBorder={location.pathname.includes("/tours")}
-                        link="/tours"
-                        size={ButtonSize.Big}
-                        info="Tournées"
-                        {...(handleCloseModal
-                            ? {
-                                  onClick: () => {
-                                      handleCloseModal();
-                                  },
-                              }
-                            : {})}
-                    >
-                        <MdPendingActions />
-                    </Button>
-
-                    <Button
-                        isBorder={location.pathname.includes("/commands")}
-                        link="/commands"
-                        size={ButtonSize.Big}
-                        info="Commandes"
-                        {...(handleCloseModal
-                            ? {
-                                  onClick: () => {
-                                      handleCloseModal();
-                                  },
-                              }
-                            : {})}
-                    >
-                        <MdOutlineAssignment />
-                    </Button>
+                    {(account.roles.includes("ROLE_WORKSHOP") || account.roles.includes("ROLE_INSTALLER")) && (
+                        <Button
+                            isBorder={location.pathname.includes("/dashboard")}
+                            link="/dashboard"
+                            size={ButtonSize.Big}
+                            info="Tableau de bord"
+                            {...(handleCloseModal
+                                ? {
+                                    onClick: () => {
+                                        handleCloseModal();
+                                    },
+                                }
+                                : {})}
+                        >
+                            <MdDashboard />
+                        </Button>
+                    )}
+                    {(account.roles.includes("ROLE_WORKSHOP") || account.roles.includes("ROLE_INSTALLER")) && (
+                        <Button
+                            isBorder={location.pathname.includes("/tours")}
+                            link="/tours"
+                            size={ButtonSize.Big}
+                            info="Tournées"
+                            {...(handleCloseModal
+                                ? {
+                                    onClick: () => {
+                                        handleCloseModal();
+                                    },
+                                }
+                                : {})}
+                        >
+                            <MdPendingActions />
+                        </Button>
+                    )}
+                    {(account.roles.includes("ROLE_WORKSHOP") || account.roles.includes("ROLE_INSTALLER")) && (
+                        <Button
+                            isBorder={location.pathname.includes("/commands")}
+                            link="/commands"
+                            size={ButtonSize.Big}
+                            info="Commandes"
+                            {...(handleCloseModal
+                                ? {
+                                    onClick: () => {
+                                        handleCloseModal();
+                                    },
+                                }
+                                : {})}
+                        >
+                            <MdOutlineAssignment />
+                        </Button>
+                    )}
                     {account.roles.includes("ROLE_WORKSHOP") && (
                         <>
                             <Button
@@ -98,10 +100,10 @@ const Menu = ({ handleCloseModal }) => {
                                 info="Factures"
                                 {...(handleCloseModal
                                     ? {
-                                          onClick: () => {
-                                              handleCloseModal();
-                                          },
-                                      }
+                                        onClick: () => {
+                                            handleCloseModal();
+                                        },
+                                    }
                                     : {})}
                             >
                                 <BsPiggyBank />
@@ -113,97 +115,14 @@ const Menu = ({ handleCloseModal }) => {
                                 info="Devis"
                                 {...(handleCloseModal
                                     ? {
-                                          onClick: () => {
-                                              handleCloseModal();
-                                          },
-                                      }
+                                        onClick: () => {
+                                            handleCloseModal();
+                                        },
+                                    }
                                     : {})}
                             >
                                 <MdOutlineCalculate />
                             </Button>
-                            {/* <Button
-                                isBorder={location.pathname.includes(
-                                    "/customers"
-                                )}
-                                link="/customers"
-                                size={ButtonSize.Big}
-                                info="Clients"
-                                {...(handleCloseModal
-                                    ? {
-                                          onClick: () => {
-                                              handleCloseModal();
-                                          },
-                                      }
-                                    : {})}
-                            >
-                                <MdAccountCircle />
-                            </Button>
-                            <Button
-                                isBorder={location.pathname.includes(
-                                    "/trustees"
-                                )}
-                                link="/trustees"
-                                size={ButtonSize.Big}
-                                info="Syndics"
-                                {...(handleCloseModal
-                                    ? {
-                                          onClick: () => {
-                                              handleCloseModal();
-                                          },
-                                      }
-                                    : {})}
-                            >
-                                <MdSupervisedUserCircle />
-                            </Button>
-                            <Button
-                                size={ButtonSize.Big}
-                                isBorder={location.pathname.includes(
-                                    "/properties"
-                                )}
-                                link="/properties"
-                                info="Copropriétés"
-                                {...(handleCloseModal
-                                    ? {
-                                          onClick: () => {
-                                              handleCloseModal();
-                                          },
-                                      }
-                                    : {})}
-                            >
-                                <MdOutlineHomeWork />
-                            </Button>
-                            <Button
-                                isBorder={location.pathname.includes(
-                                    "/contacts"
-                                )}
-                                link="/contacts"
-                                size={ButtonSize.Big}
-                                info="Contacts"
-                                {...(handleCloseModal
-                                    ? {
-                                          onClick: () => {
-                                              handleCloseModal();
-                                          },
-                                      }
-                                    : {})}
-                            >
-                                <MdGroups />
-                            </Button>
-                            <Button
-                                size={ButtonSize.Big}
-                                isBorder={location.pathname === "/services"}
-                                link="/services"
-                                info="Prestations"
-                                {...(handleCloseModal
-                                    ? {
-                                          onClick: () => {
-                                              handleCloseModal();
-                                          },
-                                      }
-                                    : {})}
-                            >
-                                <MdOutlineDriveFileRenameOutline />
-                            </Button> */}
                             <Button
                                 size={ButtonSize.Big}
                                 isBorder={location.pathname === "/settings"}
@@ -211,10 +130,10 @@ const Menu = ({ handleCloseModal }) => {
                                 info="Configuration"
                                 {...(handleCloseModal
                                     ? {
-                                          onClick: () => {
-                                              handleCloseModal();
-                                          },
-                                      }
+                                        onClick: () => {
+                                            handleCloseModal();
+                                        },
+                                    }
                                     : {})}
                             >
                                 <LuSettings2 />
