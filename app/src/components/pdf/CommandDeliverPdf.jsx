@@ -15,7 +15,7 @@ import { MdOutlineFileDownload } from "react-icons/md";
 import uuid from "react-uuid";
 import { styles } from "./styles";
 
-const CommandPdf = ({ commands = [], onClick }) => {
+const CommandDeliverPdf = ({ commands = [], onClick }) => {
     // Create Document Component
     const MyDoc = () => (
         <Document>
@@ -215,207 +215,6 @@ const CommandPdf = ({ commands = [], onClick }) => {
                             )}
                         </View>
 
-                        {order.commentMake && (
-                            <View style={styles.comment}>
-                                <Text>
-                                    Commentaire fabrication :{" "}
-                                    {order.commentMake}
-                                </Text>
-                            </View>
-                        )}
-                        {order.property &&
-                            order.property.services?.map(
-                                (service) =>
-                                    service.service.category !== "Pose" && (
-                                        <View key={uuid()}>
-                                            <View style={styles.row}>
-                                                <Text style={styles.subtitle}>
-                                                    Config.{" "}
-                                                    {service.service.title}
-                                                </Text>
-                                            </View>
-                                            <View style={styles.row}>
-                                                {service.material && (
-                                                    <View
-                                                        style={{
-                                                            ...styles.row,
-                                                            marginRight: 8,
-                                                        }}
-                                                    >
-                                                        <Text>Matière :</Text>
-                                                        <Text
-                                                            style={styles.bold}
-                                                        >
-                                                            {" "}
-                                                            {service.material}
-                                                        </Text>
-                                                    </View>
-                                                )}
-                                                {service.color && (
-                                                    <View
-                                                        style={{
-                                                            ...styles.row,
-                                                            marginRight: 8,
-                                                        }}
-                                                    >
-                                                        <Text>Couleur :</Text>
-                                                        <Text
-                                                            style={styles.bold}
-                                                        >
-                                                            {" "}
-                                                            {service.color}
-                                                        </Text>
-                                                    </View>
-                                                )}
-                                                {service.margin && (
-                                                    <View
-                                                        style={{
-                                                            ...styles.row,
-                                                            marginRight: 8,
-                                                        }}
-                                                    >
-                                                        <Text>Marges :</Text>
-                                                        <Text
-                                                            style={styles.bold}
-                                                        >
-                                                            {" "}
-                                                            {service.margin}
-                                                        </Text>
-                                                    </View>
-                                                )}
-                                            </View>
-                                            <View style={styles.row}>
-                                                {service.size && (
-                                                    <View
-                                                        style={{
-                                                            ...styles.row,
-                                                            marginRight: 8,
-                                                        }}
-                                                    >
-                                                        <Text>
-                                                            Dimensions :
-                                                        </Text>
-                                                        <Text
-                                                            style={styles.bold}
-                                                        >
-                                                            {" "}
-                                                            {service.size}
-                                                        </Text>
-                                                    </View>
-                                                )}
-                                                {service.thickness && (
-                                                    <View
-                                                        style={{
-                                                            ...styles.row,
-                                                            marginRight: 8,
-                                                        }}
-                                                    >
-                                                        <Text>Epaisseur :</Text>
-                                                        <Text
-                                                            style={styles.bold}
-                                                        >
-                                                            {" "}
-                                                            {service.thickness}
-                                                        </Text>
-                                                    </View>
-                                                )}
-                                            </View>
-
-                                            <View style={styles.row}>
-                                                {service.font && (
-                                                    <View
-                                                        style={{
-                                                            ...styles.row,
-                                                            marginRight: 8,
-                                                        }}
-                                                    >
-                                                        <Text>Police :</Text>
-                                                        <Text
-                                                            style={styles.bold}
-                                                        >
-                                                            {" "}
-                                                            {service.font}
-                                                        </Text>
-                                                    </View>
-                                                )}
-                                                {service.height && (
-                                                    <View
-                                                        style={{
-                                                            ...styles.row,
-                                                            marginRight: 8,
-                                                        }}
-                                                    >
-                                                        <Text>Hauteur :</Text>
-                                                        <Text
-                                                            style={styles.bold}
-                                                        >
-                                                            {" "}
-                                                            {service.height}
-                                                        </Text>
-                                                    </View>
-                                                )}
-                                                {service.ratio && (
-                                                    <View
-                                                        style={{
-                                                            ...styles.row,
-                                                            marginRight: 8,
-                                                        }}
-                                                    >
-                                                        <Text>Ratio :</Text>
-                                                        <Text
-                                                            style={styles.bold}
-                                                        >
-                                                            {" "}
-                                                            {service.ratio}
-                                                        </Text>
-                                                    </View>
-                                                )}
-                                            </View>
-                                            {service.finishing.length > 0 && (
-                                                <View style={styles.row}>
-                                                    <Text>Façonnage :</Text>
-                                                    {service.finishing.map(
-                                                        (finishing) => (
-                                                            <Text
-                                                                key={uuid()}
-                                                                style={{
-                                                                    ...styles.bold,
-                                                                    marginRight: 8,
-                                                                }}
-                                                            >
-                                                                {" "}
-                                                                {finishing}
-                                                            </Text>
-                                                        )
-                                                    )}
-                                                </View>
-                                            )}
-                                            {service.params.length > 0 && (
-                                                <View style={styles.row}>
-                                                    <Text>Gravure :</Text>
-                                                    {service.params.map(
-                                                        (param) => (
-                                                            <Text
-                                                                key={uuid}
-                                                                style={{
-                                                                    ...styles.bold,
-                                                                    marginRight: 8,
-                                                                }}
-                                                            >
-                                                                {" "}
-                                                                {
-                                                                    commandDetails[
-                                                                    param
-                                                                    ]
-                                                                }
-                                                            </Text>
-                                                        )
-                                                    )}
-                                                </View>
-                                            )}
-                                        </View>
-                                    )
-                            )}
 
                         {order.property && (
                             <>
@@ -526,8 +325,8 @@ const CommandPdf = ({ commands = [], onClick }) => {
         fileDownload(
             blob,
             commands.length === 1
-                ? "Commande-" + commands[0].id + ".pdf"
-                : "Commandes.pdf"
+                ? "Pose_commande-" + commands[0].id + ".pdf"
+                : "Pose_commandes.pdf"
         );
     };
 
@@ -538,29 +337,12 @@ const CommandPdf = ({ commands = [], onClick }) => {
             onClick={() => handleDownload()}
         >
             <MdOutlineFileDownload size={30} />
-            Fiche atelier
+            Fiche poseur
         </button>
     );
-    // else
-    //     return (
-    //         <PDFDownloadLink document={<MyDoc />} fileName="Commande.pdf">
-    //             {({ blob, url, loading, error }) =>
-    //                 loading ? (
-    //                     <button disabled={true}>
-    //                         <MdOutlineFileDownload size={30} />
-    //                     </button>
-    //                 ) : (
-    //                     <>
-    //                         <MdOutlineFileDownload size={30} />
-    //                         Fiches PDF
-    //                     </>
-    //                 )
-    //             }
-    //         </PDFDownloadLink>
-    //     );
 };
 
-export default CommandPdf;
+export default CommandDeliverPdf;
 
 const OrderDetails = ({ orderdetails, isCustom }) => {
     return (

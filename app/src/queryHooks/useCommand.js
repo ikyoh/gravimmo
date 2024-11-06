@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import _ from "lodash";
 import { useNavigate } from "react-router-dom";
-import { API_COMMANDS as API, itemsPerPage } from "../config/api.config";
+import { API_COMMANDS as API, API_ZONES, itemsPerPage } from "../config/api.config";
 import { request, requestIRI } from "../utils/axios.utils";
 
 /* CONFIG */
@@ -67,6 +67,7 @@ const fetchPaginatedDatas = ({
     if (filters.isHanging) options += "&isHanging=true";
     if (filters.isNotTour) options += "&exists[tour]=false";
     if (filters.status !== "all") options += "&status=" + filters.status;
+    if (filters.zone !== "") options += "&property.zone=" + filters.zone;
     return request({ url: API + options, method: "get" });
 };
 
@@ -74,6 +75,10 @@ const fetchOneData = ({ queryKey }) => {
     const id = queryKey[1];
     return request({ url: API + "/" + id, method: "get" });
 };
+
+const getCurrentAccount = () => {
+    return request({ url: API_ZONES, method: 'get' })
+}
 
 const fetchIRI = ({ queryKey }) => {
     const iri = queryKey[1];
@@ -217,7 +222,7 @@ export const usePutData = () => {
         },
         onSettled: () => {
             queryClient.invalidateQueries([queryKey]);
-            queryClient.invalidateQueries(["tours"]);
+            // queryClient.invalidateQueries(["tours"]);
         },
     });
 };
@@ -250,3 +255,11 @@ export const useGetCommandStats = ({ queryName, status, isHanging }) => {
         select: (data) => data["hydra:totalItems"],
     });
 };
+
+export const useGetCommandsZones = () => {
+    return useQuery(["zones"], getCurrentAccount, {
+        cacheTime: 6000,
+        staleTime: 6000,
+        retry: 2,
+    })
+}

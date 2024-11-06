@@ -21,6 +21,7 @@ use ApiPlatform\Doctrine\Orm\Filter\ExistsFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Controller\CommandsSectorsController;
 
 
 
@@ -34,11 +35,33 @@ use Symfony\Component\Serializer\Annotation\Groups;
         new Get(normalizationContext: ['groups' => ['command:read']]),
         new Put(),
         new Delete(),
-        new Post()
+        new Post(),
+        new Get(
+            uriTemplate: '/zones',
+            controller: CommandsSectorsController::class,
+            name: 'commands_zones',
+            read: false,
+            openapiContext: [
+                'summary' => 'Get an array of zones',
+                'responses' => [
+                    '200' => [
+                        'description' => 'Zones array where commands are in status DEFAULT',
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    'type' => 'array',
+                                    'example' => ['zone1', 'zone2']
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        )
     ]
 )]
-#[ApiFilter(OrderFilter::class, properties: ['id', 'status', 'createdAt', 'madeAt', 'deliveredAt', 'trustee.title', 'property.title', 'property.zone','tour.scheduledAt'])]
-#[ApiFilter(SearchFilter::class, properties: ['status' => 'partial' , 'property' => 'exact'])]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'status', 'createdAt', 'madeAt', 'deliveredAt', 'trustee.title', 'property.title', 'property.zone', 'tour.scheduledAt'])]
+#[ApiFilter(SearchFilter::class, properties: ['status' => 'partial', 'property' => 'exact', 'property.zone' => 'exact'])]
 #[ApiFilter(BooleanFilter::class, properties: ['isHanging'])]
 #[ApiFilter(ExistsFilter::class, properties: ['tour'])]
 #[ApiFilter(MultipleFieldsSearchFilter::class, properties: [
@@ -68,7 +91,7 @@ class Command
     private ?Property $property = null;
 
     #[ORM\ManyToOne(inversedBy: 'commands')]
-    #[Groups(["commands:read", "command:read", "command:write", "invoices:read", "tour:read","tours:read"])]
+    #[Groups(["commands:read", "command:read", "command:write", "invoices:read", "tour:read", "tours:read"])]
     private ?Customer $customer = null;
 
     #[ORM\Column]
@@ -101,7 +124,7 @@ class Command
     private ?bool $isHanging = false;
 
     #[ORM\OneToMany(mappedBy: 'command', targetEntity: MediaObject::class)]
-    #[Groups(["commands:read","command:read"])]
+    #[Groups(["commands:read", "command:read"])]
     private Collection $images;
 
     #[ORM\Column]
@@ -115,7 +138,7 @@ class Command
     #[ORM\OneToMany(mappedBy: 'command', targetEntity: CommandExtraService::class, orphanRemoval: true, cascade: ['persist', 'remove'])]
     #[Groups(["commands:read", "command:read", "command:write"])]
     private Collection $extraServices;
-    
+
     #[ORM\ManyToOne(inversedBy: 'commands')]
     #[Groups(["commands:read", "command:read", "command:write"])]
     private ?Tour $tour = null;
@@ -139,6 +162,10 @@ class Command
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["commands:read", "command:read", "command:write"])]
     private ?string $commentDeliver = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(["commands:read", "command:read", "command:write"])]
+    private ?string $commentInvoice = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["commands:read", "command:read", "command:write"])]
@@ -472,6 +499,18 @@ class Command
         return $this;
     }
 
+    public function getCommentInvoice(): ?string
+    {
+        return $this->commentInvoice;
+    }
+
+    public function setCommentInvoice(?string $commentInvoice): self
+    {
+        $this->commentInvoice = $commentInvoice;
+
+        return $this;
+    }
+
     public function getEntrance(): ?string
     {
         return $this->entrance;
@@ -526,5 +565,4 @@ class Command
 
         return $this;
     }
-
 }

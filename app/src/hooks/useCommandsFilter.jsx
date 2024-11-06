@@ -1,13 +1,16 @@
 import Dropdown from "components/dropdown/Dropdown";
 import { statusColor } from "config/translations.config";
 import _ from "lodash";
+import { useGetCommandsZones } from "queryHooks/useCommand";
 import { useState } from "react";
 import { LuSettings2 } from "react-icons/lu";
+import uuid from "react-uuid";
 
 export const useCommandsFilter = () => {
     const defaultFilters = {
         status: "DEFAULT",
         isHanging: false,
+        zone: "",
     };
 
     const [filters, setFilters] = useState(defaultFilters);
@@ -20,11 +23,28 @@ export const useCommandsFilter = () => {
         setFilters({ ...filters, [e.target.name]: e.target.checked });
     };
 
+    const { data = [], isLoading, isError, error } = useGetCommandsZones()
+
+    console.log('data', data)
+    console.log('filters', filters)
+
     return {
         filters,
         filter: (
             <Dropdown type="button" icon={<LuSettings2 size={26} />}>
-                <div className="w-52 dropdown-title">Filtres</div>
+                <div className="w-64 dropdown-title">Filtres</div>
+                <div className="form-control">
+                    <span className="label-text">Secteur</span>
+                    <label className="label cursor-pointer">
+                        <select name="zone" id="zone-select" value={filters.zone}
+                            onChange={handleChangeInput}>
+                            <option value="">Tous</option>
+                            {data.map((zone) => (
+                                <option key={uuid()} value={zone}>{zone}</option>
+                            ))}
+                        </select>
+                    </label>
+                </div>
                 <div className="form-control">
                     <label className="label cursor-pointer">
                         <span className="label-text">A traiter</span>

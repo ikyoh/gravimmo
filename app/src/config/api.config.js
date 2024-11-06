@@ -23,5 +23,6 @@ export const API_USERS = "/users";
 export const API_SERVICES = "/services";
 export const API_TRUSTEES = "/trustees";
 export const API_TOURS = "/tours";
+export const API_ZONES = "/zones";
 
 export const itemsPerPage = 40;

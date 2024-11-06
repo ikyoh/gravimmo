@@ -45,8 +45,8 @@ use DateTime;
         new Post()
     ]
 )]
-#[ApiFilter(OrderFilter::class, properties: ['id', 'reference', 'title', 'postcode', 'city', 'zone', 'trustee.title'])]
-#[ApiFilter(SearchFilter::class, properties: ['trustee' => 'exact','vigik' => 'exact', 'transmitter' => 'exact'])]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'reference', 'title', 'vigik', 'postcode', 'city', 'zone', 'trustee.title', 'trustee.reference'])]
+#[ApiFilter(SearchFilter::class, properties: ['trustee' => 'exact', 'vigik' => 'exact', 'transmitter' => 'exact'])]
 #[ApiFilter(NotEqualFilter::class, properties: ["id"])]
 #[ApiFilter(MultipleFieldsSearchFilter::class, properties: [
     "id",
@@ -128,14 +128,14 @@ class Property
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["properties:read", "property:read", "property:write"])]
     private ?string $reference = null;
-    
+
     #[ORM\OneToMany(mappedBy: 'property', targetEntity: Invoice::class)]
     private Collection $invoices;
-    
+
     #[ORM\Column(nullable: true)]
     #[Groups(["properties:read", "property:read", "property:write"])]
     private array $entrances = [];
-    
+
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(["properties:read", "property:read", "property:write", "commands:read"])]
     private ?string $digicode = null;
@@ -151,7 +151,7 @@ class Property
     #[ORM\OneToMany(mappedBy: 'property', targetEntity: Letterbox::class)]
     #[Groups(["properties:read", "property:read", "property:write", "commands:read"])]
     private Collection $letterboxes;
-    
+
 
 
     public function __construct()
@@ -164,7 +164,7 @@ class Property
     }
 
 
-     // Récupérer le montant de la TVA en fonction de la date de livraison )
+    // Récupérer le montant de la TVA en fonction de la date de livraison )
     #[Groups(["property:read"])]
     public function getTva()
     {
@@ -175,11 +175,10 @@ class Property
         $yearsInterval = ($deliveredDate)->diff(($today))->y;
 
         if ($yearsInterval < 2) {
-            return(20);
+            return (20);
         } else {
-            return(10);
+            return (10);
         }
-
     }
 
 
@@ -536,5 +535,4 @@ class Property
 
         return $this;
     }
-
 }

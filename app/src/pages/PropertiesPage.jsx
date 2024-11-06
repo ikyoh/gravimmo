@@ -14,11 +14,13 @@ import Tr from "components/templates/table/Tr";
 import { useModal } from "hooks/useModal";
 import { useSearch } from "hooks/useSearch";
 import { useSortBy } from "hooks/useSortBy";
+import _ from "lodash";
 import { useGetPaginatedDatas } from "queryHooks/useProperty";
 import { useEffect, useState } from "react";
+import { CSVLink } from "react-csv";
 import { CgDuplicate } from "react-icons/cg";
 import { IoIosArrowDropright } from "react-icons/io";
-import { LuSettings2 } from "react-icons/lu";
+import { LuSettings2, LuTable } from "react-icons/lu";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export const PropertiesPage = ({ title }) => {
@@ -34,9 +36,9 @@ export const PropertiesPage = ({ title }) => {
     const { sortValue, sortDirection, handleSort } = useSortBy(
         initialPageState
             ? {
-                  value: initialPageState.sortValue,
-                  direction: initialPageState.sortDirection,
-              }
+                value: initialPageState.sortValue,
+                direction: initialPageState.sortDirection,
+            }
             : ""
     );
     const {
@@ -54,6 +56,42 @@ export const PropertiesPage = ({ title }) => {
         }
     }, [searchValue, sortValue]);
 
+    const [isCheckAll, setIsCheckAll] = useState(false);
+    const [checkedList, setCheckedList] = useState([]);
+
+    const handleSelectAll = () => {
+        setIsCheckAll(!isCheckAll);
+        if (!isCheckAll) {
+            setCheckedList(data["hydra:member"]);
+        }
+        if (isCheckAll) {
+            setCheckedList([]);
+        }
+    };
+
+
+    const handleCheck = (data) => {
+        if (_.find(checkedList, { id: data.id }))
+            setCheckedList(checkedList.filter((f) => f.id !== data.id));
+        else {
+            setCheckedList([...checkedList, data]);
+        }
+    };
+
+
+    const csvheaders = [
+        { label: "#", key: "id" },
+        { label: "Référence", key: "reference" },
+        { label: "Nom", key: "title" },
+        { label: "Vigik", key: "vigik" },
+        { label: "Syndic", key: "trustee.title" },
+        { label: "Réf. Syndic", key: "trustee.reference" },
+        { label: "Secteur", key: "zone" },
+        { label: "Code postal", key: "postcode" },
+        { label: "Ville", key: "city" },
+    ];
+
+
     if (isLoading) return <Loader />;
     else
         return (
@@ -65,6 +103,24 @@ export const PropertiesPage = ({ title }) => {
                     error={error}
                 >
                     {searchbar}
+                    <Dropdown type="button" isDisabled={checkedList.length === 0}>
+                        <div>Sélection</div>
+                        {checkedList.length === 0 ? (
+                            <button disabled={checkedList.length === 0}>
+                                <LuTable size={26} /> Données CSV
+                            </button>
+                        ) : (
+                            <CSVLink
+                                filename={"Commandes.csv"}
+                                data={checkedList}
+                                headers={csvheaders}
+                            >
+                                <LuTable size={26} /> Données CSV
+                            </CSVLink>
+                        )}
+
+
+                    </Dropdown>
                     <Button
                         size={ButtonSize.Big}
                         onClick={() =>
@@ -91,6 +147,18 @@ export const PropertiesPage = ({ title }) => {
                                 sortDirection={sortDirection}
                                 handleSort={handleSort}
                             />
+                            <Th label="">
+                                <div className="p-3 flex items-center justify-center">
+                                    <input
+                                        type="checkbox"
+                                        name="selectAll"
+                                        id="selectAll"
+                                        onChange={handleSelectAll}
+                                        checked={isCheckAll}
+                                        className="checkbox"
+                                    />
+                                </div>
+                            </Th>
                             <Th
                                 label="Référence"
                                 sortBy="reference"
@@ -106,8 +174,22 @@ export const PropertiesPage = ({ title }) => {
                                 handleSort={handleSort}
                             />
                             <Th
+                                label="Vigik"
+                                sortBy="vigik"
+                                sortValue={sortValue}
+                                sortDirection={sortDirection}
+                                handleSort={handleSort}
+                            />
+                            <Th
                                 label="Syndic"
                                 sortBy="trustee.title"
+                                sortValue={sortValue}
+                                sortDirection={sortDirection}
+                                handleSort={handleSort}
+                            />
+                            <Th
+                                label="Réf. Syndic"
+                                sortBy="trustee.reference"
                                 sortValue={sortValue}
                                 sortDirection={sortDirection}
                                 handleSort={handleSort}
@@ -153,14 +235,43 @@ export const PropertiesPage = ({ title }) => {
                                         }
                                     >
                                         <Td text={data.id} />
+                                        <Td>
+                                            <div
+                                                onClick={(e) => e.stopPropagation()}
+                                                className="px-3"
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    className="checkbox mt-4"
+                                                    onClick={(e) =>
+                                                        e.stopPropagation()
+                                                    }
+                                                    onChange={() =>
+                                                        handleCheck(data)
+                                                    }
+                                                    checked={
+                                                        _.find(checkedList, {
+                                                            id: data.id,
+                                                        })
+                                                            ? true
+                                                            : false
+                                                    }
+                                                />
+                                            </div>
+                                        </Td>
                                         <Td
                                             label="Référence"
                                             text={data.reference}
                                         />
                                         <Td label="Nom" text={data.title} />
+                                        <Td label="Vigik" text={data.vigik ? data.vigik : "..."} />
                                         <Td
                                             label="Syndic"
                                             text={data.trustee.title}
+                                        />
+                                        <Td
+                                            label="Réf. Syndic"
+                                            text={data.trustee.reference}
                                         />
                                         <Td label="Secteur" text={data.zone} />
                                         <Td
@@ -174,7 +285,7 @@ export const PropertiesPage = ({ title }) => {
                                                     onClick={() =>
                                                         navigate(
                                                             "/properties/" +
-                                                                data.id,
+                                                            data.id,
                                                             {
                                                                 state: {
                                                                     page: page,

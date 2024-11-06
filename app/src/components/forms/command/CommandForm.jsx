@@ -585,6 +585,9 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                             label="Commentaire fabrication"
                         />
                         <DuplicateCommandCard />
+
+                        <div className="divider uppercase">Infos facture</div>
+                        <Input name="commentInvoice" label="Commentaire facture" />
                     </>
                 )}
                 {isCustom && (
@@ -618,6 +621,10 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                         <Input
                             name="commentDeliver"
                             label="Commentaire pose"
+                        />
+                        <Input
+                            name="commentInvoice"
+                            label="Commentaire facture"
                         />
 
                         <div className="">

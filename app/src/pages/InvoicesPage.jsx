@@ -44,9 +44,9 @@ export const InvoicesPage = ({ title }) => {
     const { sortValue, sortDirection, handleSort } = useSortBy(
         initialPageState
             ? {
-                  value: initialPageState.sortValue,
-                  direction: initialPageState.sortDirection,
-              }
+                value: initialPageState.sortValue,
+                direction: initialPageState.sortDirection,
+            }
             : { value: "chrono", direction: "DESC" }
     );
     const { data, isLoading, error } = useGetPaginatedDatas(
@@ -278,6 +278,13 @@ export const InvoicesPage = ({ title }) => {
                                 handleSort={handleSort}
                             />
                             <Th
+                                label="Commentaire"
+                                sortBy="comment"
+                                sortValue={sortValue}
+                                sortDirection={sortDirection}
+                                handleSort={handleSort}
+                            />
+                            <Th
                                 label="Montant H.T."
                                 sortBy="amountHT"
                                 sortValue={sortValue}
@@ -367,9 +374,15 @@ export const InvoicesPage = ({ title }) => {
                                             text={
                                                 data.cashedAt
                                                     ? dayjs(
-                                                          data.cashedAt
-                                                      ).format("DD/MM/YYYY")
+                                                        data.cashedAt
+                                                    ).format("DD/MM/YYYY")
                                                     : "..."
+                                            }
+                                        />
+                                        <Td
+                                            label="Commentaire"
+                                            text={
+                                                data.comment ? data.comment : "..."
                                             }
                                         />
                                         <Td
@@ -382,7 +395,7 @@ export const InvoicesPage = ({ title }) => {
                                                     <Dot
                                                         color={
                                                             statusColor[
-                                                                data.status
+                                                            data.status
                                                             ]
                                                         }
                                                     />
@@ -393,13 +406,13 @@ export const InvoicesPage = ({ title }) => {
                                                 <div className="flex items-center">
                                                     {(data.refundReference ||
                                                         data.isRefund) && (
-                                                        <IoReloadCircleOutline
-                                                            size={23}
-                                                        />
-                                                    )}
+                                                            <IoReloadCircleOutline
+                                                                size={23}
+                                                            />
+                                                        )}
                                                     {data.refundReference &&
                                                         "F-" +
-                                                            data.refundReference}
+                                                        data.refundReference}
                                                     {data.isSend && (
                                                         <IoIosSend size={23} />
                                                     )}
@@ -415,8 +428,8 @@ export const InvoicesPage = ({ title }) => {
                                                             data.chrono,
                                                             data.trustee
                                                                 .reference ||
-                                                                data.customer
-                                                                    .reference
+                                                            data.customer
+                                                                .reference
                                                         )
                                                     }
                                                 >
@@ -438,7 +451,7 @@ export const InvoicesPage = ({ title }) => {
                                                                         commandIRI={
                                                                             data
                                                                                 .command[
-                                                                                "@id"
+                                                                            "@id"
                                                                             ]
                                                                         }
                                                                     />

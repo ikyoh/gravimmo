@@ -22,7 +22,7 @@ class InvoiceListener extends AbstractController
     public function prePersist(Invoice $invoice)
     {
         $invoice->setChrono($this->repository->findNextChrono());
-        
+
         if ($invoice->getTrustee()) {
             $invoice->setTrusteeTitle($invoice->getTrustee()->getTitle());
         }
@@ -35,6 +35,10 @@ class InvoiceListener extends AbstractController
 
         if ($invoice->getCommand() && $invoice->getCommand()->getIsUpdate() === true) {
             $invoice->setSubject("Suite à mise à jour demandée");
+        }
+
+        if ($invoice->getCommand()) {
+            $invoice->setComment($invoice->getCommand()->getCommentInvoice());
         }
 
         if (is_null($invoice->getStatus())) $this->createInvoice($invoice);
@@ -106,23 +110,24 @@ class InvoiceListener extends AbstractController
         }
 
         if (!empty($invoice->getCommand()->getReports())) {
-        $reports = $invoice->getCommand()->getReports();
-        foreach ($reports as $report) {
-            if(!empty($report->getReport()->getService())){
-            $amount += $report->getReport()->getService()->getPrice();
-            array_push($content, array(
-                "type" => "service",
-                "serviceId" => $report->getReport()->getService()->getId(),
-                "reference" => $report->getReport()->getService()->getReference(),
-                "title" => $report->getReport()->getService()->getTitle(),
-                "invoiceTitle" => $report->getReport()->getService()->getInvoiceTitle(),
-                "quantity" => 1,
-                "price" => $report->getReport()->getService()->getPrice(),
-                "discount" => 0,
-                "amount" => $report->getReport()->getService()->getPrice(),
-            ));}
+            $reports = $invoice->getCommand()->getReports();
+            foreach ($reports as $report) {
+                if (!empty($report->getReport()->getService())) {
+                    $amount += $report->getReport()->getService()->getPrice();
+                    array_push($content, array(
+                        "type" => "service",
+                        "serviceId" => $report->getReport()->getService()->getId(),
+                        "reference" => $report->getReport()->getService()->getReference(),
+                        "title" => $report->getReport()->getService()->getTitle(),
+                        "invoiceTitle" => $report->getReport()->getService()->getInvoiceTitle(),
+                        "quantity" => 1,
+                        "price" => $report->getReport()->getService()->getPrice(),
+                        "discount" => 0,
+                        "amount" => $report->getReport()->getService()->getPrice(),
+                    ));
+                }
+            }
         }
-    }
 
         $invoice->setStatus("édité");
         $invoice->setTva($tva);
@@ -139,6 +144,5 @@ class InvoiceListener extends AbstractController
         if ($invoice->getProperty()) {
             $invoice->setPropertyTitle($invoice->getProperty()->getTitle());
         }
-
     }
 }

@@ -6,6 +6,7 @@ import TourForm from "components/forms/tour/TourForm";
 import Loader from "components/loader/Loader";
 import { NoDataFound } from "components/noDataFound/NoDataFound";
 import Pagination from "components/pagination/Pagination";
+import CommandDeliverPdf from "components/pdf/CommandDeliverPdf";
 import CommandPdf from "components/pdf/CommandPdf";
 import CommandStatus from "components/status/CommandStatus";
 import Header from "components/templates/header/Header";
@@ -236,6 +237,7 @@ export const CommandsPage = ({ title }) => {
                         </CSVLink>
                     )}
                     <CommandPdf commands={checkedList} />
+                    <CommandDeliverPdf commands={checkedList} />
                     <button
                         disabled={checkedList.length === 0}
                         onClick={() =>
@@ -553,6 +555,7 @@ export const CommandsPage = ({ title }) => {
                                                 Consulter la fiche
                                             </button>
                                             <CommandPdf commands={[data]} />
+                                            <CommandDeliverPdf commands={[data]} />
                                             {data.status !== "facturé" &&
                                                 data.status !== "posé" &&
                                                 data.status !== "annulé" && (

@@ -104,12 +104,12 @@ export const useGetAllDatas = (search = "", sortValue, sortDirection) => {
     });
 };
 
-export const useGetPaginatedDatas = (
+export const useGetPaginatedDatas = ({
     page,
     sortValue,
     sortDirection,
     searchValue,
-    filters,
+    filters}
 ) => {
     return useQuery({
         queryKey: [

@@ -201,7 +201,7 @@ export const InvoicePage = ({ title }) => {
                                     data.id,
                                     data.chrono,
                                     data.trustee.reference ||
-                                        data.customer.reference
+                                    data.customer.reference
                                 )
                             }
                         >
@@ -445,7 +445,7 @@ export const InvoicePage = ({ title }) => {
                                 <p>
                                     {price(
                                         invoiceData.amountTTC -
-                                            invoiceData.amountHT
+                                        invoiceData.amountHT
                                     )}
                                 </p>
                             </div>
@@ -460,10 +460,12 @@ export const InvoicePage = ({ title }) => {
                     <section className="mx-10 mb-10">{data.comment}</section>
                 )}
 
-                <div className="px-10 py-5">
-                    Intitulé de la facture : {""}
-                    {data.subject ? data.subject : "aucun intitulé"}
-                </div>
+
+                {data.subject &&
+                    <div className="px-10 py-5">
+                        {data.subject}
+                    </div>
+                }
 
                 <Table width="auto">
                     <Thead>
@@ -512,7 +514,7 @@ export const InvoicePage = ({ title }) => {
                                 <Td>
                                     {price(
                                         content.amount +
-                                            (content.amount * data.tva) / 100
+                                        (content.amount * data.tva) / 100
                                     )}
                                 </Td>
                                 <Td label="" text={""}>
@@ -590,7 +592,7 @@ const UpdateServiceModal = ({
 }) => {
     const validationSchema = yup.object({
         title: yup.string().required("Champ obligatoire"),
-        invoiceTitle: yup.string().required("Champ obligatoire"),
+        //invoiceTitle: yup.string().required("Champ obligatoire"),
         amount: yup.number().required().typeError("Champ obligatoire"),
         quantity: yup.number().required().typeError("Champ obligatoire"),
         price: yup.number(),
