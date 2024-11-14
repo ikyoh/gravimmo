@@ -1,9 +1,11 @@
 import Dropdown from "components/dropdown/Dropdown";
+import CommandPdf from "components/pdf/CommandPdf";
 import dayjs from "dayjs";
 import { usePutData as usePutCommand } from "queryHooks/useCommand";
 import { useGetOneData, usePutData } from "queryHooks/useTour";
 import { BsPiggyBank } from "react-icons/bs";
 import { IoIosCheckmarkCircleOutline, IoIosCloseCircle } from "react-icons/io";
+
 
 const TourDropdown = ({ tourID, setCommandsInvoice }) => {
     const { mutate } = usePutData();
@@ -43,16 +45,16 @@ const TourDropdown = ({ tourID, setCommandsInvoice }) => {
             {data.commands.some(
                 (command) => command.status === "DEFAULT - à traiter"
             ) && (
-                <button
-                    className="bg-secondary"
-                    onClick={() =>
-                        handleChangeCommandsStatus("DEFAULT - préparé")
-                    }
-                >
-                    <IoIosCheckmarkCircleOutline size={30} />
-                    Valider la préparation
-                </button>
-            )}
+                    <button
+                        className="bg-secondary"
+                        onClick={() =>
+                            handleChangeCommandsStatus("DEFAULT - préparé")
+                        }
+                    >
+                        <IoIosCheckmarkCircleOutline size={30} />
+                        Valider la préparation
+                    </button>
+                )}
 
             {!data.commands.some(
                 (command) => command.status === "DEFAULT - à traiter"
@@ -73,6 +75,8 @@ const TourDropdown = ({ tourID, setCommandsInvoice }) => {
                 <BsPiggyBank size={30} />
                 Facturer la tournée
             </button>
+            <CommandPdf commands={data.commands.map(command => command["@id"])} />
+            <CommandPdf commands={data.commands.map(command => command["@id"])} isRegular={false} />
             <button onClick={() => mutate({ id: tourID, commands: [] })}>
                 <IoIosCloseCircle size={30} />
                 Annuler la tournée

@@ -31,9 +31,9 @@ export const ReportsPage = ({ title }) => {
     const { sortValue, sortDirection, handleSort } = useSortBy(
         initialPageState
             ? {
-                  value: initialPageState.sortValue,
-                  direction: initialPageState.sortDirection,
-              }
+                value: initialPageState.sortValue,
+                direction: initialPageState.sortDirection,
+            }
             : ""
     );
     const {
@@ -101,6 +101,13 @@ export const ReportsPage = ({ title }) => {
                             sortDirection={sortDirection}
                             handleSort={handleSort}
                         />
+                        <Th
+                            label="Remise en tournée"
+                            sortBy="toDeliver"
+                            sortValue={sortValue}
+                            sortDirection={sortDirection}
+                            handleSort={handleSort}
+                        />
                         <Th label="" style={{ width: 10 }} />
                     </Thead>
                     <Tbody>
@@ -133,6 +140,7 @@ export const ReportsPage = ({ title }) => {
                                                 : "..."
                                         }
                                     />
+                                    <Td label="Remise en tournée" text={data.toDeliver ? "oui" : "non"} />
 
                                     <Td label="" text={""}>
                                         <Dropdown type="table">

@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { MdArrowBack } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { arrayOfIris } from "utils/functions.utils";
+import CommandPdf from "components/pdf/CommandPdf";
 
 import TourDropdown from "components/dropdown/contents/TourDropdown";
 import { NoDataFound } from "components/noDataFound/NoDataFound";

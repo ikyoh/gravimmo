@@ -38,10 +38,14 @@ class Report
     #[Groups(["reports:read", "report:read", "report:write", "command_report:read"])]
     private ?string $title = null;
 
-    
+
     #[ORM\ManyToOne]
     #[Groups(["reports:read", "report:read", "report:write"])]
     private ?Service $service = null;
+
+    #[ORM\Column]
+    #[Groups(["reports:read", "report:read", "report:write"])]
+    private ?bool $toDeliver = null;
 
     public function getId(): ?int
     {
@@ -72,5 +76,15 @@ class Report
         return $this;
     }
 
+    public function getToDeliver(): ?bool
+    {
+        return $this->toDeliver;
+    }
 
+    public function setToDeliver(bool $toDeliver): static
+    {
+        $this->toDeliver = $toDeliver;
+
+        return $this;
+    }
 }

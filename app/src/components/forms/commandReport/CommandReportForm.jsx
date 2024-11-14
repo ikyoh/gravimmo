@@ -32,7 +32,7 @@ export default function CommandReportForm({
     );
 
     const { data: property, isLoading: isLoadingProperty } = getProperty(
-        command && command.property ? command.property : null
+        command && command.property ? command.property["@id"] : null
     );
 
     const {
@@ -119,11 +119,10 @@ export default function CommandReportForm({
                         <button
                             type="button"
                             key={uuid()}
-                            className={`btn ${
-                                watchReport === report["@id"]
+                            className={`btn ${watchReport === report["@id"]
                                     ? "btn-primary"
                                     : "btn-secondary"
-                            }`}
+                                }`}
                             onClick={() => setValue("report", report["@id"])}
                         >
                             {report.title}
@@ -148,11 +147,10 @@ const PropertyService = ({ iri, setValue, watchService }) => {
     return (
         <button
             type="button"
-            className={`btn ${
-                watchService === data.service["@id"]
+            className={`btn ${watchService === data.service["@id"]
                     ? "btn-primary"
                     : "btn-secondary"
-            }`}
+                }`}
             onClick={() => setValue("service", data.service["@id"])}
         >
             {data.service.title}

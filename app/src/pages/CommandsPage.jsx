@@ -6,7 +6,6 @@ import TourForm from "components/forms/tour/TourForm";
 import Loader from "components/loader/Loader";
 import { NoDataFound } from "components/noDataFound/NoDataFound";
 import Pagination from "components/pagination/Pagination";
-import CommandDeliverPdf from "components/pdf/CommandDeliverPdf";
 import CommandPdf from "components/pdf/CommandPdf";
 import CommandStatus from "components/status/CommandStatus";
 import Header from "components/templates/header/Header";
@@ -32,6 +31,7 @@ import {
     IoIosAddCircleOutline,
     IoIosArrowDropright,
     IoIosCheckmarkCircleOutline,
+    IoMdRefresh
 } from "react-icons/io";
 import { LuSettings2, LuTable } from "react-icons/lu";
 import { MdPendingActions, MdWarning } from "react-icons/md";
@@ -70,6 +70,7 @@ export const CommandsPage = ({ title }) => {
     const { mutate: putData } = usePutData();
     const [isCheckAll, setIsCheckAll] = useState(false);
     const [checkedList, setCheckedList] = useState([]);
+
 
     const { setCommands, isLoading: isLoadingMakeInvoices } = useMakeInvoices();
 
@@ -236,8 +237,8 @@ export const CommandsPage = ({ title }) => {
                             <LuTable size={26} /> Données CSV
                         </CSVLink>
                     )}
-                    <CommandPdf commands={checkedList} />
-                    <CommandDeliverPdf commands={checkedList} />
+                    <CommandPdf commands={checkedList.map(item => item["@id"])} />
+                    <CommandPdf commands={checkedList.map(item => item["@id"])} isRegular={false} />
                     <button
                         disabled={checkedList.length === 0}
                         onClick={() =>
@@ -256,7 +257,7 @@ export const CommandsPage = ({ title }) => {
                     </button>
                     <button
                         disabled={checkedList.length === 0 ||
-                            checkedList.filter((command) => command.status === "DEFAULT - posé").length === 0
+                            checkedList.filter((command) => command.status === "DEFAULT - posé" || command.status === "DEFAULT - facturé").length === 0
                         }
                         onClick={() => setCommands(checkedList)}
                     >
@@ -554,8 +555,8 @@ export const CommandsPage = ({ title }) => {
                                                 />
                                                 Consulter la fiche
                                             </button>
-                                            <CommandPdf commands={[data]} />
-                                            <CommandDeliverPdf commands={[data]} />
+                                            <CommandPdf commands={[data["@id"]]} />
+                                            <CommandPdf commands={[data["@id"]]} isRegular={false} />
                                             {data.status !== "facturé" &&
                                                 data.status !== "posé" &&
                                                 data.status !== "annulé" && (
@@ -665,6 +666,54 @@ export const CommandsPage = ({ title }) => {
                                                 />
                                                 Ajout de visuels
                                             </button>
+
+                                            {data.status === "facturé" &&
+                                                <button
+                                                    onClick={() =>
+                                                        putData({
+                                                            id: data.id,
+                                                            status: "DEFAULT - facturé",
+                                                        })
+                                                    }
+                                                >
+                                                    <IoMdRefresh
+                                                        size={30}
+                                                    />
+                                                    Remettre en production
+                                                </button>
+                                            }
+
+                                            {data.status === "DEFAULT - préparé" &&
+                                                <button
+                                                    onClick={() =>
+                                                        putData({
+                                                            id: data.id,
+                                                            status: "DEFAULT - à traiter",
+                                                        })
+                                                    }
+                                                >
+                                                    <IoMdRefresh
+                                                        size={30}
+                                                    />
+                                                    Remettre en traitement
+                                                </button>
+                                            }
+                                            {data.status === "DEFAULT - posé" &&
+                                                <button
+                                                    onClick={() =>
+                                                        putData({
+                                                            id: data.id,
+                                                            status: "DEFAULT - préparé",
+                                                            deliveredAt: null
+                                                        })
+                                                    }
+                                                >
+                                                    <IoMdRefresh
+                                                        size={30}
+                                                    />
+                                                    Remettre en préparation
+                                                </button>
+                                            }
                                         </Dropdown>
                                     </Td>
                                 </Tr>

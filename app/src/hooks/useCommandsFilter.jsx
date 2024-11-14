@@ -25,9 +25,6 @@ export const useCommandsFilter = () => {
 
     const { data = [], isLoading, isError, error } = useGetCommandsZones()
 
-    console.log('data', data)
-    console.log('filters', filters)
-
     return {
         filters,
         filter: (

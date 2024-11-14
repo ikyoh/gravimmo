@@ -40,6 +40,8 @@ export const CommandForm = ({ id, handleCloseModal }) => {
         isError,
         error,
     } = useGetOneData(id);
+
+    console.log('data', data)
     const {
         mutate: postData,
         isLoading: isPostLoading,
@@ -203,6 +205,7 @@ export const CommandForm = ({ id, handleCloseModal }) => {
             delete _form.tour;
             delete _form.images;
             delete _form.trustee;
+            delete _form.property;
             putData(_form);
         } else {
             // case custom
@@ -375,7 +378,7 @@ export const CommandForm = ({ id, handleCloseModal }) => {
         );
     };
 
-    const Step2 = () => {
+    const Step2 = ({ id }) => {
         useEffect(() => {
             if (!isCustom && errors.details)
                 setFocus("details." + Object.keys(errors.details)[0]);
@@ -385,7 +388,9 @@ export const CommandForm = ({ id, handleCloseModal }) => {
             data: property,
             isLoading,
             error,
-        } = getProperty(watch("property"));
+        } = getProperty(!id ? watch("property") : data.property["@id"]);
+
+        console.log('property', property)
 
         const handleChangeEntrance = (value) => {
             const details = getValues("details");
@@ -921,7 +926,7 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                 isDisabled={isSubmitting || isPostLoading || isPutLoading}
             >
                 {currentStep === 1 && <Step1 />}
-                {currentStep === 2 && <Step2 />}
+                {currentStep === 2 && <Step2 id={id} />}
                 {currentStep === 3 && <Step3 register={register} />}
                 <div ref={ref}>
                 </div>

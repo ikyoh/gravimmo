@@ -16,7 +16,7 @@ use ApiPlatform\Metadata\GetCollection;
 #[ORM\Entity(repositoryClass: PropertyServiceRepository::class)]
 #[ApiResource(
     normalizationContext: ['groups' => ['propertyservices:read']],
-    denormalizationContext : ['groups' => ["propertyservice:write"]],
+    denormalizationContext: ['groups' => ["propertyservice:write"]],
     operations: [
         new GetCollection(),
         new Get(normalizationContext: ['groups' => ['propertyservice:read']]),
@@ -35,43 +35,43 @@ class PropertyService
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(["commands:read", "propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
+    #[Groups(["commands:read", "propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read", "command:read"])]
     private ?Service $service = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read", "command:read"])]
     private ?string $material = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read", "command:read"])]
     private ?string $size = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read", "command:read"])]
     private ?string $color = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read", "command:read"])]
     private ?string $font = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read", "command:read"])]
     private ?string $thickness = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read", "command:read"])]
     private ?string $height = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read", "command:read"])]
     private ?string $ratio = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read", "command:read"])]
     private ?string $margin = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read", "command:read"])]
     private array $finishing = [];
 
     #[ORM\ManyToOne(inversedBy: 'services')]
@@ -80,12 +80,12 @@ class PropertyService
     private ?Property $property = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read"])]
+    #[Groups(["propertyservices:read", "propertyservice:read", "propertyservice:write", "commands:read", "command:read"])]
     private ?string $configuration = null;
 
 
     #[ORM\Column(type: 'json', nullable: true)]
-    #[Groups(["propertyservice:read", "propertyservice:write", "commands:read"])]
+    #[Groups(["propertyservice:read", "propertyservice:write", "commands:read", "command:read"])]
     private $params = [];
 
     public function getId(): ?int
@@ -248,5 +248,4 @@ class PropertyService
 
         return $this;
     }
-
 }

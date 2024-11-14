@@ -188,6 +188,20 @@ class Command
         $this->reports = new ArrayCollection();
     }
 
+    /**
+     * Return true if the command has reports to deliver
+     */
+    #[Groups(["commands:read", "command:read"])]
+    public function getIsReportsToDeliver(): bool
+    {
+        foreach ($this->reports as $report) {
+            if ($report->getReport()->getToDeliver() === true) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public function getId(): ?int
     {

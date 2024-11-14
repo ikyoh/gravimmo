@@ -14,30 +14,35 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 class PdfInvoiceMailerController extends AbstractController
 {
 
-    public function __invoke(Invoice $data, MailerInterface $mailer,PdfInvoiceService $pdf)
+    public function __invoke(Invoice $data, MailerInterface $mailer, PdfInvoiceService $pdf)
     {
 
 
         $html =  $this->renderView('pdf/invoice.html.twig', $pdf->formatTwigContent($data));
 
         $to = $data->getTrustee()->getBillingEmail();
-        $subject = 'Facture Gravimmo'. $data->getChrono();
+        $cc = $data->getTrustee()->getCcBillingEmails();
+        $subject = 'Facture Gravimmo' . $data->getChrono();
 
-        if ($data->getTrustee())
-        {$customerReference = $data->getTrustee()->getReference();}
+        if ($data->getTrustee()) {
+            $customerReference = $data->getTrustee()->getReference();
+        }
 
-        if ($data->getCustomer()){
-        $customerReference = $data->getCustomer()->getReference();}
+        if ($data->getCustomer()) {
+            $customerReference = $data->getCustomer()->getReference();
+        }
 
         $email = (new TemplatedEmail())
-        ->from('gravimmo@gmail.com')
-        ->to($to)
-        ->subject($subject)
-        ->attach($pdf->generatePDF($html), 'Facture_'.$data->getChrono().'_'.$customerReference.'.pdf')
-        ->htmlTemplate('mail/email.html.twig');
+            ->from('gravimmo@gmail.com')
+            ->to($to)
+            ->subject($subject)
+            ->attach($pdf->generatePDF($html), 'Facture_' . $data->getChrono() . '_' . $customerReference . '.pdf')
+            ->htmlTemplate('mail/email.html.twig');
+
+        if (!empty($cc)) {
+            $email->addTo(...$cc);
+        }
 
         $mailer->send($email);
     }
-
-
 }

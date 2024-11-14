@@ -11,6 +11,7 @@ export const statusColor = {
     validé: StatusColor.Mention,
     posé: StatusColor.Waiting,
     "DEFAULT - posé": StatusColor.Waiting,
+    "DEFAULT - facturé": StatusColor.Error,
     comptabilisé: StatusColor.Success,
     lettré: StatusColor.Success,
     facturé: StatusColor.Success,
@@ -27,6 +28,7 @@ export const userStatus = {
 };
 
 export const status = {
+    "DEFAULT - facturé": "DF",
     "DEFAULT - à traiter": "à traiter",
     édité: "édité",
     "DEFAULT - préparé": "préparé",

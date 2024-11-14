@@ -40,7 +40,13 @@ dayjs.extend(localizedFormat);
 let utc = require("dayjs/plugin/utc");
 dayjs.extend(utc);
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false, // default: true
+        },
+    },
+})
 
 export default function App() {
     return (

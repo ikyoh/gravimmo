@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\TrusteeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\ApiFilter;
@@ -48,7 +49,7 @@ class Trustee
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["trustees:read", "trustee:read", "users:read", "properties:read", "property:read", "commands:read", "invoices:read"])]
+    #[Groups(["trustees:read", "trustee:read", "users:read", "properties:read", "property:read", "commands:read", "command:read", "invoices:read"])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
@@ -80,11 +81,11 @@ class Trustee
     private ?string $mobile = null;
 
     #[ORM\Column(length: 7, nullable: true)]
-    #[Groups(["trustees:read", "trustee:read", "commands:read"])]
+    #[Groups(["trustees:read", "trustee:read", "commands:read", "command:read"])]
     private ?string $color = '#C00000';
 
     #[ORM\Column(length: 7, nullable: true)]
-    #[Groups(["trustees:read", "trustee:read", "commands:read"])]
+    #[Groups(["trustees:read", "trustee:read", "commands:read", "command:read"])]
     private ?string $color2 = null;
 
     #[ORM\Column(nullable: true)]
@@ -92,7 +93,7 @@ class Trustee
     private array $orderTag = [];
 
     #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: User::class)]
-    #[Groups(["trustee:read","property:read"])]
+    #[Groups(["trustee:read", "property:read"])]
     private Collection $contacts;
 
     #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: Property::class)]
@@ -108,6 +109,15 @@ class Trustee
 
     #[ORM\OneToMany(mappedBy: 'trustee', targetEntity: Invoice::class)]
     private Collection $invoices;
+
+    #[ORM\Column]
+    #[Groups(["trustees:read", "trustee:read"])]
+    private ?bool $isAutoSendInvoice = true;
+
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(["trustee:read"])]
+    private array $ccBillingEmails = [];
 
     public function __construct()
     {
@@ -388,6 +398,27 @@ class Trustee
         return $this;
     }
 
+    public function GetIsAutoSendInvoice(): ?bool
+    {
+        return $this->isAutoSendInvoice;
+    }
 
+    public function setIsAutoSendInvoice(bool $isAutoSendInvoice): self
+    {
+        $this->isAutoSendInvoice = $isAutoSendInvoice;
 
+        return $this;
+    }
+
+    public function getCcBillingEmails(): array
+    {
+        return $this->ccBillingEmails;
+    }
+
+    public function setCcBillingEmails(array $ccBillingEmails): static
+    {
+        $this->ccBillingEmails = $ccBillingEmails;
+
+        return $this;
+    }
 }

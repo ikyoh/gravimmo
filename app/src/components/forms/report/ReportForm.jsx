@@ -1,4 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import FormCheckbox from 'components/form/checkbox/FormCheckbox';
 import Form from "components/form/form/Form";
 import { FormInput } from "components/form/input/FormInput";
 import Label from "components/form/label/FormLabel";
@@ -10,6 +11,7 @@ import { useForm } from "react-hook-form";
 import uuid from "react-uuid";
 import { deepClone } from "utils/functions.utils";
 import * as yup from "yup";
+
 
 export default function ReportForm({ iri, handleCloseModal }) {
     const { isLoading: isLoadingData, data } = useGetIRI(iri);
@@ -86,6 +88,13 @@ export default function ReportForm({ iri, handleCloseModal }) {
                     ))}
                 </select>
             </div>
+            <FormCheckbox
+                name="toDeliver"
+                label="Implique une remise en tournée"
+                error={errors['toDeliver']}
+                register={register}
+                required={true}
+            />
         </Form>
     );
 }

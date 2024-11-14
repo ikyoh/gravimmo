@@ -196,35 +196,103 @@
         </tbody>
     </table>
 
-    <div style="margin-top: 20;">
-        <table style="width: 200; margin-left: auto; border-spacing: 0; border-collapse: separate;
+
+    <table style="width: 100%; margin-top: 20;">
+        <tr>
+            <td>
+                <table style="width: 260; border-spacing: 0; border-collapse: separate;
         overflow: hidden;
         border: 0.5pt solid black;">
-            <tr>
-                <td style="padding: 5 10; background-color: lightgray; width: 50%;">Total HT</td>
-                <td style="padding: 5 10; text-align: right;">{{ amountHT|format_currency('EUR', locale='fr') }}
-                </td>
-            </tr>
-            <tr>
-                <td style="padding: 5 10; background-color: lightgray; width: 50%;">Total TVA ({{tva}}%)</td>
-                <td style="padding: 5 10; text-align: right;">{{ (amountTTC - amountHT) |format_currency('EUR',
-                    locale='fr') }}</td>
-            </tr>
-            <tr>
-                <td style="padding: 5 10; background-color: lightgray; width: 50%;">Total TTC</td>
-                <td style="padding: 5 10; text-align: right;">{{ amountTTC|format_currency('EUR', locale='fr') }}
-                </td>
-            </tr>
-            <tr style="font-weight: bold;">
-                <td style="padding: 5 10; background-color: lightgray; width: 50%; border-top: 1pt solid black;">Net
-                    à
-                    payer</td>
-                <td style="padding: 5 10; text-align: right; border-top: 1pt solid black;">{{
-                    amountTTC|format_currency('EUR',
-                    locale='fr') }}</td>
-            </tr>
-        </table>
-    </div>
+                    <tr>
+                        <td colspan="2" style="padding: 5 10 0 10;">
+                            Relevé d'identité bancaire
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0 10; width: 30%;">
+                            IBAN
+                        </td>
+                        <td style="padding: 0 10;">
+                            FR76 1460 7003 1470 7216 8761 114
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0 10; width: 30%;">
+                            BIC
+                        </td>
+                        <td style="padding: 0 10;">
+                            CCBPFRPPMAR
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0 10; width: 30%;">
+                            Code Banque
+                        </td>
+                        <td style="padding: 0 10;">
+                            14607
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0 10; width: 30%;">
+                            Code Guichet
+                        </td>
+                        <td style="padding: 0 10;">
+                            00314
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0 10; width: 30%;">
+                            N° du compte
+                        </td>
+                        <td style="padding: 0 10;">
+                            70721687611
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0 10 5 10; width: 30%;">
+                            Clé RIB
+                        </td>
+                        <td style="padding: 0 10 5 10;">
+                            14
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table style="width: 200; border-spacing: 0; border-collapse: separate;
+        overflow: hidden;
+        border: 0.5pt solid black; margin-left: auto;">
+                    <tr>
+                        <td style="padding: 5 10; background-color: lightgray; width: 50%;">Total HT</td>
+                        <td style="padding: 5 10; text-align: right;">{{ amountHT|format_currency('EUR', locale='fr') }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5 10; background-color: lightgray; width: 50%;">Total TVA ({{tva}}%)</td>
+                        <td style="padding: 5 10; text-align: right;">{{ (amountTTC - amountHT) |format_currency('EUR',
+                            locale='fr') }}</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 5 10; background-color: lightgray; width: 50%;">Total TTC</td>
+                        <td style="padding: 5 10; text-align: right;">{{ amountTTC|format_currency('EUR', locale='fr')
+                            }}
+                        </td>
+                    </tr>
+                    <tr style="font-weight: bold;">
+                        <td
+                            style="padding: 5 10; background-color: lightgray; width: 50%; border-top: 1pt solid black;">
+                            Net
+                            à
+                            payer</td>
+                        <td style="padding: 5 10; text-align: right; border-top: 1pt solid black;">{{
+                            amountTTC|format_currency('EUR',
+                            locale='fr') }}</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
 
 </body>
 

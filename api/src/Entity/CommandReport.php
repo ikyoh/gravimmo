@@ -30,30 +30,30 @@ class CommandReport
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['command_reports:read','command_report:read'])]
+    #[Groups(['command_reports:read', 'command_report:read'])]
     private ?int $id = null;
 
     #[ORM\Column]
-    #[Groups(['command_reports:read','command_report:read'])]
+    #[Groups(['command_reports:read', 'command_report:read'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['command_reports:read','command_report:read', 'command_report:write'])]
+    #[Groups(['command_reports:read', 'command_report:read', 'command_report:write'])]
     private ?string $comment = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['command_reports:read','command_report:read', 'command_report:write'])]
+    #[Groups(['command_reports:read', 'command_report:read', 'command_report:write'])]
     private ?Report $report = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['command_reports:read','command_report:read', 'command_report:write'])]
+    #[Groups(['command_reports:read', 'command_report:read', 'command_report:write'])]
     private ?Service $service = null;
 
     #[ORM\ManyToOne(inversedBy: 'reports')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['command_reports:read','command_report:read', 'command_report:write'])]
+    #[Groups(['command_reports:read', 'command_report:read', 'command_report:write'])]
     private ?Command $command = null;
 
 
@@ -126,7 +126,4 @@ class CommandReport
 
         return $this;
     }
-
-
-
 }

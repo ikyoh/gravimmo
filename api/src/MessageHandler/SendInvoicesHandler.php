@@ -15,37 +15,39 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[AsMessageHandler]
 final class SendInvoicesHandler extends AbstractController
 {
-    public function __construct(private MailerInterface $mailer, private InvoiceRepository $invoiceRepository, private EntityManagerInterface $entityManager, private PdfInvoiceService $pdf)
-    {
-    }
+    public function __construct(private MailerInterface $mailer, private InvoiceRepository $invoiceRepository, private EntityManagerInterface $entityManager, private PdfInvoiceService $pdf) {}
 
     public function __invoke(SendInvoicesMessage $message)
     {
 
-        $invoicesToSend = $this->invoiceRepository->findBy(['status' => "validé",'isSend' => false]);
+        $invoicesToSend = $this->invoiceRepository->findBy(['status' => "validé", 'isAutoSendInvoice' => true]);
 
-    foreach ($invoicesToSend as $invoice) {
+        foreach ($invoicesToSend as $invoice) {
 
-        $html = $this->renderView('pdf/invoice.html.twig', $this->pdf->formatTwigContent($invoice));
+            $html = $this->renderView('pdf/invoice.html.twig', $this->pdf->formatTwigContent($invoice));
 
-        $to = $invoice->getTrustee()->getBillingEmail();
-        $subject = 'Facture Gravimmo'. $invoice->getChrono();
+            $to = $invoice->getTrustee()->getBillingEmail();
+            $cc = $invoice->getTrustee()->getCcBillingEmails();
+            $subject = 'Facture Gravimmo' . $invoice->getChrono();
 
-        $customerReference = $invoice->getTrustee()->getReference() || $invoice->getCustomer()->getReference();
+            $customerReference = $invoice->getTrustee()->getReference() || $invoice->getCustomer()->getReference();
 
-        $email = (new TemplatedEmail())
-        ->from('gravimmo@gmail.com')
-        ->to($to)
-        ->subject($subject)
-        ->attach($this->pdf->generatePDF($html), 'Facture_'.$invoice->getChrono().'_'.$customerReference.'.pdf')
-        ->htmlTemplate('mail/email.html.twig');
+            $email = (new TemplatedEmail())
+                ->from('gravimmo@gmail.com')
+                ->to($to)
+                ->subject($subject)
+                ->attach($this->pdf->generatePDF($html), 'Facture_' . $invoice->getChrono() . '_' . $customerReference . '.pdf')
+                ->htmlTemplate('mail/email.html.twig');
 
-        $this->mailer->send($email);
+            if (!empty($cc)) {
+                $email->addTo(...$cc);
+            }
 
-        $invoice->setIsSend(true);
-        $this->entityManager->persist($invoice);
-        $this->entityManager->flush();
+            $this->mailer->send($email);
+
+            $invoice->setIsSend(true);
+            $this->entityManager->persist($invoice);
+            $this->entityManager->flush();
         }
     }
 }
-

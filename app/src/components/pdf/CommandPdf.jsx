@@ -15,11 +15,15 @@ import { MdOutlineFileDownload } from "react-icons/md";
 import uuid from "react-uuid";
 import { styles } from "./styles";
 
-const CommandPdf = ({ commands = [], onClick }) => {
+import useGetCommands from "hooks/useGetCommands";
+import { useEffect } from "react";
+
+const CommandPdf = ({ commands = [], isRegular = true }) => {
+
     // Create Document Component
     const MyDoc = () => (
         <Document>
-            {commands.map((order) => (
+            {fetchedCommands.map((order) => (
                 <Page
                     key={order["@id"]}
                     size="A4"
@@ -215,7 +219,7 @@ const CommandPdf = ({ commands = [], onClick }) => {
                             )}
                         </View>
 
-                        {order.commentMake && (
+                        {isRegular && order.commentMake && (
                             <View style={styles.comment}>
                                 <Text>
                                     Commentaire fabrication :{" "}
@@ -223,7 +227,8 @@ const CommandPdf = ({ commands = [], onClick }) => {
                                 </Text>
                             </View>
                         )}
-                        {order.property &&
+
+                        {isRegular && order.property &&
                             order.property.services?.map(
                                 (service) =>
                                     service.service.category !== "Pose" && (
@@ -456,7 +461,7 @@ const CommandPdf = ({ commands = [], onClick }) => {
                                             "tableauptt"
                                         ) && <Text>Tableau PTT</Text>}
                                 </View>
-                                {order.customServices?.length > 0 && (
+                                {order.customServices?.length > 0 &&
                                     <View style={styles.row}>
                                         {order.customServices?.map(
                                             (customService) => (
@@ -498,10 +503,10 @@ const CommandPdf = ({ commands = [], onClick }) => {
                                             )
                                         )}
                                     </View>
-                                )}
+                                }
                             </>
                         )}
-                        {order.extraServices.length > 0 && (
+                        {order.extraServices.length > 0 &&
                             <>
                                 <View style={styles.row}>
                                     <Text style={styles.subtitle}>
@@ -514,50 +519,48 @@ const CommandPdf = ({ commands = [], onClick }) => {
                                     extraServices={order.extraServices}
                                 />
                             </>
-                        )}
+                        }
                     </View>
                 </Page>
             ))}
         </Document>
     );
 
+    const { isSuccess, isLoading, setCommands, fetchedCommands } = useGetCommands();
+
+    useEffect(() => {
+        if (isSuccess && fetchedCommands.length > 0) {
+            handleDownload();
+        }
+        setCommands([]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isSuccess, setCommands])
+
+
     const handleDownload = async () => {
         const blob = await pdf(<MyDoc />).toBlob();
         fileDownload(
             blob,
             commands.length === 1
-                ? "Commande-" + commands[0].id + ".pdf"
-                : "Commandes.pdf"
+                ? isRegular
+                    ? "Fiche_commande-" + fetchedCommands[0].id + ".pdf"
+                    : "Fiche_pose-" + fetchedCommands[0].id + ".pdf"
+                : isRegular
+                    ? "Fiches_commandes.pdf"
+                    : "Fiches_pose.pdf"
         );
     };
 
-    //if (commands.length === 0)
     return (
         <button
             disabled={commands.length === 0}
-            onClick={() => handleDownload()}
+            onClick={() => setCommands(commands)}
         >
             <MdOutlineFileDownload size={30} />
-            Fiche atelier
+            {isRegular ? "Fiche atelier" : "Fiche pose"}
         </button>
     );
-    // else
-    //     return (
-    //         <PDFDownloadLink document={<MyDoc />} fileName="Commande.pdf">
-    //             {({ blob, url, loading, error }) =>
-    //                 loading ? (
-    //                     <button disabled={true}>
-    //                         <MdOutlineFileDownload size={30} />
-    //                     </button>
-    //                 ) : (
-    //                     <>
-    //                         <MdOutlineFileDownload size={30} />
-    //                         Fiches PDF
-    //                     </>
-    //                 )
-    //             }
-    //         </PDFDownloadLink>
-    //     );
+
 };
 
 export default CommandPdf;

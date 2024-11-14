@@ -23,10 +23,10 @@ import { SlPicture } from "react-icons/sl";
 import uuid from "react-uuid";
 
 export const CardTour = ({ iri }) => {
-    console.log("iri", iri);
+
     const { data, isLoading } = useGetIRI(iri);
     const { data: property, isLoading: isLoadingProperty } = useGetPropertyIRI(
-        data ? data.property : null
+        data ? data.property["@id"] : null
     );
     const { data: customer, isLoading: isLoadingCustomer } = useGetCustomerIRI(
         data ? data.customer : null
@@ -36,6 +36,7 @@ export const CardTour = ({ iri }) => {
     if (isLoading && !data) return <Loading />;
     if (data && data.property && isLoadingProperty) return <Loading />;
     if (data && data.customer && isLoadingCustomer) return <Loading />;
+
 
     return (
         <>

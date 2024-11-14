@@ -18,6 +18,8 @@ import dayjs from "dayjs";
 import useMakeInvoices from "hooks/useMakeInvoices";
 import { useModal } from "hooks/useModal";
 import _ from "lodash";
+import { IoMdRefresh } from "react-icons/io";
+
 
 import {
     useDeleteIRI,
@@ -113,9 +115,8 @@ export const CommandPage = ({
                                         {commandDetails[key]} :
                                     </span>
                                     <span
-                                        className={`${
-                                            !infos[key] && "text-warning"
-                                        }`}
+                                        className={`${!infos[key] && "text-warning"
+                                            }`}
                                     >
                                         {infos[key]
                                             ? " " + infos[key]
@@ -310,6 +311,52 @@ export const CommandPage = ({
                                 Supprimer
                             </button>
                         )}
+                        {data.status === "facturé" &&
+                            <button
+                                onClick={() =>
+                                    putData({
+                                        id: data.id,
+                                        status: "DEFAULT - facturé",
+                                    })
+                                }
+                            >
+                                <IoMdRefresh
+                                    size={30}
+                                />
+                                Remettre en production
+                            </button>
+                        }
+                        {data.status === "DEFAULT - préparé" &&
+                            <button
+                                onClick={() =>
+                                    putData({
+                                        id: data.id,
+                                        status: "DEFAULT - à traiter",
+                                    })
+                                }
+                            >
+                                <IoMdRefresh
+                                    size={30}
+                                />
+                                Remettre en traitement
+                            </button>
+                        }
+                        {data.status === "DEFAULT - posé" &&
+                            <button
+                                onClick={() =>
+                                    putData({
+                                        id: data.id,
+                                        status: "DEFAULT - préparé",
+                                        deliveredAt: null
+                                    })
+                                }
+                            >
+                                <IoMdRefresh
+                                    size={30}
+                                />
+                                Remettre en préparation
+                            </button>
+                        }
                     </Dropdown>
 
                     {_.isEmpty(previousPageState && !isModalContent) ? (
@@ -514,8 +561,8 @@ export const CommandPage = ({
                                 <div>
                                     {data.madeAt
                                         ? dayjs(data.madeAt).format(
-                                              "DD/MM/YYYY"
-                                          )
+                                            "DD/MM/YYYY"
+                                        )
                                         : "....."}
                                 </div>
                             </div>
@@ -524,8 +571,8 @@ export const CommandPage = ({
                                 <div>
                                     {data.deliveredAt
                                         ? dayjs(data.deliveredAt).format(
-                                              "DD/MM/YYYY"
-                                          )
+                                            "DD/MM/YYYY"
+                                        )
                                         : "....."}
                                 </div>
                             </div>

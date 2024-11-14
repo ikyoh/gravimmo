@@ -50,11 +50,11 @@ class Service
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["commands:read", "services:read", "service:read", "service:write", "propertyservice:read", "command:read", "extraservices:read", "reports:read" , "command_report:read"])]
+    #[Groups(["commands:read", "services:read", "service:read", "service:write", "propertyservice:read", "command:read", "extraservices:read", "reports:read", "command_report:read"])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["services:read", "service:read", "service:write", "propertyservice:read", "commands:read"])]
+    #[Groups(["services:read", "service:read", "service:write", "propertyservice:read", "commands:read", "command:read"])]
     private ?string $category = null;
 
     #[ORM\Column(nullable: true)]
@@ -113,7 +113,7 @@ class Service
     #[Groups(["services:read", "service:read"])]
     public function getFormattedPrice(): ?string
     {
-        $fmt = numfmt_create( 'fr_FR', NumberFormatter::CURRENCY );
+        $fmt = numfmt_create('fr_FR', NumberFormatter::CURRENCY);
         return numfmt_format_currency($fmt, $this->price, "EUR");
     }
 

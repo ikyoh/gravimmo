@@ -70,31 +70,31 @@ class Property
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["properties:read", "property:read", "property:write", "commands:read", "invoices:read", "tour:read", "letterbox:read"])]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read", "command:read", "invoices:read", "tour:read", "letterbox:read"])]
     private ?string $title = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["properties:read", "property:read", "property:write", "commands:read"])]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read", "command:read"])]
     private ?string $address = null;
 
     #[ORM\Column(length: 5)]
-    #[Groups(["properties:read", "property:read", "property:write", "commands:read"])]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read", "command:read"])]
     private ?string $postcode = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["properties:read", "property:read", "property:write", "commands:read"])]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read", "command:read"])]
     private ?string $city = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["property:read", "property:write", "commands:read"])]
+    #[Groups(["property:read", "property:write", "commands:read", "command:read"])]
     private ?string $contactName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["property:read", "property:write", "commands:read"])]
+    #[Groups(["property:read", "property:write", "commands:read", "command:read"])]
     private ?string $contactPhone = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["properties:read", "property:read", "property:write", "commands:read", "tour:read"])]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read", "command:read", "tour:read"])]
     private ?string $zone = null;
 
     #[ORM\ManyToOne(inversedBy: 'properties')]
@@ -103,11 +103,11 @@ class Property
     private ?Trustee $trustee = null;
 
     #[ORM\OneToMany(mappedBy: 'property', targetEntity: PropertyService::class, orphanRemoval: true)]
-    #[Groups(["property:read", "property:write", "commands:read"])]
+    #[Groups(["property:read", "property:write", "commands:read", "command:read"])]
     private Collection $services;
 
     #[ORM\Column(type: 'json', nullable: true)]
-    #[Groups(["property:read", "property:write", "commands:read"])]
+    #[Groups(["property:read", "property:write", "commands:read", "command:read"])]
     private $params = [];
 
     #[ORM\OneToMany(mappedBy: 'property', targetEntity: Command::class)]
@@ -122,7 +122,7 @@ class Property
     private ?\DateTimeInterface $deliveredAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(["property:read", "property:write", "commands:read"])]
+    #[Groups(["property:read", "property:write", "commands:read", "command:read"])]
     private array $accesses = [];
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -137,19 +137,19 @@ class Property
     private array $entrances = [];
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["properties:read", "property:read", "property:write", "commands:read"])]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read", "command:read"])]
     private ?string $digicode = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["properties:read", "property:read", "property:write", "commands:read"])]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read", "command:read"])]
     private ?string $vigik = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(["properties:read", "property:read", "property:write", "commands:read"])]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read", "command:read"])]
     private ?string $transmitter = null;
 
     #[ORM\OneToMany(mappedBy: 'property', targetEntity: Letterbox::class)]
-    #[Groups(["properties:read", "property:read", "property:write", "commands:read"])]
+    #[Groups(["properties:read", "property:read", "property:write", "commands:read", "command:read"])]
     private Collection $letterboxes;
 
 

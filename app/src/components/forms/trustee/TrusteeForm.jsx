@@ -1,13 +1,13 @@
-import { useEffect } from 'react';
-import { useForm } from "react-hook-form";
-import { usePostData, usePutData, useGetID } from 'queryHooks/useTrustee';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from "yup";
+import FormCheckbox from "components/form/checkbox/FormCheckbox";
+import FieldArray from "components/form/field-array/FieldArray";
 import Form from "components/form/form/Form";
 import { FormInput } from "components/form/input/FormInput";
-import FieldArray from "components/form/field-array/FieldArray";
 import Loader from 'components/loader/Loader';
-
+import { useGetID, usePostData, usePutData } from 'queryHooks/useTrustee';
+import { useEffect } from 'react';
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
 
 export default function TrusteeForm({ id, handleCloseModal }) {
 
@@ -24,9 +24,10 @@ export default function TrusteeForm({ id, handleCloseModal }) {
         reference: yup.string().required("Champ obligatoire").max(5, '5 caractères maximum autorisé'),
         email: yup.string().email('Email non valide').required('Champ obligatoire'),
         billingEmail: yup.string().email('Email non valide').required('Champ obligatoire'),
+        isAutoSendInvoice: yup.boolean().required('Champ obligatoire'),
     })
 
-    const { register, handleSubmit, setValue, setError, setFocus, reset, control, formState: { errors, isSubmitting, isSubmitted } } = useForm({
+    const { register, handleSubmit, setError, setFocus, reset, control, formState: { errors, isSubmitting } } = useForm({
         resolver: yupResolver(validationSchema),
         defaultValues: id ? data : {}
     })
@@ -160,6 +161,23 @@ export default function TrusteeForm({ id, handleCloseModal }) {
                 register={register}
                 required={true}
             />
+            <FieldArray
+                name="ccBillingEmails"
+                label="Emails de facturation supplémentaires"
+                placeholder="you@syndic.com"
+                error={errors['ccBillingEmails']}
+                control={control}
+                required={false}
+            />
+            <div className='mb-2'>
+                <FormCheckbox
+                    name="isAutoSendInvoice"
+                    label="Envoi de factures automatique"
+                    error={errors["isAutoSendInvoice"]}
+                    register={register}
+                    required={true}
+                />
+            </div>
             <FormInput
                 type="text"
                 name="phone"
