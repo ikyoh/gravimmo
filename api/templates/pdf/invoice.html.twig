@@ -175,10 +175,10 @@
                 </td>
                 <td style="padding: 5 10; border: 0.2pt solid black;">
                     {{content.title}}
-                    {% if content.proprietaire is defined %}
+                    {% if content.proprietaire is defined and content.occupant != "" %}
                     - {{content.proprietaire}}
                     {% endif %}
-                    {% if content.occupant is defined %}
+                    {% if content.occupant is defined and content.occupant != "" %}
                     ({{content.occupant}})
                     {% endif %}
                 </td>
