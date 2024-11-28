@@ -2,7 +2,7 @@ import classNames from "classnames";
 
 const Table = ({ children, width = "auto" }) => {
     const className = classNames(
-        "w-full text-left border-collapse dark:bg-gradient-page bg-fixed rounded",
+        "w-full text-left border-collapse bg-gradient-to-br from-purple-500/30 to-accent/30 dark:bg-gradient-page bg-fixed rounded",
         {
             "table-auto": width === "auto",
             "table-fixed": width === "fixed",

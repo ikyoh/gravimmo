@@ -11,7 +11,7 @@ const Dropdown = ({ type = "card", isDisabled, children, icon }) => {
     });
 
     const classNameContent = classNames(
-        "dropdown-content z-[1] bg-slate-400 dark:bg-primary rounded pr-2",
+        "dropdown-content z-[1] bg-gray-500 dark:bg-primary rounded pr-2",
         {
             "translate-x-1 -translate-y-[10px] w-64": type === "card",
             "translate-x-1 -translate-y-2 w-auto": type === "table",

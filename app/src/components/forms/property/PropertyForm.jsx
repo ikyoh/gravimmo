@@ -12,7 +12,7 @@ import {
     useGetFilteredDatasByVigik,
     useGetOneData,
     usePostData,
-    usePutData,
+    usePutData
 } from "queryHooks/useProperty";
 import { useGetAllDatas } from "queryHooks/useTrustee";
 import { useEffect } from "react";
@@ -151,7 +151,7 @@ export default function PropertyForm({
             isLoading={isSubmitting || isPutLoading || isPostLoading}
             isDisabled={isSubmitting || isPutLoading || isPostLoading}
         >
-            {!trusteeIRI && (
+            {!id && (
                 <FormSelect
                     type="text"
                     name="trustee"
@@ -327,6 +327,7 @@ const SearchVigik = ({ watch, propertyId }) => {
         return <p className="mb-2 text-error">Attention doublon</p>;
     return null;
 };
+
 
 const SearchTransmitter = ({ watch, propertyId }) => {
     const watchTransmitter = watch("transmitter", false);

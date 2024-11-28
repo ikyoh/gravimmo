@@ -17,19 +17,19 @@ use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Doctrine\Orm\Filter\ExistsFilter;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Filter\NotEqualFilter;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
 use DateTime;
 
 #[ORM\Entity(repositoryClass: PropertyRepository::class)]
-// #[UniqueEntity(
-//     fields: ['vigik'],
-//     message: 'Cette référence existe déjà.',
-//     ignoreNull: true
-// )]
+#[UniqueEntity(
+    fields: ['reference'],
+    message: 'Cette référence existe déjà.',
+    ignoreNull: true
+)]
 // #[UniqueEntity(
 //     fields: ['transmitter'],
 //     message: 'Cette référence existe déjà.',
@@ -125,7 +125,7 @@ class Property
     #[Groups(["property:read", "property:write", "commands:read", "command:read"])]
     private array $accesses = [];
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     #[Groups(["properties:read", "property:read", "property:write"])]
     private ?string $reference = null;
 

@@ -18,42 +18,42 @@ export const SettingsPage = ({ title }) => {
                 <div className="flex flex-col gap-5 justify-start items-start">
                     <Link
                         to="/customers"
-                        className="btn bg-gradient-to-br from-purple-500 to-accent text-white !inline-flex"
+                        className="btn border-white dark:border-black bg-gradient-to-br from-purple-500 to-accent text-white !inline-flex"
                     >
                         <MdAccountCircle size={32} />
                         Clients
                     </Link>
                     <Link
                         to="/trustees"
-                        className="btn bg-gradient-to-br from-purple-500 to-accent text-white"
+                        className="btn border-white dark:border-black bg-gradient-to-br from-purple-500 to-accent text-white"
                     >
                         <MdSupervisedUserCircle size={32} />
                         Syndics
                     </Link>
                     <Link
                         to="/properties"
-                        className="btn bg-gradient-to-br from-purple-500 to-accent text-white"
+                        className="btn border-white dark:border-black bg-gradient-to-br from-purple-500 to-accent text-white"
                     >
                         <MdOutlineHomeWork size={32} />
                         Copropriétés
                     </Link>
                     <Link
                         to="/contacts"
-                        className="btn bg-gradient-to-br from-purple-500 to-accent text-white"
+                        className="btn border-white dark:border-black bg-gradient-to-br from-purple-500 to-accent text-white"
                     >
                         <MdGroups size={32} />
                         Contacts
                     </Link>
                     <Link
                         to="/services"
-                        className="btn bg-gradient-to-br from-purple-500 to-accent text-white"
+                        className="btn border-white dark:border-black bg-gradient-to-br from-purple-500 to-accent text-white"
                     >
                         <MdOutlineDriveFileRenameOutline size={32} />
                         Prestations
                     </Link>
                     <Link
                         to="/reports"
-                        className="btn bg-gradient-to-br from-purple-500 to-accent text-white"
+                        className="btn border-white dark:border-black bg-gradient-to-br from-purple-500 to-accent text-white"
                     >
                         <MdWarning size={32} />
                         Incidents

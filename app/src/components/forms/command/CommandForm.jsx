@@ -258,9 +258,9 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                 }}
             >
                 <div>
-                    <span className="font-semibold">{data.title}</span>
+                    <span className="font-semibold dark:text-white/50 text-dark">{data.title}</span>
                     {data.trustee && (
-                        <span className="text-white/50">
+                        <span className="dark:text-white/50 text-dark">
                             {" "}
                             - {data.trustee.title}
                         </span>
@@ -619,6 +619,12 @@ export const CommandForm = ({ id, handleCloseModal }) => {
                             label="Email de suivi"
                             placeholder="url de l'email"
                         />
+                        <Input
+                            name="contractorEmail"
+                            label="Email du donneur d'ordre"
+                            placeholder="adresse email"
+                        />
+
                         <Input
                             name="commentMake"
                             label="Commentaire fabrication"

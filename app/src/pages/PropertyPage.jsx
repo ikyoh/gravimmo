@@ -1,7 +1,10 @@
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, ButtonSize } from "components/button/Button";
 import { CardContact } from "components/cards/contact/CardContact";
 import { CardService } from "components/cards/service/CardService";
 import Dropdown from "components/dropdown/Dropdown";
+import Form from "components/form/form/Form";
+import { FormSelect } from "components/form/select/FormSelect";
 import PropertyForm from "components/forms/property/PropertyForm";
 import PropertyContactForm from "components/forms/propertyContact/PropertyContactForm";
 import PropertyServiceForm from "components/forms/propertyService/PropertyServiceForm";
@@ -13,12 +16,16 @@ import useMakeLetterboxes from "hooks/useMakeLetterboxes";
 import { useModal } from "hooks/useModal";
 import _ from "lodash";
 import { usePostData as PostLetterbox } from "queryHooks/useLetterbox";
-import { useGetOneData } from "queryHooks/useProperty";
+import { useGetOneData, usePutData } from "queryHooks/useProperty";
+import { useGetAllDatas } from "queryHooks/useTrustee";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { IoIosAddCircleOutline, IoIosGrid } from "react-icons/io";
 import { LuSettings2 } from "react-icons/lu";
-import { MdArrowBack, MdGroups } from "react-icons/md";
+import { MdArrowBack, MdGroups, MdSupervisedUserCircle } from "react-icons/md";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import uuid from "react-uuid";
+import * as yup from "yup";
 
 export const PropertyPage = () => {
     const navigate = useNavigate();
@@ -119,6 +126,23 @@ export const PropertyPage = () => {
                             Voir le tableau BAL
                         </button>
                     )}
+                    <button
+                        onClick={() =>
+                            handleOpenModal({
+                                size: "small",
+                                title: "Changement de syndic",
+                                content: (
+                                    <TrusteeForm
+                                        id={data.id}
+                                        handleCloseModal={handleCloseModal}
+                                    />
+                                ),
+                            })
+                        }
+                    >
+                        <MdSupervisedUserCircle size={30} />
+                        Changement de syndic
+                    </button>
                 </Dropdown>
                 {_.isEmpty(previousPageState) ? (
                     <Button size={ButtonSize.Big} onClick={() => navigate(-1)}>
@@ -331,3 +355,81 @@ const LetterboxForm = ({ iri, entrances, handleCloseModal }) => {
         </div>
     );
 };
+
+
+const TrusteeForm = ({ id, handleCloseModal }) => {
+
+    const validationSchema = yup.object({
+        trustee: yup.string().required("Champ obligatoire"),
+    });
+
+    const {
+        mutate: putData,
+        isLoading: isPutLoading,
+        isSuccess: isPutSuccess,
+        error: putError,
+    } = usePutData();
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm({
+        resolver: yupResolver(validationSchema),
+        // defaultValues: defaultValues,
+    });
+
+    const { isLoading: isLoadingTrustees, data: dataTrustees } = useGetAllDatas(
+        "",
+        "title",
+        "ASC"
+    );
+
+    const onSubmit = (form) => {
+        const _form = { ...form };
+        _form.id = id;
+        _form.contacts = [];
+        delete _form.services;
+        putData(_form);
+    }
+
+
+    useEffect(() => {
+        if (isPutSuccess) handleCloseModal();
+    }, [isPutSuccess, handleCloseModal])
+
+
+    return (
+        <Form
+            onSubmit={handleSubmit(onSubmit)}
+            isLoading={isSubmitting || isPutLoading || isLoadingTrustees}
+            isDisabled={isSubmitting || isPutLoading || isLoadingTrustees}
+        >
+            <FormSelect
+                type="text"
+                name="trustee"
+                label="Syndic"
+                error={errors["title"]}
+                register={register}
+                required={true}
+            >
+                {isLoadingTrustees && (
+                    <option disabled>Chargement des syndics</option>
+                )}
+                {!isLoadingTrustees && dataTrustees.length !== 0 && (
+                    <option value="">Choisir une nouveau syndic</option>
+                )}
+                {!isLoadingTrustees && dataTrustees.length === 0 && (
+                    <option disabled>Aucun syndic trouvé</option>
+                )}
+                {!isLoadingTrustees &&
+                    dataTrustees.map((data) => (
+                        <option key={data["@id"]} value={data["@id"]}>
+                            {data.title}
+                        </option>
+                    ))}
+            </FormSelect>
+
+        </Form>
+    );
+}

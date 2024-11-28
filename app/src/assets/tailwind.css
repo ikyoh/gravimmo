@@ -134,7 +134,7 @@ section {
 ._card {
     @apply card rounded shadow-sm shadow-dark/40 dark:shadow-white/10 !p-4 relative;
     @apply text-dark dark:text-white;
-    @apply bg-dark/10 dark:bg-dark/60;
+    @apply bg-white dark:bg-dark/60;
 }
 
 .card-button {
@@ -157,6 +157,11 @@ select,
 select[multiple],
 textarea {
     @apply bg-light dark:bg-dark border border-neutral text-dark dark:text-white h-[50px] !rounded !p-3 !mt-2 w-full leading-tight focus:outline focus:outline-accent;
+}
+
+
+input[type="checkbox"] {
+    @apply bg-light dark:bg-dark border border-neutral text-dark dark:text-white !rounded !p-3 leading-tight focus:outline focus:outline-accent;
 }
 
 select {

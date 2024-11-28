@@ -45,7 +45,7 @@ export const Button = ({
     );
 
     const iconClassName = classNames(
-        "w-full h-full flex items-center justify-center transition-all ease-in duration-75 dark:text-white text-dark rounded-full dark:bg-dark bg-light",
+        "w-full h-full flex items-center justify-center transition-all ease-in duration-75 dark:text-white text-dark rounded-full dark:bg-dark bg-gray-300",
         {
             "text-2xl": size === ButtonSize.Small,
             "text-3xl": size === ButtonSize.Medium,
@@ -73,7 +73,7 @@ export const Button = ({
                     </div>
                 ) : null}
                 {info && (
-                    <div className="absolute z-10 left-[64px] text-white p-3 bg-slate-400 dark:bg-dark rounded hidden md:group-hover:block whitespace-nowrap">
+                    <div className="absolute z-10 left-[64px] text-white p-3 bg-gray-500 dark:bg-dark rounded hidden md:group-hover:block whitespace-nowrap">
                         {info}
                     </div>
                 )}
