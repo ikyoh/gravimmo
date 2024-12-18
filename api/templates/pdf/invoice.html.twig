@@ -30,33 +30,32 @@
 
             </td>
             <td style="width: 100%; text-align:right">
-                <div style="background-color : black; display: inline-block; overflow: hidden; min-width:80px;">
-                    <div
-                        style="background-color : lightgray; padding: 5px; margin-top:0.5pt; margin-left:0.5pt; margin-right:0.5pt; text-align: center;">
+                <div
+                    style="display: inline-block; overflow: hidden; min-width:80px; border: 0.5pt solid black;  border-radius:8px">
+                    <div style=" background-color : lightgray; padding: 5px; text-align: center;">
                         Facture N°
                     </div>
-                    <div
-                        style="background-color : white; padding: 5px; margin-bottom:0.5pt; margin-left:0.5pt; margin-right:0.5pt; text-align: center;">
+                    <div style="background-color : white; padding: 5px; text-align: center;">
                         {{chrono}}
                     </div>
                 </div>
-                <div style="background-color : black; display: inline-block; overflow: hidden; min-width:80px;">
+                <div
+                    style="display: inline-block; overflow: hidden; min-width:80px; border: 0.5pt solid black;  border-radius:8px">
                     <div
                         style="background-color : lightgray; padding: 5px; margin-top:0.5pt; margin-left:0.5pt; margin-right:0.5pt; text-align: center;">
                         Date
                     </div>
-                    <div
-                        style="background-color : white; padding: 5px; margin-bottom:0.5pt; margin-left:0.5pt; margin-right:0.5pt; text-align: center;">
+                    <div style="background-color : white; padding: 5px; text-align: center;">
                         {{date}}
                     </div>
                 </div>
-                <div style="background-color : black; display: inline-block; overflow: hidden; min-width:80px;">
-                    <div
-                        style="background-color : lightgray; padding: 5px; margin-top:0.5pt; margin-left:0.5pt; margin-right:0.5pt; text-align: center;">
+                <div
+                    style="display: inline-block; overflow: hidden; min-width:80px; border: 0.5pt solid black;  border-radius:8px">
+                    <div style=" background-color : lightgray; padding: 5px; margin-top:0.5pt; margin-left:0.5pt;
+                    margin-right:0.5pt; text-align: center;">
                         Client
                     </div>
-                    <div
-                        style="background-color : white; padding: 5px; margin-bottom:0.5pt; margin-left:0.5pt; margin-right:0.5pt; text-align: center;">
+                    <div style="background-color : white; padding: 5px; text-align: center;">
                         {% if trusteeRef is defined %}
                         {{trusteeRef}}
                         {% endif %}
@@ -128,66 +127,73 @@
         </div>
         {% endif %}
         {% if refundReference is defined %}
-        <div style="background-color: lightgray;display: inline-block; padding : 5pt;">
+        <div style="border : 0.5pt solid black; border-radius : 8px; display: inline-block; padding : 5pt;">
             Avoir sur la facture : {{refundReference}}
         </div>
         {% endif %}
         {% if details.orderTags is defined %}
         {% for k,v in details.orderTags %}
-        <div style="background-color: lightgray;display: inline-block; padding : 5pt;">
+        <div style="border : 0.5pt solid black; border-radius : 8px; display: inline-block; padding : 5pt;">
             {{k}} : {{v}}
         </div>
         {% endfor %}
         {% endif %}
 
         {% if property is defined %}
-        <div style="background-color: lightgray;display: inline-block; padding : 5pt;">
+        <div style="border : 0.5pt solid black; border-radius : 8px; display: inline-block; padding : 5pt;">
             Copropriété : {{propertydetails}}
         </div>
         {% endif %}
-        {% if details.proprietaire is defined and details.proprietaire != "" %}
-        <div style="background-color: lightgray;display: inline-block; padding : 5pt;">
+        {# {% if details.proprietaire is defined and details.proprietaire != " %}
+        <div style="border : 0.5pt solid black; border-radius : 8px; display: inline-block; padding : 5pt;">
             Propriétaire : {{details.proprietaire}}
         </div>
-        {% endif %}
+        {% endif %} #}
     </div>
 
 
-    <table style="min-height: 500px; width: 100%; border-spacing: 0; border-collapse: separate;
+    <table style="min-height: 450px; width: 100%; border-spacing: 0; border-collapse: separate;
     overflow: hidden;
     position: relative;
-    border: 0.2pt solid black;"">
-        <thead style=" background-color: lightgray; text-align: left;">
-        <tr>
-            <th style="padding: 5 10; border: 0.2pt solid black;">Réf.</th>
-            <th style="padding: 5 10; border: 0.2pt solid black; width: 100%;">Désignation</th>
-            <th style="padding: 5 10; border: 0.2pt solid black; width: 40; text-align: center">Quantité
-            </th>
-            <th style="padding: 5 10; border: 0.2pt solid black; width : 50; text-align: right;">PU TTC</th>
-            <th style="padding: 5 10; width : 50; text-align: right; border: 0.2pt solid black;">Total TTC</th>
-        </tr>
+    border: 0.5pt solid black; border-radius:8px">
+        <thead style="background-color: lightgray; text-align: left; overflow: hidden;">
+            <tr>
+                <th style="padding: 5 10; border-right: 0.5pt solid black;">Réf.</th>
+                <th style="padding: 5 10; border-right: 0.5pt solid black; width: 100%;">Désignation</th>
+                <th style="padding: 5 10; border-right: 0.5pt solid black; width: 40; text-align: center">Quantité
+                </th>
+                <th style="padding: 5 10; border-right: 0.5pt solid black; width : 50; text-align: right;">PU TTC</th>
+                <th style="padding: 5 10; width : 50; text-align: right;">Total TTC
+                </th>
+            </tr>
         </thead>
         <tbody style="height: 100%; position:relative;">
             {% for content in contents %}
             <tr>
-                <td style="padding: 5 10; border: 0.2pt solid black;">
+                <td style="padding: 5 10; border-right: 0.5pt solid black; border-bottom : 0.5pt solid black;">
                     {{content.reference}}
                 </td>
-                <td style="padding: 5 10; border: 0.2pt solid black;">
-                    {{content.title}}
-                    {% if content.proprietaire is defined and content.occupant != "" %}
-                    - {{content.proprietaire}}
-                    {% endif %}
-                    {% if content.occupant is defined and content.occupant != "" %}
-                    ({{content.occupant}})
-                    {% endif %}
+                <td style="padding: 5 10; border-right: 0.5pt solid black; border-bottom : 0.5pt solid black;">
+                    <div>
+                        {{content.title}}
+                    </div>
+                    <div>
+                        {% if content.proprietaire is defined and content.proprietaire != "" %}
+                        ({{content.proprietaire}})
+                        {% endif %}
+                        {% if content.occupant is defined and content.occupant != "" %}
+                        {{content.occupant}}
+                        {% endif %}
+                    </div>
                 </td>
-                <td style="padding: 5 10; border: 0.2pt solid black; text-align:center;">
+                <td
+                    style="padding: 5 10; border-right: 0.5pt solid black; border-bottom : 0.5pt solid black; text-align:center;">
                     {{content.quantity}}
-                <td style="padding: 5 10; border: 0.2pt solid black; text-align: right;">
+                <td
+                    style="padding: 5 10; border-right: 0.5pt solid black; border-bottom : 0.5pt solid black; text-align: right;">
                     {{ (content.amount + content.amount * tva / 100)|format_currency('EUR', locale='fr') }}
                 </td>
-                <td style="padding: 5 10; text-align: right; border: 0.2pt solid black;">
+                <td style="padding: 5 10; text-align: right; border-bottom : 0.5pt solid black;">
                     {{ ((content.amount + content.amount * tva / 100) * content.quantity)|format_currency('EUR',
                     locale='fr') }}
                 </td>
@@ -197,22 +203,23 @@
     </table>
 
 
-    <table style="width: 100%; margin-top: 20;">
+    <table style="width: 100%; margin-top: 10;">
         <tr>
             <td>
                 <table style="width: 260; border-spacing: 0; border-collapse: separate;
         overflow: hidden;
-        border: 0.5pt solid black;">
+        border: 0.5pt solid black; border-radius:8px">
                     <tr>
-                        <td colspan="2" style="padding: 5 10 0 10;">
+                        <td colspan="2"
+                            style="padding: 5 10 5 10; border-bottom : 0.5pt solid black; font-weight: bold;">
                             Relevé d'identité bancaire
                         </td>
                     </tr>
                     <tr>
-                        <td style="padding: 0 10; width: 30%;">
+                        <td style="padding: 5 10 0 10; width: 30%;">
                             IBAN
                         </td>
-                        <td style="padding: 0 10;">
+                        <td style="padding: 5 10 0 10;">
                             FR76 1460 7003 1470 7216 8761 114
                         </td>
                     </tr>
@@ -261,7 +268,7 @@
             <td>
                 <table style="width: 200; border-spacing: 0; border-collapse: separate;
         overflow: hidden;
-        border: 0.5pt solid black; margin-left: auto;">
+        border: 0.5pt solid black; margin-left: auto; border-radius:8px">
                     <tr>
                         <td style="padding: 5 10; background-color: lightgray; width: 50%;">Total HT</td>
                         <td style="padding: 5 10; text-align: right;">{{ amountHT|format_currency('EUR', locale='fr') }}
@@ -280,11 +287,10 @@
                     </tr>
                     <tr style="font-weight: bold;">
                         <td
-                            style="padding: 5 10; background-color: lightgray; width: 50%; border-top: 1pt solid black;">
-                            Net
-                            à
-                            payer</td>
-                        <td style="padding: 5 10; text-align: right; border-top: 1pt solid black;">{{
+                            style="padding: 5 10; background-color: lightgray; width: 50%; border-top: 0.5pt solid black;">
+                            Net à payer
+                        </td>
+                        <td style="padding: 5 10; text-align: right; border-top: 0.5pt solid black;">{{
                             amountTTC|format_currency('EUR',
                             locale='fr') }}</td>
                     </tr>

@@ -62,6 +62,7 @@ class InvoiceListener extends AbstractController
                     "title" => $service->getService()->getTitle(),
                     "invoiceTitle" => $service->getService()->getInvoiceTitle(),
                     "occupant" => $invoice->getCommand()->getDetails()['nouveloccupant'],
+                    "proprietaire" => $invoice->getCommand()->getDetails()['proprietaire'],
                     "quantity" => 1,
                     "price" => $service->getService()->getPrice(),
                     "discount" => 0,

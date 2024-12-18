@@ -15,6 +15,7 @@
         "dompdf/dompdf": "*",
         "dragonmantank/cron-expression": "*",
         "nelmio/cors-bundle": "^2.2",
+        "nucleos/dompdf-bundle": "^4.3",
         "phenx/php-svg-lib": "^0.5.2",
         "phpdocumentor/reflection-docblock": "^5.3",
         "phpstan/phpdoc-parser": "^1.9",

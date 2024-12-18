@@ -2,34 +2,17 @@
 
 namespace App\Service;
 
-// use Dompdf\Dompdf;
-// use Dompdf\Options;
 use Nucleos\DompdfBundle\Factory\DompdfFactoryInterface;
 use Nucleos\DompdfBundle\Wrapper\DompdfWrapperInterface;
 
-class PdfInvoiceService
+class InvoicePdfService
 {
-    private $domPdf;
 
     public function __construct(
         private readonly DompdfFactoryInterface $factory,
         private readonly DompdfWrapperInterface $wrapper
-    ) {
-        // $pdfOptions = new Options();
-        // $pdfOptions->set('defaultFont', 'Helvetica');
-        // $pdfOptions->set('isRemoteEnabled', true);
-        // $pdfOptions->set('no-pdf-compression', true);
-        // $this->domPdf = new DomPdf($pdfOptions);
-        // $this->domPdf->setPaper('A4', 'portrait');
-    }
+    ) {}
 
-    // public function downloadPDF($html)
-    // {
-
-    //     $this->domPdf->loadHtml($html);
-    //     $this->domPdf->render();
-    //     return $this->domPdf->stream('facture.pdf', ["Attachment" => false]);
-    // }
 
     public function getPdf(string $html): string
     {
@@ -41,13 +24,6 @@ class PdfInvoiceService
         $this->wrapper->getStreamResponse($html, $filename);
     }
 
-
-    // public function generatePDF($html)
-    // {
-    //     $this->domPdf->loadHtml($html);
-    //     $this->domPdf->render();
-    //     return $this->domPdf->output();
-    // }
 
     public function formatTwigContent($invoice)
     {
@@ -115,100 +91,101 @@ class PdfInvoiceService
 
         return $datas;
     }
-}
-
-function formatContent($content)
-{
-
-    $computedcontent = [];
-    $servicesLine = [];
 
 
-    foreach ($content as $line) {
+    function formatContent($content)
+    {
 
-        // Vérifie si le type est service
-        if ($line['type'] === "service") {
+        $computedcontent = [];
+        $servicesLine = [];
 
-            //si $servicesLine est empty
-            if (empty($servicesLine)) {
-                $servicesLine = [
-                    "type" => "service",
-                    "title" => "",
-                    "price" => $line['price'],
-                    "amount" => $line['amount'],
-                    "quantity" => $line['quantity'],
-                    "occupant" => $line['occupant'],
-                    "reference" => $line['reference'],
-                ];
 
-                if ($line['invoiceTitle']) {
-                    $servicesLine['title'] = $line['invoiceTitle'];
+        foreach ($content as $line) {
+
+            // Vérifie si le type est service
+            if ($line['type'] === "service") {
+
+                //si $servicesLine est empty
+                if (empty($servicesLine)) {
+                    $servicesLine = [
+                        "type" => "service",
+                        "title" => "",
+                        "price" => $line['price'],
+                        "amount" => $line['amount'],
+                        "quantity" => $line['quantity'],
+                        "occupant" => $line['occupant'],
+                        "reference" => $line['reference'],
+                    ];
+
+                    if ($line['invoiceTitle']) {
+                        $servicesLine['title'] = $line['invoiceTitle'];
+                    }
+                }
+                //sinon concat
+                else {
+                    if ($line['invoiceTitle']) {
+                        $servicesLine['title'] =  $servicesLine['title'] . " - " . $line['invoiceTitle'];
+                    }
+                    $servicesLine['reference'] =  $servicesLine['reference'] . $line['reference'];
+                    $servicesLine['price'] =  $servicesLine['price'] + $line['price'];
+                    $servicesLine['amount'] =  $servicesLine['amount'] + $line['amount'];
                 }
             }
-            //sinon concat
-            else {
-                if ($line['invoiceTitle']) {
-                    $servicesLine['title'] =  $servicesLine['title'] . " - " . $line['invoiceTitle'];
+
+            if ($line['type'] === "extraService") {
+                array_push($computedcontent, $line);
+            }
+
+            if ($line['type'] === "customService") {
+
+                if (!isValueInArray($line['occupant'], $computedcontent)) {
+                    $customLine = [
+                        "type" => "customService",
+                        "title" => $line['invoiceTitle'] !== "" && $line['invoiceTitle'] !== null ? $line['invoiceTitle'] : "",
+                        "proprietaire" => $line['proprietaire'] ? $line['proprietaire'] : "",
+                        "title" =>  $line['invoiceTitle'],
+                        "price" => $line['price'],
+                        "amount" => $line['amount'],
+                        "quantity" => $line['quantity'],
+                        "occupant" => $line['occupant'],
+                        "reference" => $line['reference'],
+                    ];
+                    array_unshift($computedcontent, $customLine);
+                } else {
+                    $index = findIndexInArray($computedcontent, $line['occupant']);
+                    $computedcontent[$index]['reference'] =  $computedcontent[$index]['reference'] . $line['reference'];
+                    if ($line['invoiceTitle']) {
+                        $computedcontent[$index]['title'] =  $computedcontent[$index]['title'] . " - " . $line['invoiceTitle'];
+                    }
+                    $computedcontent[$index]['price'] =  $computedcontent[$index]['price'] + $line['price'];
+                    $computedcontent[$index]['amount'] =  $computedcontent[$index]['amount'] + $line['amount'];
                 }
-                $servicesLine['reference'] =  $servicesLine['reference'] . $line['reference'];
-                $servicesLine['price'] =  $servicesLine['price'] + $line['price'];
-                $servicesLine['amount'] =  $servicesLine['amount'] + $line['amount'];
             }
         }
 
-        if ($line['type'] === "extraService") {
-            array_push($computedcontent, $line);
+
+        if (!empty($servicesLine)) {
+            array_unshift($computedcontent, $servicesLine);
         }
 
-        if ($line['type'] === "customService") {
+        return ($computedcontent);
+    }
 
-            if (!isValueInArray($line['occupant'], $computedcontent)) {
-                $customLine = [
-                    "type" => "customService",
-                    "title" => $line['invoiceTitle'] !== "" && $line['invoiceTitle'] !== null ? $line['invoiceTitle'] : "",
-                    "proprietaire" => $line['proprietaire'] ? $line['proprietaire'] : "",
-                    "title" =>  $line['invoiceTitle'],
-                    "price" => $line['price'],
-                    "amount" => $line['amount'],
-                    "quantity" => $line['quantity'],
-                    "occupant" => $line['occupant'],
-                    "reference" => $line['reference'],
-                ];
-                array_unshift($computedcontent, $customLine);
-            } else {
-                $index = findIndexInArray($computedcontent, $line['occupant']);
-                $computedcontent[$index]['reference'] =  $computedcontent[$index]['reference'] . $line['reference'];
-                if ($line['invoiceTitle']) {
-                    $computedcontent[$index]['title'] =  $computedcontent[$index]['title'] . " - " . $line['invoiceTitle'];
-                }
-                $computedcontent[$index]['price'] =  $computedcontent[$index]['price'] + $line['price'];
-                $computedcontent[$index]['amount'] =  $computedcontent[$index]['amount'] + $line['amount'];
+    function isValueInArray($value, $array)
+    {
+        foreach ($array as $line) {
+            if (in_array($value, $line)) return true;
+        }
+        return false;
+    }
+
+    function findIndexInArray($tableaux, $valueToFind)
+    {
+        foreach ($tableaux as $index => $tableau) {
+            // Vérifier si la valeur est présente dans le tableau
+            if (in_array($valueToFind, $tableau)) {
+                return $index;
             }
-        }
-    }
-
-
-    if (!empty($servicesLine)) {
-        array_unshift($computedcontent, $servicesLine);
-    }
-
-    return ($computedcontent);
-}
-
-function isValueInArray($value, $array)
-{
-    foreach ($array as $line) {
-        if (in_array($value, $line)) return true;
-    }
-    return false;
-}
-
-function findIndexInArray($tableaux, $valueToFind)
-{
-    foreach ($tableaux as $index => $tableau) {
-        // Vérifier si la valeur est présente dans le tableau
-        if (in_array($valueToFind, $tableau)) {
-            return $index;
         }
     }
 }

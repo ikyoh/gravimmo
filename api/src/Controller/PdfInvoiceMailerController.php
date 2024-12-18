@@ -22,7 +22,7 @@ class PdfInvoiceMailerController extends AbstractController
 
         $to = $data->getTrustee()->getBillingEmail();
         $cc = $data->getTrustee()->getCcBillingEmails();
-        $subject = 'Facture Gravimmo' . $data->getChrono();
+        $subject = "Facture Gravimmo n°" . $data->getChrono();
 
         if ($data->getTrustee()) {
             $customerReference = $data->getTrustee()->getReference();
@@ -36,7 +36,7 @@ class PdfInvoiceMailerController extends AbstractController
             ->from('gravimmo@gmail.com')
             ->to($to)
             ->subject($subject)
-            ->attach($pdf->generatePDF($html), 'Facture_' . $data->getChrono() . '_' . $customerReference . '.pdf')
+            ->attach($pdf->getPdf($html), 'Facture_' . $data->getChrono() . '_' . $customerReference . '.pdf')
             ->htmlTemplate('mail/email.html.twig');
 
         if (!empty($cc)) {
