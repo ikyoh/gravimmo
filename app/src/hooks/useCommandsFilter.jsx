@@ -10,6 +10,7 @@ export const useCommandsFilter = () => {
     const defaultFilters = {
         status: "DEFAULT",
         isHanging: false,
+        isReport: false,
         zone: "",
     };
 
@@ -128,6 +129,18 @@ export const useCommandsFilter = () => {
                             name="isHanging"
                             className="toggle toggle-warning"
                             checked={filters.isHanging}
+                            onChange={handleChangeCheckbox}
+                        />
+                    </label>
+                </div>
+                <div className="form-control">
+                    <label className="cursor-pointer label">
+                        <span className="label-text">Avec incidents</span>
+                        <input
+                            type="checkbox"
+                            name="isReport"
+                            className="toggle toggle-info"
+                            checked={filters.isReport}
                             onChange={handleChangeCheckbox}
                         />
                     </label>

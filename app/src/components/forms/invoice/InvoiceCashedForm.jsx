@@ -1,23 +1,23 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import Form from "components/form/form/Form";
 import dayjs from "dayjs";
-import { usePutData } from "queryHooks/useInvoice";
 import { useEffect } from "react";
 import Calendar from "react-calendar";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
+import useCachedInvoices from "../../../hooks/useCachedInvoices";
 
-export default function InvoiceCashedForm({ id, handleCloseModal }) {
-    const { mutate, isLoading, isSuccess } = usePutData();
+export default function InvoiceCashedForm({ handleCloseModal, invoices = [] }) {
+
 
     const defaultValues = {
-        id: id,
+        //id: id,
         cashedAt: dayjs().format("YYYY-MM-DD"),
         status: "lettré",
     };
 
     const validationSchema = yup.object({
-        id: yup.string().required("Champ obligatoire"),
+        //id: yup.string().required("Champ obligatoire"),
         cashedAt: yup.string().required("Champ obligatoire"),
     });
 
@@ -33,13 +33,15 @@ export default function InvoiceCashedForm({ id, handleCloseModal }) {
 
     const watchDate = watch("cashedAt");
 
-    const onSubmit = (form) => {
-        mutate(form);
+    const { setInvoices, isLoading, isSuccess } = useCachedInvoices(watchDate);
+
+    const onSubmit = () => {
+        setInvoices(invoices);
     };
 
     useEffect(() => {
         if (isSuccess) handleCloseModal();
-    }, [isSuccess]);
+    }, [isSuccess, handleCloseModal]);
 
     return (
         <Form

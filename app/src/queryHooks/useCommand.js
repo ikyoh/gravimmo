@@ -66,6 +66,7 @@ const fetchPaginatedDatas = ({
     if (details) options += "&search=" + details;
     if (filters.isHanging) options += "&isHanging=true";
     if (filters.isNotTour) options += "&exists[tour]=false";
+    if (filters.isReport) options += "&exists[reports]=true";
     if (filters.status !== "all") options += "&status=" + filters.status;
     if (filters.zone !== "") options += "&property.zone=" + filters.zone;
     return request({ url: API + options, method: "get" });

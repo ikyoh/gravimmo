@@ -2,6 +2,7 @@ import axios from "axios";
 import { Button, ButtonSize } from "components/button/Button";
 import { Dot } from "components/dot/Dot";
 import Dropdown from "components/dropdown/Dropdown";
+import InvoiceCashedForm from "components/forms/invoice/InvoiceCashedForm";
 import InvoiceForm from "components/forms/invoice/InvoiceForm";
 import Loader from "components/loader/Loader";
 import { NoDataFound } from "components/noDataFound/NoDataFound";
@@ -23,6 +24,7 @@ import fileDownload from "js-file-download";
 import _ from "lodash";
 import { useGetPaginatedDatas, usePutData } from "queryHooks/useInvoice";
 import { useEffect, useState } from "react";
+import { BsPiggyBank } from "react-icons/bs";
 import { IoIosCheckmarkCircleOutline, IoIosSend } from "react-icons/io";
 import { IoReloadCircleOutline } from "react-icons/io5";
 import { MdOutlineAssignment, MdOutlineFileDownload } from "react-icons/md";
@@ -70,7 +72,7 @@ export const InvoicesPage = ({ title }) => {
         }
         setCheckedList([]);
         setIsCheckAll(false);
-    }, [searchValue, sortValue, filters]);
+    }, [searchValue, sortValue, initialPageState]);
 
     const handleSelectAll = () => {
         setIsCheckAll(!isCheckAll);
@@ -186,24 +188,32 @@ export const InvoicesPage = ({ title }) => {
                         isDisabled={checkedList.length === 0}
                     >
                         <div>Sélection</div>
-                        <button onClick={() => handleDownloadSelection()}>
+                        <button
+                            disabled={checkedList.length === 0}
+                            onClick={() => handleDownloadSelection()}>
                             <MdOutlineFileDownload size={30} />
                             Télécharger
                         </button>
-                        {/* <button
+                        <button
+                            disabled={checkedList.length === 0}
                             onClick={() =>
-                                handleChangeStatus(data.id, "validé")
+                                handleOpenModal({
+                                    title: "Date d'encaissement",
+                                    size: "small",
+                                    content: (
+                                        <InvoiceCashedForm
+                                            handleCloseModal={
+                                                handleCloseModal
+                                            }
+                                            invoices={checkedList}
+                                        />
+                                    ),
+                                })
                             }
                         >
-                            <IoIosCheckmarkCircleOutline size={30} />
-                            Valider
-                        </button> */}
-                        {/* <button
-                            disabled={checkedList.length === 0}
-                            onClick={() => setCommands(checkedList)}
-                        >
-                            <BsPiggyBank size={26} /> Lettrer
-                        </button> */}
+                            <BsPiggyBank size={30} />
+                            Lettrer
+                        </button>
                     </Dropdown>
                     <Button
                         size={ButtonSize.Big}

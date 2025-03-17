@@ -139,6 +139,7 @@ function formatContent($content)
                     "quantity" => $line['quantity'],
                     "occupant" => $line['occupant'],
                     "reference" => $line['reference'],
+                    "proprietaire" => $line['proprietaire'] ? $line['proprietaire'] : "",
                 ];
 
                 if ($line['invoiceTitle']) {

@@ -39,6 +39,8 @@ import { RiLockFill } from "react-icons/ri";
 import { SlPicture } from "react-icons/sl";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import { useQueryClient } from "@tanstack/react-query";
+
 export const CommandsPage = ({ title }) => {
     const navigate = useNavigate();
     const { state: initialPageState } = useLocation();
@@ -58,6 +60,7 @@ export const CommandsPage = ({ title }) => {
             }
             : { value: "id", direction: "DESC" }
     );
+    const queryClient = useQueryClient()
 
     const { data, isLoading, error } = useGetPaginatedDatas({
         enabled: true,
@@ -104,8 +107,11 @@ export const CommandsPage = ({ title }) => {
     };
 
     const handleValidateSelection = async (status) => {
+
+        const _checkedList = [...checkedList];
         await Promise.all(
-            checkedList.map(async (command) => {
+
+            _checkedList.map(async (command) => {
                 const _command = { id: command.id };
                 if (
                     status === "DEFAULT - à traiter" &&
@@ -113,6 +119,7 @@ export const CommandsPage = ({ title }) => {
                 ) {
                     _command.madeAt = dayjs();
                     _command.status = "DEFAULT - préparé";
+                    command.status = "DEFAULT - préparé";
                 }
                 if (
                     status === "DEFAULT - préparé" &&
@@ -120,10 +127,16 @@ export const CommandsPage = ({ title }) => {
                 ) {
                     _command.deliveredAt = dayjs();
                     _command.status = "DEFAULT - posé";
+                    command.status = "DEFAULT - posé";
                 }
                 putData(_command);
             })
         );
+
+        queryClient.invalidateQueries("commands")
+        setCheckedList(_checkedList);
+
+
     };
 
     const csvDatas = () => {

@@ -63,7 +63,7 @@ use App\Controller\CommandsSectorsController;
 #[ApiFilter(OrderFilter::class, properties: ['id', 'status', 'createdAt', 'madeAt', 'deliveredAt', 'trustee.title', 'property.title', 'property.zone', 'tour.scheduledAt'])]
 #[ApiFilter(SearchFilter::class, properties: ['status' => 'partial', 'property' => 'exact', 'property.zone' => 'exact'])]
 #[ApiFilter(BooleanFilter::class, properties: ['isHanging'])]
-#[ApiFilter(ExistsFilter::class, properties: ['tour'])]
+#[ApiFilter(ExistsFilter::class, properties: ['tour', 'reports'])]
 #[ApiFilter(MultipleFieldsSearchFilter::class, properties: [
     "id",
     "trustee.title",

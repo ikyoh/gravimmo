@@ -706,7 +706,7 @@ export const CommandPage = ({
                                     (service) => (
                                         <CardService
                                             key={uuid()}
-                                            iri={service}
+                                            iri={service["@id"]}
                                             editable={false}
                                         />
                                     )

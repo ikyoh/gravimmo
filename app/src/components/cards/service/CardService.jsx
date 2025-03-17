@@ -17,6 +17,7 @@ export const CardService = ({
     const { data = {}, isLoading, error } = useGetOneData(iri);
     const { mutate: deleteData } = useDeleteData();
 
+    console.log('iri', iri)
     return (
         <div className="_card">
             {isLoading ? (

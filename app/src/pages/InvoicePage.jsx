@@ -19,6 +19,7 @@ import { useGetID, usePostData, usePutData } from "queryHooks/useInvoice";
 import { useGetAllDatas as useGetServices } from "queryHooks/useService";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { BsPiggyBank } from "react-icons/bs";
 import {
     IoIosAddCircleOutline,
     IoIosCheckmarkCircleOutline,
@@ -26,7 +27,7 @@ import {
     IoIosSend,
     IoMdCheckmark,
 } from "react-icons/io";
-import { IoReloadCircleOutline } from "react-icons/io5";
+import { IoDuplicateOutline, IoReloadCircleOutline } from "react-icons/io5";
 import { LiaCommentAlt } from "react-icons/lia";
 import { LuSettings2 } from "react-icons/lu";
 import {
@@ -286,7 +287,7 @@ export const InvoicePage = ({ title }) => {
                                     })
                                 }
                             >
-                                <IoReloadCircleOutline size={30} />
+                                <BsPiggyBank size={30} />
                                 Lettrer
                             </button>
                         )}
@@ -346,7 +347,7 @@ export const InvoicePage = ({ title }) => {
                                     })
                                 }
                             >
-                                <IoReloadCircleOutline size={30} />
+                                <IoIosCloseCircle size={30} />
                                 Facture irrécouvrable
                             </button>
                         )}
@@ -390,7 +391,7 @@ export const InvoicePage = ({ title }) => {
                                     })
                                 }
                             >
-                                <IoReloadCircleOutline size={30} />
+                                <IoDuplicateOutline size={30} />
                                 Dupliquer
                             </button>
                         )}
